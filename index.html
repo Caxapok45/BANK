@@ -803,8 +803,6 @@ input,select{font-size:16px}
   ::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:8px}
   .filter-scroll::-webkit-scrollbar{display:none}
 }
-#homeCryptoHead{order:5}#homeCryptoPanel{order:6}
-@media (min-width:900px){#homeCryptoHead{grid-column:2;grid-row:4}#homeCryptoPanel{grid-column:2;grid-row:5;align-self:start}}
 #exMax{flex-shrink:0}
 
 /* ===== settings ===== */
@@ -1073,9 +1071,6 @@ input,select{font-size:16px}
         <div class="section-link" id="linkAllAccounts">Сменить валюту</div>
       </div>
       <div class="panel" id="accountsPanel"></div>
-
-      <div class="section-head" id="homeCryptoHead"><div class="section-title">Криптовалюты</div></div>
-      <div class="panel" id="homeCryptoPanel"></div>
 
       <div style="height:20px"></div>
     </div>
@@ -1765,7 +1760,7 @@ $('#balEye').addEventListener('click', e => {
   e.stopPropagation();
   haptic('light');
   balHidden = !balHidden; S.hideBalance = balHidden; saveState();
-  renderBalance(); renderAccounts(); renderHomeCrypto();
+  renderBalance(); renderAccounts();
   const icon = $('#balEyeIcon');
   icon.innerHTML = balHidden
     ? '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>'
@@ -1790,18 +1785,6 @@ function renderBalance(){
   balRaf = requestAnimationFrame(step);
 }
 
-function renderHomeCrypto(){
-  const p = $('#homeCryptoPanel'); if (!p) return;
-  const zero = S.settings.showZero ? ['bitcoin','ethereum','tether'].filter(id => CRYPTO.some(c => c.id === id)) : [];
-  const ids = [...new Set([...Object.keys(S.crypto).filter(id => S.crypto[id].amount > 0), ...zero])];
-  if (!ids.length){ p.innerHTML = '<div class="empty"><div>Нет криптоактивов.<br>Обменяйте валюту на крипту во вкладке «Обмен».</div></div>'; return; }
-  p.innerHTML = ids.map(id => {
-    const c = CRYPTO.find(y => y.id === id) || {id, symbol:S.crypto[id]?.symbol, name:S.crypto[id]?.name, image:''};
-    const x = S.crypto[id] || {amount:0};
-    const sym = String(c.symbol || '').toUpperCase();
-    return `<div class="row">${coinIcon(c)}<div class="row-main"><div class="row-title">${esc(sym)}</div><div class="row-sub">${esc(c.name || sym)}</div></div><div class="row-amt">${balHidden ? '\u2022\u2022\u2022\u2022' : esc(fmtCrypto(x.amount) + ' ' + sym)}</div></div>`;
-  }).join('');
-}
 function renderAccounts(){
   const panel = $('#accountsPanel');
   const zero = S.settings.showZero ? ['USD','EUR','RUB','GBP'].filter(c => FIAT && FIAT[c]) : [];
@@ -2409,7 +2392,6 @@ function confirmSheet({title, rows, onConfirm, okText, danger}){
 function renderAll(){
   renderBalance();
   renderAccounts();
-  renderHomeCrypto();
   if ($('#page-crypto').classList.contains('active')) renderCrypto();
   renderHistory();
   updateExchange();
