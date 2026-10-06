@@ -835,6 +835,44 @@ input,select{font-size:16px}
 .row-amt{white-space:normal;overflow-wrap:anywhere}
 .coin-price,.rate-line b{overflow-wrap:anywhere}
 .rate-line b{text-align:right;min-width:0}
+
+  /* ===== Lock screen — минималистичный редизайн ===== */
+  #lockScreen{
+    background:
+      radial-gradient(90% 55% at 50% -8%, color-mix(in srgb,var(--a2) 24%,transparent), transparent 70%),
+      radial-gradient(70% 45% at 50% 108%, color-mix(in srgb,var(--a1) 10%,transparent), transparent 70%),
+      var(--bg);
+  }
+  .lock-logo{
+    width:60px;height:60px;border-radius:20px;margin-bottom:20px;
+    background:linear-gradient(160deg,rgba(255,255,255,.10),rgba(255,255,255,.02));
+    border:1px solid rgba(255,255,255,.12);
+    -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+    box-shadow:0 18px 40px -18px color-mix(in srgb,var(--a2) 65%,transparent), inset 0 1px 0 rgba(255,255,255,.14);
+  }
+  .lock-logo svg{width:26px;height:26px;fill:none;stroke:var(--a1);stroke-width:1.7;}
+  .lock-title{
+    font-size:36px;font-weight:700;letter-spacing:-1.2px;margin-bottom:8px;
+    background:linear-gradient(180deg,#fff 30%,rgba(255,255,255,.62));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  .lock-sub{font-size:13px;color:var(--muted);letter-spacing:.2px;margin-bottom:44px;}
+  .dots{gap:18px;margin-bottom:44px;}
+  .dot{width:12px;height:12px;border:1.5px solid rgba(255,255,255,.28);}
+  .keypad{gap:16px;max-width:280px;}
+  .key{
+    height:68px;font-size:26px;font-weight:300;
+    background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
+    -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  }
+  .key:active{background:rgba(255,255,255,.12);}
+  .key.ghost{background:transparent;border:none;-webkit-backdrop-filter:none;backdrop-filter:none;}
+  @media (max-height:560px){
+    .lock-logo{width:44px;height:44px;border-radius:14px;margin-bottom:12px}
+    .lock-logo svg{width:20px;height:20px}
+    .lock-title{font-size:26px}.lock-sub{margin-bottom:16px}.dots{margin-bottom:18px}
+    .key{height:46px;font-size:21px}.keypad{gap:10px}
+  }
 </style>
 </head>
 <body>
@@ -842,8 +880,8 @@ input,select{font-size:16px}
 
 <!-- ================= LOCK SCREEN ================= -->
 <div id="lockScreen">
-  <div class="lock-logo">S</div>
-  <div class="lock-title">SAYFER Bank</div>
+  <div class="lock-logo"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="10.5" width="15" height="10" rx="3"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg></div>
+  <div class="lock-title">Bank</div>
   <div class="lock-sub">Введите код доступа для входа</div>
 
   <div class="dots" id="dots">
@@ -871,7 +909,6 @@ input,select{font-size:16px}
   </div>
 
   <div class="lock-msg" id="lockMsg">Неверный код доступа</div>
-  <div class="lock-footer">Виртуальная игровая система · Средства не являются реальными</div>
 </div>
 
 <!-- ================= MAIN APP ================= -->
@@ -881,7 +918,6 @@ input,select{font-size:16px}
       <div class="brand-mark">S</div>
       <div>
         <div class="brand-name" id="brandName">Здравствуйте</div>
-        <div class="brand-sub" id="brandUser">@user</div>
       </div>
     </div>
     <div class="top-right">
@@ -1609,8 +1645,6 @@ async function bootstrap(){
     S.user.firstName = cleanName(tgUser.first_name) || 'SAYFER';
     saveState();
   }
-  const uname = S.user.username ? '@' + S.user.username : '@user';
-  $('#brandUser').textContent = uname;
   const dn = cleanName(S.user.firstName) || 'SAYFER';
   $('#userName').textContent = dn.toUpperCase().slice(0, 10);
   $('#userAv').textContent = dn[0].toUpperCase();
@@ -2048,9 +2082,9 @@ function openTransfer(){
     </div>
 
     <div class="field">
-      <div class="field-label">Получатель (@username или ID)</div>
+      <div class="field-label">Получатель</div>
       <div class="input-box">
-        <input id="trRec" placeholder="@username" autocomplete="off">
+        <input id="trRec" type="text" placeholder="Получатель" autocomplete="off" autocapitalize="off" spellcheck="false">
       </div>
     </div>
 
@@ -2089,14 +2123,12 @@ function openTransfer(){
   upd();
 
   $('#trConfirm').addEventListener('click', () => {
-    const rec = $('#trRec').value.trim();
+    const rec = $('#trRec').value;   // как ввёл пользователь, без изменений
     const cur = $('#trCur').value;
     const amt = truncB(parseAmt($('#trAmt').value, 8), 2);
     const av  = S.balances[cur] || 0n;
 
-    if (!rec) return toast('Введите получателя', 'err');
-    if (!/^@?[A-Za-z0-9_]{3,32}$/.test(rec)) return toast('Некорректный получатель', 'err');
-    if (rec.replace('@','').toLowerCase() === String(S.user.username||'').toLowerCase()) return toast('Нельзя перевести самому себе', 'err');
+    if (!rec.trim()) return toast('Введите получателя', 'err');
     if (!(amt > 0n)) return toast('Введите сумму', 'err');
     if (amt > av) return toast('Недостаточно средств', 'err');
 
@@ -2384,7 +2416,6 @@ loadCrypto();
    ========================================================= */
 const I18N_EN = {
  'Введите код доступа для входа':'Enter your passcode to sign in','Неверный код доступа':'Wrong passcode',
- 'Виртуальная игровая система · Средства не являются реальными':'Virtual game system · Funds are not real',
  'Нажмите на карту, чтобы перевернуть':'Tap the card to flip it','Баланс счёта':'Account balance',
  'Пополнить':'Top up','Обмен':'Exchange','Перевод':'Transfer','Валютные счета':'Currency accounts','Сменить валюту':'Change currency',
  'Криптовалюты':'Cryptocurrencies','Обмен валют':'Currency exchange','Отдаёте':'You give','Макс':'Max','Получаете':'You get',
@@ -2395,7 +2426,7 @@ const I18N_EN = {
  'У вас пока нет криптоактивов.':"You don't have any crypto assets yet.",'Купите первую монету ниже.':'Buy your first coin below.',
  'Загрузка рынка…':'Loading market…','Рыночная цена':'Market price','Операций пока нет':'No transactions yet',
  'Основная валюта':'Main currency','Поиск валюты...':'Search currency...','Закрыть':'Close','Валюта':'Currency','Сумма':'Amount',
- 'Получатель (@username или ID)':'Recipient (@username or ID)','Комиссия':'Fee','Отправить':'Send','Подтверждение перевода':'Confirm transfer',
+ 'Комиссия':'Fee','Отправить':'Send','Подтверждение перевода':'Confirm transfer',
  'Подтверждение обмена':'Confirm exchange','Получатель':'Recipient','Итого':'Total','Подтвердить':'Confirm','Отмена':'Cancel',
  'Пополнение':'Top-up','Корректировка':'Adjustment','Изменение баланса':'Adjust balance','Актив':'Asset','Добавить':'Add',
  'Установить':'Set exactly','Новый баланс':'New balance','Текущий баланс':'Current balance','Баланс после':'Balance after','Применить':'Apply',
