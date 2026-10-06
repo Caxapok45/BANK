@@ -894,13 +894,6 @@ input,select{font-size:16px}
 .action-ic svg{stroke:var(--a1)}
 .action:active .action-ic{transform:scale(.94)}
 .action-lbl{font-weight:600;font-size:12.5px}
-.recent-ops{margin:6px 0 4px}
-.ro-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--border)}
-.ro-item:last-child{border-bottom:none}
-.ro-t{flex:1;min-width:0}.ro-t b{display:block;font-size:14px;font-weight:600}
-.ro-t span{display:block;font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ro-a{font-weight:700;font-size:14px}.ro-a.neg{color:var(--red)}.ro-a.pos{color:var(--green)}
-.ro-empty{padding:16px;text-align:center;color:var(--muted);font-size:13px}
 #trRec,#trAmt{font-size:22px;font-weight:700;padding:6px 0}
 #trAmt{font-size:28px}
 .rec-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
@@ -1074,12 +1067,6 @@ input,select{font-size:16px}
           <div class="action-lbl">Crypto</div>
         </button>
       </div>
-
-      <div class="section-head">
-        <div class="section-title">Последние операции</div>
-        <div class="section-link" id="linkAllOps">Все</div>
-      </div>
-      <div class="panel recent-ops" id="recentOps"></div>
 
       <div class="section-head">
         <div class="section-title">Валютные счета</div>
@@ -1582,6 +1569,7 @@ function pinError(){
   }, 380);
 }
 const SESSION_KEY = 'sayfer_session';
+const IDLE_MS = 10 * 60 * 1000;   // автоблокировка после 10 минут бездействия
 const touchSession = () => { try { sessionStorage.setItem(SESSION_KEY, String(Date.now())); } catch(e){} };
 function endSession(){ try { sessionStorage.removeItem(SESSION_KEY); } catch(e){} try { TG?.BackButton?.hide(); } catch(e){} location.reload(); }
 function pinSuccess(){
@@ -2137,7 +2125,7 @@ function openTransfer(){
     <div class="field">
       <div class="field-label">Получатель</div>
       <div class="input-box">
-        <input id="trRec" type="text" placeholder="Получатель" autocomplete="off" autocapitalize="off" spellcheck="false">
+        <input id="trRec" type="text" placeholder="Имя или номер получателя" autocomplete="off" autocapitalize="off" spellcheck="false">
       </div>
     </div>
 
@@ -2480,7 +2468,7 @@ const I18N_EN = {
  'Загрузка рынка…':'Loading market…','Рыночная цена':'Market price','Операций пока нет':'No transactions yet',
  'Основная валюта':'Main currency','Поиск валюты...':'Search currency...','Закрыть':'Close','Валюта':'Currency','Сумма':'Amount',
  'Комиссия':'Fee','Отправить':'Send','Подтверждение перевода':'Confirm transfer',
- 'Подтверждение обмена':'Confirm exchange','Получатель':'Recipient','Итого':'Total','Подтвердить':'Confirm','Отмена':'Cancel',
+ 'Подтверждение обмена':'Confirm exchange','Получатель':'Recipient','Имя или номер получателя':'Recipient name or number','Итого':'Total','Подтвердить':'Confirm','Отмена':'Cancel',
  'Пополнение':'Top-up','Корректировка':'Adjustment','Изменение баланса':'Adjust balance','Актив':'Asset','Добавить':'Add',
  'Установить':'Set exactly','Новый баланс':'New balance','Текущий баланс':'Current balance','Баланс после':'Balance after','Применить':'Apply',
  'Введите сумму':'Enter an amount','Введите получателя':'Enter a recipient','Некорректный получатель':'Invalid recipient',
@@ -2645,25 +2633,12 @@ document.body.classList.toggle('no-anim', S.settings.animations === false);
   const getRec=()=>{try{return JSON.parse(localStorage.getItem(RK)||'[]')}catch(e){return[]}};
   const addRec=r=>{try{const l=[r,...getRec().filter(x=>x!==r)].slice(0,5);localStorage.setItem(RK,JSON.stringify(l))}catch(e){}};
 
-  // recent operations on home
-  function renderRecent(){
-    const el=document.getElementById('recentOps'); if(!el) return;
-    const l=S.txs.slice(0,3);
-    if(!l.length){el.innerHTML='<div class="ro-empty">Операций пока нет</div>';return;}
-    el.innerHTML=l.map(t=>`<div class="ro-item"><div class="ro-t"><b>${esc(t.title||'')}</b><span>${esc(t.subtitle||'')}</span></div><div class="ro-a ${t.amountClass==='neg'?'neg':'pos'}">${esc(t.amountText||'')}</div></div>`).join('');
-  }
-  const _ra=renderAll; renderAll=function(){_ra();renderRecent();};
-  const la=document.getElementById('linkAllOps');
-  if(la) la.addEventListener('click',()=>document.querySelector('.nav-item[data-page="history"]').click());
-  renderRecent();
-
   // transfer: disable send until filled, recent recipients
   const _ot=openTransfer;
   openTransfer=function(){
     _ot();
     const rec=document.getElementById('trRec'), amt=document.getElementById('trAmt'), btn=document.getElementById('trConfirm');
     if(!rec||!btn) return;
-    rec.placeholder='@username или любой текст';
     const check=()=>{btn.disabled=!(rec.value.trim()&&/\d/.test(amt.value));};
     rec.addEventListener('input',check); amt.addEventListener('input',check); check();
     const l=getRec();
@@ -2676,7 +2651,7 @@ document.body.classList.toggle('no-anim', S.settings.animations === false);
     btn.addEventListener('click',()=>{ if(rec.value.trim()) addRec(rec.value); },true);
   };
 
-  // manual lock + auto-lock after 2 min of inactivity
+  // manual lock + auto-lock after 10 min of inactivity
   const main=document.getElementById('main');
   if(main && !document.getElementById('lockNow')){
     const b=document.createElement('button');b.id='lockNow';b.type='button';b.className='icon-btn lock-now';b.setAttribute('aria-label','Заблокировать');
@@ -2684,8 +2659,15 @@ document.body.classList.toggle('no-anim', S.settings.animations === false);
     b.onclick=endSession;
     (document.querySelector('.top-right')||main).appendChild(b);
   }
-  let idle; const arm=()=>{clearTimeout(idle);if(unlocked)touchSession();idle=setTimeout(()=>{ if(unlocked) endSession(); },120000);};
-  ['pointerdown','keydown','touchstart','scroll'].forEach(e=>document.addEventListener(e,arm,{passive:true}));
+  let idle, lastActive = Date.now();
+  const arm=()=>{lastActive=Date.now();clearTimeout(idle);if(unlocked)touchSession();idle=setTimeout(()=>{ if(unlocked) endSession(); },IDLE_MS);};
+  ['pointerdown','keydown','touchstart','input'].forEach(e=>document.addEventListener(e,arm,{passive:true}));
+  document.addEventListener('scroll',arm,{passive:true,capture:true});   // scroll не всплывает — ловим на захвате
+  // таймеры замораживаются, пока приложение свёрнуто — при возврате сверяем по времени
+  const checkIdle=()=>{ if(unlocked && Date.now()-lastActive>=IDLE_MS) endSession(); };
+  document.addEventListener('visibilitychange',()=>{ if(!document.hidden) checkIdle(); });
+  window.addEventListener('pageshow',checkIdle);
+  try{ TG?.onEvent('activated',checkIdle); }catch(e){}
   arm();
 })();
 
@@ -2695,7 +2677,7 @@ document.body.classList.toggle('no-anim', S.settings.animations === false);
   // обычная перезагрузка внутри сеанса — остаёмся в приложении; новый запуск — экран PIN
   let last = 0;
   try { last = parseInt(sessionStorage.getItem(SESSION_KEY) || '0', 10) || 0; } catch(e){}
-  if (last && Date.now() - last < 120000 && !unlocked){
+  if (last && Date.now() - last < IDLE_MS && !unlocked){
     lockScreen.style.display = 'none';
     pinSuccess();
   } else if (last){ try { sessionStorage.removeItem(SESSION_KEY); } catch(e){} }
