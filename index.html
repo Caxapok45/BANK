@@ -895,8 +895,12 @@ input,select{font-size:16px}
 #toast .t-dot{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;font-size:13px;font-weight:800;color:#101319;background:var(--a2)}
 #toast.ok .t-dot::before{content:"\2713"}
 #toast.err .t-dot{background:var(--red)}#toast.err .t-dot::before{content:"!"}
-.lock-now{position:absolute;right:16px;top:calc(12px + var(--safe-top));width:38px;height:38px;border-radius:12px;background:var(--surface);border:1px solid var(--border-2);display:grid;place-items:center;z-index:5}
-.lock-now svg{width:18px;height:18px;stroke:var(--a1);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.lock-now{flex-shrink:0}
+.top-right{min-width:0;gap:8px}
+.user-chip{min-width:0;flex-shrink:1}
+#userName{max-width:64px}
+@media (max-width:380px){#userName{max-width:44px}}
+.lock-now svg{width:16px;height:16px;stroke:var(--a1);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 @media (prefers-reduced-motion:reduce){.action:active .action-ic,.rec-chip:active{transform:none}}
 </style>
 </head>
@@ -2660,10 +2664,10 @@ document.body.classList.toggle('no-anim', S.settings.animations === false);
   // manual lock + auto-lock after 2 min of inactivity
   const main=document.getElementById('main');
   if(main && !document.getElementById('lockNow')){
-    const b=document.createElement('button');b.id='lockNow';b.className='lock-now';b.setAttribute('aria-label','Заблокировать');
+    const b=document.createElement('button');b.id='lockNow';b.type='button';b.className='icon-btn lock-now';b.setAttribute('aria-label','Заблокировать');
     b.innerHTML='<svg viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="3"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
     b.onclick=endSession;
-    main.appendChild(b);
+    (document.querySelector('.top-right')||main).appendChild(b);
   }
   let idle; const arm=()=>{clearTimeout(idle);if(unlocked)touchSession();idle=setTimeout(()=>{ if(unlocked) endSession(); },120000);};
   ['pointerdown','keydown','touchstart','scroll'].forEach(e=>document.addEventListener(e,arm,{passive:true}));
