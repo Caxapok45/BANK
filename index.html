@@ -2,10 +2,22 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#0a0b10">
 <title>SAYFER Bank</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script>
+/* Блокировка масштабирования и сдвига экрана от жестов (pinch, мультитач, ctrl+колесо) */
+(function(){
+  var stop=function(e){ e.preventDefault(); };
+  ['gesturestart','gesturechange','gestureend'].forEach(function(t){ document.addEventListener(t,stop,{passive:false}); });
+  document.addEventListener('touchmove',function(e){ if(e.touches&&e.touches.length>1) e.preventDefault(); },{passive:false});
+  document.addEventListener('wheel',function(e){ if(e.ctrlKey) e.preventDefault(); },{passive:false});
+  var reset=function(){ if(window.scrollX||window.scrollY) window.scrollTo(0,0); var de=document.documentElement; if(de.scrollTop||de.scrollLeft){de.scrollTop=0;de.scrollLeft=0;} };
+  window.addEventListener('scroll',reset,{passive:true});
+  if(window.visualViewport){ visualViewport.addEventListener('scroll',reset); visualViewport.addEventListener('resize',reset); }
+})();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
@@ -29,6 +41,9 @@
   }
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
   html,body{height:100%;overflow:hidden;}
+  /* фиксация экрана: без зума, панорамирования и смещения страницы (прокрутка внутри блоков работает) */
+  html{touch-action:pan-x pan-y;-webkit-text-size-adjust:100%;text-size-adjust:100%;overscroll-behavior:none;}
+  body{position:fixed;inset:0;width:100%;touch-action:pan-x pan-y;-webkit-touch-callout:none;}
   body{
     font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Roboto,'Helvetica Neue',sans-serif;
     background:var(--bg);
