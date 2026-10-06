@@ -1274,8 +1274,33 @@ function dStr(b){
 }
 function groupInt(s){
   const r = s.length % 3; let o = s.slice(0, r);
-  for (let i = r; i < s.length; i += 3) o += (o ? ',' : '') + s.slice(i, i + 3);
+  for (let i = r; i < s.length; i += 3) o += (o ? ' ' : '') + s.slice(i, i + 3);
   return o;
+}
+/* Короткий формат: K, M, B, T, Qa, Qi … (короткая шкала) */
+const SHORT_SUF = ['','K','M','B','T','Qa','Qi','Sx','Sp','Oc','No','Dc','Ud','Dd','Td'];
+function fmtShortB(b){                 // BigInt-атомы → {neg, num, suf} | null
+  const neg = b < 0n, abs = neg ? -b : b;
+  const intPart = abs / SCB;           // целая часть (без дробной)
+  if (intPart < 1000n) return null;    // маленькие показываем полностью
+  const str = intPart.toString();
+  if (str.length > 30) return null;    // совсем огромные — полный формат
+  let idx = 0, v = Number(intPart);
+  while (v >= 1000 && idx < SHORT_SUF.length - 1){ v /= 1000; idx++; }
+  const dec = v < 10 ? 2 : v < 100 ? 1 : 0;
+  let s = v.toFixed(dec);
+  if (dec > 0) s = s.replace(/\.?0+$/, '');
+  return { neg, num: s, suf: SHORT_SUF[idx] };
+}
+function fmtShortNum(n){               // то же для обычных чисел (для fmtMoney)
+  const neg = n < 0, a = Math.abs(n);
+  if (a < 1000) return null;
+  let idx = 0, v = a;
+  while (v >= 1000 && idx < SHORT_SUF.length - 1){ v /= 1000; idx++; }
+  const dec = v < 10 ? 2 : v < 100 ? 1 : 0;
+  let s = v.toFixed(dec);
+  if (dec > 0) s = s.replace(/\.?0+$/, '');
+  return { neg, num: s, suf: SHORT_SUF[idx] };
 }
 function splitB(b, minD, maxD){
   b = roundB(b, maxD); const neg = b < 0n; if (neg) b = -b;
@@ -1311,7 +1336,7 @@ const DEFAULT_STATE = {
     holder: 'SAYFER'
   },
   user: { username: 'user', firstName: 'SAYFER' },
-  settings: { lang:'ru', haptics:true, notify:true, animations:true, showZero:false, pinHash:null }
+  settings: { lang:'ru', haptics:true, notify:true, animations:true, showZero:false, numberFormat:'full', pinHash:null }
 };
 
 let S = loadState();
@@ -1354,6 +1379,10 @@ const $  = (s, r=document) => r.querySelector(s);
 const $$ = (s, r=document) => [...r.querySelectorAll(s)];
 
 function fmtMoneyB(b, cur, min, max){
+  if (S.settings.numberFormat === 'short'){
+    const sh = fmtShortB(b);
+    if (sh) return (sh.neg ? '-' : '') + curSymbol(cur) + sh.num + sh.suf;
+  }
   const {neg, i, f} = splitB(b, min, max);
   let parts = null;
   try { parts = new Intl.NumberFormat('en-US', {style:'currency', currency: cur, currencyDisplay:'narrowSymbol', minimumFractionDigits: min, maximumFractionDigits: max}).formatToParts(0); } catch(e){}
@@ -1369,15 +1398,23 @@ function fmtMoneyB(b, cur, min, max){
 }
 function fmtMoney(n, cur, min=2, max=2){
   if (typeof n === 'bigint') return fmtMoneyB(n, cur, min, max);
-  if (Math.abs(n) >= 1e21) return curSymbol(cur) + Number(n).toExponential(3).replace('e+','E');
-  try {
-    return new Intl.NumberFormat('en-US', {
-      style:'currency', currency: cur, currencyDisplay:'narrowSymbol',
-      minimumFractionDigits: min, maximumFractionDigits: max
-    }).format(n);
-  } catch(e){
-    return (Number(n)||0).toFixed(min) + ' ' + cur;
+  const neg = n < 0, a = Math.abs(n), sym = curSymbol(cur);
+  if (S.settings.numberFormat === 'short'){
+    const sh = fmtShortNum(a);
+    if (sh) return (neg ? '-' : '') + sym + sh.num + sh.suf;
   }
+  if (!isFinite(a)) return (neg ? '-' : '') + sym + (a > 0 ? '∞' : '0');
+  if (a >= 1e21) return (neg ? '-' : '') + sym + a.toExponential(3).replace('e+','E');
+  let s = a.toFixed(max);
+  if (max > min){
+    let cut = max;
+    while (cut > min && s.endsWith('0')){ s = s.slice(0, -1); cut--; }
+    if (s.endsWith('.')) s = s.slice(0, -1);
+  }
+  const dot = s.indexOf('.');
+  const ip = dot < 0 ? s : s.slice(0, dot);
+  const fp = dot < 0 ? '' : s.slice(dot + 1);
+  return (neg ? '-' : '') + sym + groupInt(ip) + (fp ? '.' + fp : '');
 }
 function fmtNum(n, dec=2){
   return new Intl.NumberFormat('en-US',{minimumFractionDigits:dec, maximumFractionDigits:dec}).format(n||0);
@@ -1905,9 +1942,30 @@ function setBal(a, n){
   else if (n === 0n) delete S.crypto[a.id];
   else (S.crypto[a.id] = S.crypto[a.id] || {symbol:a.lbl, name:a.name, amount:0n}).amount = n;
 }
-const fmtQty = n => typeof n === 'bigint'
-  ? (({neg, i, f}) => (neg ? '-' : '') + groupInt(i) + (f ? '.' + f : ''))(splitB(n, 0, absB(n) >= 1000n * SCB ? 2 : absB(n) >= SCB ? 4 : 8))
-  : Math.abs(n) >= 1e21 ? Number(n).toExponential(3).replace('e+','E') : (Number(n) || 0).toLocaleString('en-US', {maximumFractionDigits: n >= 1000 ? 2 : n >= 1 ? 4 : 8});
+const fmtQty = n => {
+  if (typeof n === 'bigint'){
+    if (S.settings.numberFormat === 'short'){
+      const sh = fmtShortB(n);
+      if (sh) return (sh.neg ? '-' : '') + sh.num + sh.suf;
+    }
+    const abs = n < 0n ? -n : n;
+    const maxD = abs >= 1000n * SCB ? 2 : abs >= SCB ? 4 : 8;
+    const {neg, i, f} = splitB(n, 0, maxD);
+    return (neg ? '-' : '') + groupInt(i) + (f ? '.' + f : '');
+  }
+  const neg = n < 0, a = Math.abs(n);
+  if (S.settings.numberFormat === 'short'){
+    const sh = fmtShortNum(a);
+    if (sh) return (neg ? '-' : '') + sh.num + sh.suf;
+  }
+  if (a >= 1e21) return (neg ? '-' : '') + a.toExponential(3).replace('e+','E');
+  const maxD = a >= 1000 ? 2 : a >= 1 ? 4 : 8;
+  let s = a.toFixed(maxD).replace(/\.?0+$/, '') || '0';
+  const dot = s.indexOf('.');
+  const ip = dot < 0 ? s : s.slice(0, dot);
+  const fp = dot < 0 ? '' : s.slice(dot + 1);
+  return (neg ? '-' : '') + groupInt(ip) + (fp ? '.' + fp : '');
+};
 function calcEx(A, B, amt){
   const ok = A.usd > 0 && B.usd > 0 && A.v !== B.v, rate = ok ? A.usd / B.usd : 0;
   const gross = ok ? mulNum(amt, rate) : 0n, fee = roundB((gross * 5n + 500n) / 1000n, DEC(B));   // комиссия 0.5%
@@ -2131,6 +2189,7 @@ function openTransfer(){
     </div>
 
     <div class="rate-line"><span>Комиссия</span><b>0.00</b></div>
+    <div class="rate-line"><span>Переводишь</span><b id="trSum">—</b></div>
     <div class="rate-line"><span>Доступно</span><b id="trAvail">—</b></div>
 
     <button class="btn btn-primary" id="trConfirm">Отправить</button>
@@ -2142,8 +2201,12 @@ function openTransfer(){
     const c = $('#trCur').value;
     $('#trCurLbl').textContent = c;
     $('#trAvail').textContent = fmtMoney(S.balances[c]||0, c);
+    const raw = $('#trAmt').value.trim();
+    const amt = raw ? truncB(parseAmt(raw, 8), 2) : 0n;
+    $('#trSum').textContent = raw ? fmtMoney(amt, c) : '—';
   };
   $('#trCur').addEventListener('change', upd);
+  $('#trAmt').addEventListener('input', upd);
   upd();
 
   $('#trConfirm').addEventListener('click', () => {
@@ -2470,6 +2533,11 @@ const I18N_EN = {
  'Текущий код':'Current passcode','Новый код':'New passcode','Повторите новый код':'Repeat new passcode','Сохранить':'Save',
  'Неверный текущий код':'Wrong current passcode','Код должен состоять из 4 цифр':'Passcode must be 4 digits','Коды не совпадают':'Passcodes do not match',
  'Код доступа изменён':'Passcode changed',
+ 'Переводишь':'You send',
+ 'Формат сумм':'Number format',
+ 'Отображение больших чисел':'Display of large numbers',
+ 'Полный':'Full',
+ 'Короткий':'Short',
  'SAYFER Bank · демо-версия. Данные хранятся только в этом браузере.':'SAYFER Bank · demo. Data is stored only in this browser.'
 };
 const I18N_RX = [
@@ -2556,6 +2624,11 @@ function openSettings(){
       <div class="row"><div class="row-ic gold">🌐</div><div class="row-main"><div class="row-title">Язык</div></div>
         <div class="seg"><button class="chip-f${st.lang === 'ru' ? ' active' : ''}" data-lang="ru">Русский</button><button class="chip-f${st.lang === 'en' ? ' active' : ''}" data-lang="en">English</button></div></div>
       <div class="row set-row" data-nav="currency"><div class="row-ic gold">${flag(cur)}</div><div class="row-main"><div class="row-title">Основная валюта</div><div class="row-sub">${esc(cur)} · ${esc(curName(cur))}</div></div><div class="row-amt" style="color:var(--muted)">›</div></div>
+      <div class="row"><div class="row-ic gold">🔢</div><div class="row-main"><div class="row-title">Формат сумм</div><div class="row-sub">Отображение больших чисел</div></div>
+        <div class="seg">
+          <button class="chip-f${st.numberFormat !== 'short' ? ' active' : ''}" data-numfmt="full">Полный</button>
+          <button class="chip-f${st.numberFormat === 'short' ? ' active' : ''}" data-numfmt="short">Короткий</button>
+        </div></div>
       ${sw('animations', '✨', 'Анимации', 'Плавные переходы и эффекты', st.animations !== false)}
       ${sw('showZero', '0️⃣', 'Показывать нулевые балансы', 'Основные активы всегда в списке', !!st.showZero)}
       ${sw('hide', '👁', 'Скрывать баланс', 'Суммы заменяются точками', balHidden)}
@@ -2591,6 +2664,13 @@ function openSettings(){
     st.lang = l; saveState(); haptic('light');
     $$('[data-lang]', sheet).forEach(x => x.classList.toggle('active', x === b));
     renderAll(); applyLang();
+  }));
+  $$('[data-numfmt]', sheet).forEach(b => b.addEventListener('click', () => {
+    const m = b.dataset.numfmt;
+    if (st.numberFormat === m) return;
+    st.numberFormat = m; saveState(); haptic('light');
+    $$('[data-numfmt]', sheet).forEach(x => x.classList.toggle('active', x === b));
+    renderAll(); renderCrypto();
   }));
   $$('.set-row[data-nav]', sheet).forEach(r => r.addEventListener('click', () => {
     haptic('light');
