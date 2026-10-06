@@ -873,6 +873,31 @@ input,select{font-size:16px}
     .lock-title{font-size:26px}.lock-sub{margin-bottom:16px}.dots{margin-bottom:18px}
     .key{height:46px;font-size:21px}.keypad{gap:10px}
   }
+
+/* ===== v2 polish ===== */
+.action-ic{width:58px;height:58px;border-radius:20px;background:linear-gradient(145deg,color-mix(in srgb,var(--a2) 28%,#1c202c),#14171f);border:1px solid color-mix(in srgb,var(--a2) 40%,transparent);box-shadow:0 10px 24px -14px color-mix(in srgb,var(--a2) 70%,transparent)}
+.action-ic svg{stroke:var(--a1)}
+.action:active .action-ic{transform:scale(.94)}
+.action-lbl{font-weight:600;font-size:12.5px}
+.recent-ops{margin:6px 0 4px}
+.ro-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--border)}
+.ro-item:last-child{border-bottom:none}
+.ro-t{flex:1;min-width:0}.ro-t b{display:block;font-size:14px;font-weight:600}
+.ro-t span{display:block;font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ro-a{font-weight:700;font-size:14px}.ro-a.neg{color:var(--red)}.ro-a.pos{color:var(--green)}
+.ro-empty{padding:16px;text-align:center;color:var(--muted);font-size:13px}
+#trRec,#trAmt{font-size:22px;font-weight:700;padding:6px 0}
+#trAmt{font-size:28px}
+.rec-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.rec-chip{padding:7px 12px;border-radius:999px;background:var(--surface-2);border:1px solid var(--border-2);font-size:13px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rec-chip:active{transform:scale(.96)}
+.btn-primary:disabled{filter:grayscale(.5);cursor:not-allowed}
+#toast .t-dot{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;font-size:13px;font-weight:800;color:#101319;background:var(--a2)}
+#toast.ok .t-dot::before{content:"\2713"}
+#toast.err .t-dot{background:var(--red)}#toast.err .t-dot::before{content:"!"}
+.lock-now{position:absolute;right:16px;top:calc(12px + var(--safe-top));width:38px;height:38px;border-radius:12px;background:var(--surface);border:1px solid var(--border-2);display:grid;place-items:center;z-index:5}
+.lock-now svg{width:18px;height:18px;stroke:var(--a1);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+@media (prefers-reduced-motion:reduce){.action:active .action-ic,.rec-chip:active{transform:none}}
 </style>
 </head>
 <body>
@@ -1030,6 +1055,12 @@ input,select{font-size:16px}
           <div class="action-lbl">Crypto</div>
         </button>
       </div>
+
+      <div class="section-head">
+        <div class="section-title">Последние операции</div>
+        <div class="section-link" id="linkAllOps">Все</div>
+      </div>
+      <div class="panel recent-ops" id="recentOps"></div>
 
       <div class="section-head">
         <div class="section-title">Валютные счета</div>
@@ -1303,7 +1334,7 @@ function loadState(){
       settings: { ...DEFAULT_STATE.settings, ...(p.settings||{}) },
       txs: p.txs || []
     };
-  } catch(e){ return structuredClone(DEFAULT_STATE); }
+  } catch(e){ try{ localStorage.setItem(STORAGE_KEY+'_backup', localStorage.getItem(STORAGE_KEY)||''); }catch(_){} return structuredClone(DEFAULT_STATE); }
 }
 function saveState(){
   if (resetting) return;
@@ -1531,8 +1562,11 @@ function pinError(){
     }, 380);
   }, 380);
 }
+const SESSION_KEY = 'sayfer_session';
+const touchSession = () => { try { sessionStorage.setItem(SESSION_KEY, String(Date.now())); } catch(e){} };
+function endSession(){ try { sessionStorage.removeItem(SESSION_KEY); } catch(e){} try { TG?.BackButton?.hide(); } catch(e){} location.reload(); }
 function pinSuccess(){
-  if (unlocked) return; unlocked = true;
+  if (unlocked) return; unlocked = true; touchSession();
   hapticOk();
   lockScreen.classList.add('hidden');
   setTimeout(()=>{ lockScreen.style.display='none'; }, 520);
@@ -2440,7 +2474,7 @@ const I18N_EN = {
  'Скрывать баланс':'Hide balances','Суммы заменяются точками':'Amounts are masked','Уведомления':'Notifications',
  'Уведомления об операциях':'Operation notifications','Всплывающие сообщения об успехе':'Pop-up success messages','Вибрация':'Haptics',
  'Отклик при нажатиях (Telegram)':'Tap feedback (Telegram)','Безопасность':'Security','Изменить код доступа':'Change passcode',
- '4-значный PIN':'4-digit PIN','Заблокировать сейчас':'Lock now','Вернуться на экран ввода кода':'Return to the passcode screen',
+ '4-значный PIN':'4-digit PIN','Заблокировать сейчас':'Lock now','Выйти':'Log out','Завершить сеанс — потребуется PIN':'End session — PIN required','Вернуться на экран ввода кода':'Return to the passcode screen',
  'Данные':'Data','Полный сброс':'Full reset','Удалить все данные приложения':'Delete all app data',
  'Будет удалено':'Will be deleted','Все балансы, криптоактивы, история, настройки и данные пользователя':'All balances, crypto assets, history, settings and user data',
  'Это действие':'This action','Нельзя отменить':'Cannot be undone','Сбросить всё':'Reset everything',
@@ -2545,7 +2579,7 @@ function openSettings(){
     <div class="set-title">Безопасность</div>
     <div class="panel">
       ${nav('pin', '🔑', 'Изменить код доступа', '4-значный PIN')}
-      ${nav('lock', '🔒', 'Заблокировать сейчас', 'Вернуться на экран ввода кода')}
+      ${nav('lock', '🚪', 'Выйти', 'Завершить сеанс — потребуется PIN')}
     </div>
     <div class="set-title">Данные</div>
     <div class="panel">${nav('reset', '⚠️', 'Полный сброс', 'Удалить все данные приложения', 'row-danger')}</div>
@@ -2574,7 +2608,7 @@ function openSettings(){
     const id = r.dataset.nav;
     if (id === 'currency') openCurrencyPicker();
     else if (id === 'pin') openPinChange();
-    else if (id === 'lock'){ try { TG?.BackButton?.hide(); } catch(e){} location.reload(); }
+    else if (id === 'lock') endSession();
     else if (id === 'reset') confirmSheet({
       title: 'Полный сброс', danger: true, okText: 'Сбросить всё',
       rows: [['Будет удалено', 'Все балансы, криптоактивы, история, настройки и данные пользователя'], ['Это действие', 'Нельзя отменить']],
@@ -2585,6 +2619,73 @@ function openSettings(){
 $('#openSettings').addEventListener('click', () => { haptic('light'); openSettings(); });
 $('#myAssetsEdit').addEventListener('click', () => { haptic('light'); openDeposit('c:bitcoin'); });
 document.body.classList.toggle('no-anim', S.settings.animations === false);
+
+/* ===== v2 polish ===== */
+(function(){
+  const RK='sayfer_recent_rec';
+  const getRec=()=>{try{return JSON.parse(localStorage.getItem(RK)||'[]')}catch(e){return[]}};
+  const addRec=r=>{try{const l=[r,...getRec().filter(x=>x!==r)].slice(0,5);localStorage.setItem(RK,JSON.stringify(l))}catch(e){}};
+
+  // recent operations on home
+  function renderRecent(){
+    const el=document.getElementById('recentOps'); if(!el) return;
+    const l=S.txs.slice(0,3);
+    if(!l.length){el.innerHTML='<div class="ro-empty">Операций пока нет</div>';return;}
+    el.innerHTML=l.map(t=>`<div class="ro-item"><div class="ro-t"><b>${esc(t.title||'')}</b><span>${esc(t.subtitle||'')}</span></div><div class="ro-a ${t.amountClass==='neg'?'neg':'pos'}">${esc(t.amountText||'')}</div></div>`).join('');
+  }
+  const _ra=renderAll; renderAll=function(){_ra();renderRecent();};
+  const la=document.getElementById('linkAllOps');
+  if(la) la.addEventListener('click',()=>document.querySelector('.nav-item[data-page="history"]').click());
+  renderRecent();
+
+  // transfer: disable send until filled, recent recipients
+  const _ot=openTransfer;
+  openTransfer=function(){
+    _ot();
+    const rec=document.getElementById('trRec'), amt=document.getElementById('trAmt'), btn=document.getElementById('trConfirm');
+    if(!rec||!btn) return;
+    rec.placeholder='@username или любой текст';
+    const check=()=>{btn.disabled=!(rec.value.trim()&&/\d/.test(amt.value));};
+    rec.addEventListener('input',check); amt.addEventListener('input',check); check();
+    const l=getRec();
+    if(l.length){
+      const box=document.createElement('div'); box.className='rec-chips';
+      l.forEach(r=>{const b=document.createElement('button');b.type='button';b.className='rec-chip';b.textContent=r;
+        b.onclick=()=>{rec.value=r;check();amt.focus();};box.appendChild(b);});
+      rec.closest('.field').appendChild(box);
+    }
+    btn.addEventListener('click',()=>{ if(rec.value.trim()) addRec(rec.value); },true);
+  };
+
+  // manual lock + auto-lock after 2 min of inactivity
+  const main=document.getElementById('main');
+  if(main && !document.getElementById('lockNow')){
+    const b=document.createElement('button');b.id='lockNow';b.className='lock-now';b.setAttribute('aria-label','Заблокировать');
+    b.innerHTML='<svg viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="3"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
+    b.onclick=endSession;
+    main.appendChild(b);
+  }
+  let idle; const arm=()=>{clearTimeout(idle);if(unlocked)touchSession();idle=setTimeout(()=>{ if(unlocked) endSession(); },120000);};
+  ['pointerdown','keydown','touchstart','scroll'].forEach(e=>document.addEventListener(e,arm,{passive:true}));
+  arm();
+})();
+
+
+/* ===== session restore & persistence ===== */
+(function(){
+  // обычная перезагрузка внутри сеанса — остаёмся в приложении; новый запуск — экран PIN
+  let last = 0;
+  try { last = parseInt(sessionStorage.getItem(SESSION_KEY) || '0', 10) || 0; } catch(e){}
+  if (last && Date.now() - last < 120000 && !unlocked){
+    lockScreen.style.display = 'none';
+    pinSuccess();
+  } else if (last){ try { sessionStorage.removeItem(SESSION_KEY); } catch(e){} }
+  const flush = () => { try { saveState(); } catch(e){} };
+  window.addEventListener('pagehide', flush);
+  document.addEventListener('visibilitychange', () => { if (document.hidden) flush(); });
+  try { navigator.storage?.persist?.(); } catch(e){}
+})();
+
 applyLang();
 
 </script>
