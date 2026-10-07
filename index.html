@@ -530,7 +530,7 @@
     backdrop-filter:blur(24px) saturate(180%);
     -webkit-backdrop-filter:blur(24px) saturate(180%);
     border:1px solid var(--border-2);
-    display:grid;grid-template-columns:repeat(4,1fr);
+    display:grid;grid-template-columns:repeat(5,1fr);
     padding:6px;
     box-shadow:0 20px 45px -20px rgba(0,0,0,.95);
     z-index:50;
@@ -1222,6 +1222,22 @@ input,select{font-size:16px}
       <div style="height:20px"></div>
     </div>
 
+    <div class="page" id="page-stocks">
+      <div class="section-head" style="padding-top:8px">
+        <div class="section-title" style="font-size:22px;letter-spacing:-.6px;">Акции</div>
+        <div class="section-link" id="stkRefresh">Обновить</div>
+      </div>
+      <div class="panel" id="stkSummary"></div>
+      <div class="section-head"><div class="section-title">Мой портфель</div></div>
+      <div class="panel" id="stkPortfolio"></div>
+      <div class="section-head"><div class="section-title">Поиск акций</div></div>
+      <div class="field"><div class="input-box"><input type="text" id="stkSearch" placeholder="Тикер или компания: AAPL, Siemens…" autocomplete="off" autocapitalize="off" spellcheck="false"></div></div>
+      <div class="panel" id="stkResults" style="display:none"></div>
+      <div class="section-head"><div class="section-title">Популярные</div><div class="section-link">Мировые биржи</div></div>
+      <div class="panel" id="stkMarket"></div>
+      <div style="height:20px"></div>
+    </div>
+
     <div class="page" id="page-history">
       <div class="section-head" style="padding-top:8px">
         <div class="section-title" style="font-size:22px;letter-spacing:-.6px;">История</div>
@@ -1233,6 +1249,7 @@ input,select{font-size:16px}
         <button class="chip-f" data-f="transfer">Переводы</button>
         <button class="chip-f" data-f="exchange">Обмен</button>
         <button class="chip-f" data-f="crypto">Крипто</button>
+        <button class="chip-f" data-f="stock">Акции</button>
       </div>
 
       <div style="height:14px"></div>
@@ -1255,6 +1272,10 @@ input,select{font-size:16px}
     <button class="nav-item" data-page="crypto">
       <svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
       <span>Crypto</span>
+    </button>
+    <button class="nav-item" data-page="stocks">
+      <svg viewBox="0 0 24 24"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="15 7 21 7 21 13"/></svg>
+      <span>Акции</span>
     </button>
     <button class="nav-item" data-page="history">
       <svg viewBox="0 0 24 24"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><polyline points="12 7 12 12 16 14"/></svg>
@@ -1303,9 +1324,12 @@ const PASS_HASH = 115568777;
 
 const SCB = 10n ** 8n;
 function bigPow(d){ return 10n ** BigInt(8 - d); }
+/* parseAmt — теперь игнорирует пробелы (обычные, NBSP, NNBSP) и запятые,
+   чтобы «1 000 000» и «1,000,000» корректно превращались в 1000000. */
 function parseAmt(v, d){
   if (d == null) d = 8;
-  const m = /^(\d*)(?:[.,](\d*))?/.exec(String(v == null ? '' : v).trim());
+  const s = String(v == null ? '' : v).replace(/[\s\u00A0\u202F]/g, '');
+  const m = /^(\d*)(?:[.,](\d*))?/.exec(s);
   const ip = (m && m[1]) || '0', fp = ((m && m[2]) || '').slice(0, d).padEnd(8, '0');
   return BigInt(ip) * SCB + BigInt(fp);
 }
@@ -1375,6 +1399,25 @@ function mulNum(b, x){
   return (b * n * 2n + d) / (d * 2n);
 }
 
+/* Форматирование вводимой строки: удаляет мусор, оставляет одну точку,
+   группирует целую часть пробелами. Возвращает строку без изменения смысла. */
+function formatAmountInput(str){
+  if (str == null) return '';
+  let s = String(str).replace(/[\s\u00A0\u202F]/g, '');
+  const neg = s.startsWith('-');
+  if (neg) s = s.slice(1);
+  s = s.replace(/,/g, '.').replace(/[^\d.]/g, '');
+  const firstDot = s.indexOf('.');
+  if (firstDot >= 0) s = s.slice(0, firstDot + 1) + s.slice(firstDot + 1).replace(/\./g, '');
+  const dot = s.indexOf('.');
+  let ip = dot < 0 ? s : s.slice(0, dot);
+  const fp = dot < 0 ? '' : s.slice(dot);
+  ip = ip.replace(/^0+(?=\d)/, '');
+  if (ip.length > 30) ip = ip.slice(0, 30);
+  if (!ip && !fp) return neg ? '-' : '';
+  return (neg ? '-' : '') + groupInt(ip) + fp;
+}
+
 const STORAGE_KEY = 'sayfer_bank_v1';
 
 const DEFAULT_STATE = {
@@ -1394,6 +1437,8 @@ const DEFAULT_STATE = {
 };
 
 let S = loadState();
+(function(){ const o = (S.stocks && typeof S.stocks === 'object') ? S.stocks : {}; S.stocks = {};
+  for (const [k,v] of Object.entries(o)){ try { const q = toB(v.qty), c = toB(v.cost); if (q > 0n && /^[A-Z0-9.\-^=]{1,15}$/.test(k)) S.stocks[k] = {name:String(v.name||k), cur:String(v.cur||'USD'), qty:q, cost:c}; } catch(e){} } })();
 HAPTICS = S.settings.haptics !== false;
 let resetting = false;
 const getPinHash = () => (typeof S.settings.pinHash === 'number' ? S.settings.pinHash : PASS_HASH);
@@ -1469,12 +1514,13 @@ function fmtMoney(n, cur, min=0, max=2){
 function fmtNum(n, dec=2){
   return new Intl.NumberFormat('en-US',{minimumFractionDigits:dec, maximumFractionDigits:dec}).format(n||0);
 }
+/* fmtCrypto теперь группирует целую часть — раньше 1500000 выводилось слитно */
 function fmtCrypto(n){
   const b = toB(n);
   if (b === 0n) return '0';
   const a = absB(b), d = a < 10000n ? 8 : a < SCB ? 6 : a < 100n * SCB ? 4 : 3;
   const {neg, i, f} = splitB(b, 0, d);
-  return (neg ? '-' : '') + i + (f ? '.' + f : '');
+  return (neg ? '-' : '') + groupInt(i) + (f ? '.' + f : '');
 }
 function curName(code){
   try { return new Intl.DisplayNames(['en'], {type:'currency'}).of(code) || code; }
@@ -1552,6 +1598,10 @@ function totalUSD(){
     if (!h.amount) continue;
     const c = CRYPTO.find(x => x.id === id);
     if (c) sum += mulNum(h.amount, c.current_price);
+  }
+  for (const [sym, h] of Object.entries(S.stocks || {})){
+    const q = STK[sym], p = q ? stkUSD(q) : 0;
+    sum += p > 0 ? mulNum(h.qty, p) : h.cost;
   }
   return sum;
 }
@@ -1907,6 +1957,7 @@ $$('.nav-item').forEach(btn => {
     $('#content').scrollTop = 0;
     if (page === 'history') renderHistory();
     if (page === 'crypto') renderCrypto();
+    if (page === 'stocks') openStocksPage();
     if (page === 'exchange') updateExchange();
     if (page === 'home') renderAll();
   });
@@ -1930,7 +1981,8 @@ $('#linkAllAccounts').addEventListener('click', () => {
 
 const FEE = 0.005;
 const DEC = a => a.k === 'f' ? 2 : 8;
-const fmtFixed = (n, a) => { const {neg, i, f} = a.k === 'f' ? splitB(toB(n), 0, 2) : splitB(toB(n), 0, 8); return (neg ? '-' : '') + i + (f ? '.' + f : ''); };
+/* fmtFixed теперь группирует целую часть — раньше 1500000 выводилось слитно */
+const fmtFixed = (n, a) => { const {neg, i, f} = a.k === 'f' ? splitB(toB(n), 0, 2) : splitB(toB(n), 0, 8); return (neg ? '-' : '') + groupInt(i) + (f ? '.' + f : ''); };
 function asset(v){
   const [k, id] = String(v).split(':');
   if (k === 'f') return {v, k, id, lbl:id, name:id, usd: FIAT && FIAT[id] > 0 ? 1 / FIAT[id] : 0};
@@ -2113,7 +2165,12 @@ function openDeposit(preset){
     if (key !== lastQ){
       lastQ = key;
       $('#depQuick').innerHTML = q.map(v => `<button class="chip-f dep-quick" data-v="${v}">${mode === 'add' ? '+' : ''}${v}</button>`).join('');
-      $$('.dep-quick').forEach(b => b.addEventListener('click', () => { haptic('light'); $('#depAmt').value = b.dataset.v; upd(); }));
+      $$('.dep-quick').forEach(b => b.addEventListener('click', () => {
+        haptic('light');
+        const inp = $('#depAmt');
+        inp.value = formatAmountInput(b.dataset.v);
+        upd();
+      }));
     }
   };
   $('#depCur').addEventListener('change', upd);
@@ -2380,7 +2437,7 @@ function renderHistory(){
     const iconChar = t.type === 'deposit' ? '+'
       : t.type === 'transfer' ? '→'
       : t.type === 'exchange' ? '⇄'
-      : t.type === 'crypto' ? '₿' : '•';
+      : t.type === 'crypto' ? '₿' : t.type === 'stock' ? '📈' : '•';
     const note = (t.type === 'transfer' && t.meta && typeof t.meta.comment === 'string') ? t.meta.comment.trim() : '';
     return `
       <div class="row">
@@ -2443,6 +2500,7 @@ function renderAll(){
   renderBalance();
   renderAccounts();
   if ($('#page-crypto').classList.contains('active')) renderCrypto();
+  if ($('#page-stocks').classList.contains('active')) renderStocks();
   renderHistory();
   updateExchange();
 }
@@ -2638,14 +2696,287 @@ function openCalc(){
   renderCalc();
 }
 
+/* =========================================================
+   АКЦИИ — реальные котировки (Yahoo Finance), интеграция с балансом
+   ========================================================= */
+/* Если у вас есть свой CORS-прокси (Cloudflare Worker и т.п.), укажите его здесь:
+   STK_PROXY = 'https://your-worker.example.workers.dev/?u='  — адрес Yahoo будет добавлен в encodeURIComponent. */
+const STK_PROXY = '';
+const STK_HOST  = 'https://query1.finance.yahoo.com';
+const STK_TYPES = ['EQUITY','ETF'];
+const STK = {};
+const STK_LIST = ['AAPL','MSFT','NVDA','TSLA','AMZN','GOOGL','META','NFLX','JPM','V','KO','DIS','TSM','BABA',
+  'ASML.AS','SAP.DE','SIE.DE','MC.PA','NESN.SW','SHEL.L','NVO','7203.T','005930.KS','0700.HK','PKN.WA','CDR.WA','PKO.WA','RY.TO'];
+const symOk = s => /^[A-Z0-9.\-^=]{1,15}$/.test(s);
+
+async function yf(path){
+  const u = STK_HOST + path, enc = encodeURIComponent(u);
+  const tries = [...(STK_PROXY ? [STK_PROXY + enc] : []), u, 'https://corsproxy.io/?' + enc, 'https://api.allorigins.win/raw?url=' + enc];
+  let err; for (const t of tries){ try { return await fetchJSON(t, 9000); } catch(e){ err = e; } }
+  throw err || new Error('network');
+}
+function normPrice(p, cur){
+  if (cur === 'GBp' || cur === 'GBX') return [p / 100, 'GBP'];
+  if (cur === 'ILA') return [p / 100, 'ILS'];
+  if (cur === 'ZAc' || cur === 'ZAC') return [p / 100, 'ZAR'];
+  return [p, cur];
+}
+async function getQuote(sym, force){
+  sym = String(sym || '').toUpperCase().trim();
+  if (!symOk(sym)) throw new Error('bad symbol');
+  const c = STK[sym];
+  if (c && !force && Date.now() - c.at < 30000) return c;
+  const d = await yf('/v8/finance/chart/' + encodeURIComponent(sym) + '?range=1d&interval=5m');
+  const m = d?.chart?.result?.[0]?.meta;
+  if (!m || !(m.regularMarketPrice > 0) || !STK_TYPES.includes(m.instrumentType)) throw new Error('not found');
+  const rawCur = m.currency || 'USD', [price, cur] = normPrice(m.regularMarketPrice, rawCur);
+  const pr = m.chartPreviousClose ?? m.previousClose;
+  const prev = pr > 0 ? normPrice(pr, rawCur)[0] : price;
+  return STK[sym] = { sym, name: String(m.longName || m.shortName || sym), cur, price, prev,
+    exch: String(m.fullExchangeName || m.exchangeName || ''), t: (m.regularMarketTime || 0) * 1000, at: Date.now() };
+}
+async function getHist(sym, range){
+  const [rg, iv] = { '1D':['1d','5m'], '1M':['1mo','1d'], '1Y':['1y','1wk'] }[range];
+  const d = await yf('/v8/finance/chart/' + encodeURIComponent(sym) + `?range=${rg}&interval=${iv}`);
+  const cl = d?.chart?.result?.[0]?.indicators?.quote?.[0]?.close || [];
+  return cl.filter(x => typeof x === 'number' && x > 0);
+}
+const stkUSD = q => { const r = FIAT && FIAT[q.cur]; return r > 0 ? q.price / r : 0; };
+const stkChg = q => q.prev > 0 ? (q.price / q.prev - 1) * 100 : 0;
+const stkClosed = q => !q.t || Date.now() - q.t > 30 * 60000;
+const sgn = (v, txt) => (v > 0n || v > 0 ? '+' : '') + txt;
+
+function posInfo(sym, h){
+  const q = STK[sym], p = q ? stkUSD(q) : 0;
+  if (!(p > 0)) return null;
+  const val = mulNum(h.qty, p), pl = val - h.cost;
+  return { val, pl, pct: h.cost > 0n ? Number(pl) / Number(h.cost) * 100 : 0 };
+}
+function stkRow(sym, name, h){
+  const q = STK[sym], cur = S.displayCurrency, letter = coinIcon({symbol: sym});
+  let sub = esc(name), r1 = '<span class="loader" style="width:14px;height:14px"></span>', r2 = '';
+  if (h){
+    const pi = posInfo(sym, h);
+    sub = `${fmtQty(h.qty)} шт` + (q ? ` · ${fmtMoney(fromUSD(stkUSD(q), cur), cur, 0, 2)}` : '');
+    if (pi){ r1 = fmtMoney(fromUSD(pi.val, cur), cur); const cls = pi.pl >= 0n ? 'pos' : 'neg';
+      r2 = `<div class="coin-change ${cls}">${sgn(pi.pl, fmtMoney(fromUSD(pi.pl, cur), cur))} (${pi.pct >= 0 ? '+' : ''}${pi.pct.toFixed(2)}%)</div>`; }
+    else if (q){ r1 = `${fmtNum(q.price)} ${esc(q.cur)}`; }
+  } else if (q){
+    const p = stkUSD(q), chg = stkChg(q); sub = esc(q.name);
+    r1 = p > 0 ? fmtMoney(fromUSD(p, cur), cur, 0, 2) : `${fmtNum(q.price)} ${esc(q.cur)}`;
+    r2 = `<div class="coin-change ${chg >= 0 ? 'pos' : 'neg'}">${chg >= 0 ? '+' : ''}${chg.toFixed(2)}%</div>`;
+  } else if (STK_ERR[sym]) { r1 = '—'; }
+  return `<div class="coin-row" data-sym="${esc(sym)}">${letter}<div class="coin-main"><div class="coin-name">${esc(sym)}</div><div class="coin-sub">${sub}</div></div><div class="coin-right"><div class="coin-price">${r1}</div>${r2}</div></div>`;
+}
+const STK_ERR = {};
+let _stkT = null;
+function schedStk(){ clearTimeout(_stkT); _stkT = setTimeout(() => { if ($('#page-stocks').classList.contains('active')) renderStocks(); }, 120); }
+async function stkLoad(list, force){
+  const q = [...new Set(list)]; let i = 0;
+  const w = async () => { while (i < q.length){ const s = q[i++]; try { await getQuote(s, force); delete STK_ERR[s]; } catch(e){ STK_ERR[s] = 1; } schedStk(); } };
+  await Promise.all([w(), w(), w(), w()]);
+}
+function renderStocks(){
+  const cur = S.displayCurrency, hs = Object.entries(S.stocks);
+  let val = 0n, pl = 0n, cost = 0n, ok = true;
+  for (const [sym, h] of hs){ const pi = posInfo(sym, h); if (!pi){ ok = false; continue; } val += pi.val; pl += pi.pl; cost += h.cost; }
+  const pct = cost > 0n ? Number(pl) / Number(cost) * 100 : 0, cls = pl >= 0n ? 'pos' : 'neg', hid = balHidden;
+  $('#stkSummary').innerHTML = `<div style="padding:16px 18px"><div style="font-size:12.5px;color:var(--muted)">Стоимость портфеля акций</div>
+    <div style="font-size:28px;font-weight:800;letter-spacing:-1px;margin-top:4px">${hid ? '••••••' : fmtMoney(fromUSD(val, cur), cur)}</div>
+    <div class="coin-change ${cls}" style="font-size:13px;margin-top:4px">${hid ? '' : hs.length && ok ? `${sgn(pl, fmtMoney(fromUSD(pl, cur), cur))} (${pct >= 0 ? '+' : ''}${pct.toFixed(2)}%) за всё время` : (hs.length ? 'Загрузка цен…' : '')}</div>
+    <div style="font-size:12px;color:var(--muted);margin-top:8px">Доступно для покупок: ${hid ? '••••' : fmtMoney(S.balances[cur] || 0n, cur)}</div></div>`;
+  $('#stkPortfolio').innerHTML = hs.length ? hs.map(([s, h]) => stkRow(s, h.name, h)).join('')
+    : '<div class="empty"><div>У вас пока нет акций.<br>Выберите компанию ниже и купите первую.</div></div>';
+  $('#stkMarket').innerHTML = STK_LIST.map(s => stkRow(s, s, null)).join('');
+  if (STK_LIST.every(s => STK_ERR[s]) ) $('#stkMarket').insertAdjacentHTML('afterbegin', '<div class="empty" style="padding:14px">Не удалось получить котировки. Проверьте сеть и нажмите «Обновить».</div>');
+}
+function openStocksPage(){
+  renderStocks();
+  stkLoad([...Object.keys(S.stocks), ...STK_LIST], false);
+}
+$('#stkRefresh').addEventListener('click', async () => {
+  haptic('light'); toast('Обновление…');
+  await Promise.all([loadFiatRates(true), stkLoad([...Object.keys(S.stocks), ...STK_LIST], true)]);
+  renderStocks(); renderAll(); toast('Котировки обновлены');
+});
+['#stkPortfolio', '#stkMarket', '#stkResults'].forEach(id => $(id).addEventListener('click', e => {
+  const r = e.target.closest('.coin-row'); if (!r || !r.dataset.sym) return; haptic('light'); openStock(r.dataset.sym);
+}));
+
+/* ---- поиск по всему миру ---- */
+let _stkSearchT = null, _stkSearchN = 0;
+$('#stkSearch').addEventListener('input', e => {
+  const q = e.target.value.trim(), box = $('#stkResults'); clearTimeout(_stkSearchT);
+  if (q.length < 1){ box.style.display = 'none'; return; }
+  box.style.display = ''; box.innerHTML = '<div class="empty" style="padding:14px"><span class="loader"></span></div>';
+  const n = ++_stkSearchN;
+  _stkSearchT = setTimeout(async () => {
+    let list = [];
+    try {
+      const d = await yf('/v1/finance/search?q=' + encodeURIComponent(q) + '&quotesCount=12&newsCount=0&listsCount=0');
+      list = (d?.quotes || []).filter(x => x && STK_TYPES.includes(x.quoteType) && symOk(String(x.symbol || '').toUpperCase()));
+    } catch(err){ if (n !== _stkSearchN) return; box.innerHTML = '<div class="empty" style="padding:14px">Поиск недоступен. Проверьте сеть.</div>'; return; }
+    if (n !== _stkSearchN) return;
+    box.innerHTML = list.length ? list.map(x => { const s = String(x.symbol).toUpperCase();
+      return `<div class="coin-row" data-sym="${esc(s)}">${coinIcon({symbol: s})}<div class="coin-main"><div class="coin-name">${esc(s)}</div><div class="coin-sub">${esc(x.longname || x.shortname || '')}</div></div><div class="coin-right"><div class="coin-sub">${esc(x.exchDisp || '')}</div></div></div>`; }).join('')
+      : '<div class="empty" style="padding:14px">Ничего не найдено</div>';
+  }, 400);
+});
+
+/* ---- карточка акции ---- */
+function sparkSvg(cl){
+  if (cl.length < 2) return '<div class="empty" style="padding:24px">Нет данных графика</div>';
+  const W = 300, H = 90, mn = Math.min(...cl), mx = Math.max(...cl), sp = (mx - mn) || 1;
+  const pts = cl.map((v, i) => `${(i / (cl.length - 1) * W).toFixed(1)},${(H - 6 - (v - mn) / sp * (H - 12)).toFixed(1)}`).join(' ');
+  const up = cl[cl.length - 1] >= cl[0], col = up ? 'var(--green)' : 'var(--red)', ch = (cl[cl.length - 1] / cl[0] - 1) * 100;
+  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" style="width:100%;height:110px;display:block"><polyline points="${pts}" fill="none" stroke="${col}" stroke-width="2" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg>
+    <div class="coin-change ${up ? 'pos' : 'neg'}" style="text-align:center;margin-top:6px">${ch >= 0 ? '+' : ''}${ch.toFixed(2)}% за период</div>`;
+}
+async function openStock(sym){
+  openSheet(`<div class="sheet-handle"></div><div class="empty"><span class="loader"></span><div style="margin-top:12px">Загрузка котировки…</div></div>`);
+  let q; try { q = await getQuote(sym, true); } catch(e){ closeSheet(); return toast('Акция не найдена или нет данных', 'err'); }
+  if (!(stkUSD(q) > 0)) { closeSheet(); return toast('Курс валюты ' + q.cur + ' недоступен', 'err'); }
+  const cur = S.displayCurrency, h = S.stocks[sym], chg = stkChg(q), pi = h ? posInfo(sym, h) : null;
+  const when = q.t ? new Date(q.t).toLocaleString(S.settings.lang === 'en' ? 'en-GB' : 'ru-RU', {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit'}) : '';
+  openSheet(`<div class="sheet-handle"></div>
+    <div class="sheet-head"><div class="sheet-title">${esc(sym)}</div><button class="sheet-close" data-close><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div style="padding:0 20px 6px"><div style="color:var(--muted);font-size:13px">${esc(q.name)}${q.exch ? ' · ' + esc(q.exch) : ''}</div>
+      <div style="font-size:30px;font-weight:800;letter-spacing:-1px;margin-top:6px">${fmtMoney(fromUSD(stkUSD(q), cur), cur, 2, 2)}</div>
+      <div style="font-size:12.5px;color:var(--muted)">${fmtNum(q.price)} ${esc(q.cur)} · <span class="coin-change ${chg >= 0 ? 'pos' : 'neg'}" style="display:inline">${chg >= 0 ? '+' : ''}${chg.toFixed(2)}% сегодня</span></div>
+      <div style="font-size:11.5px;color:var(--muted-2);margin-top:4px">${stkClosed(q) ? 'Биржа закрыта · последняя цена ' : 'Обновлено '}${esc(when)}</div></div>
+    <div class="filter-scroll" id="stkRange" style="padding-top:10px"><button class="chip-f" data-r="1D">1 день</button><button class="chip-f active" data-r="1M">1 месяц</button><button class="chip-f" data-r="1Y">1 год</button></div>
+    <div id="stkChart" style="padding:4px 20px 8px"><div class="empty" style="padding:24px"><span class="loader"></span></div></div>
+    ${h ? `<div style="padding:0 20px 8px">${[['В портфеле', `${fmtQty(h.qty)} шт`], ['Средняя цена', fmtMoney(fromUSD(mulNum(h.cost, 1) * SCB / h.qty, cur), cur, 2, 2)],
+        ['Стоимость', pi ? fmtMoney(fromUSD(pi.val, cur), cur) : '—'], ['Прибыль/убыток', pi ? `${sgn(pi.pl, fmtMoney(fromUSD(pi.pl, cur), cur))} (${pi.pct >= 0 ? '+' : ''}${pi.pct.toFixed(2)}%)` : '—']]
+      .map(([k, v]) => `<div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:13.5px"><span style="color:var(--muted)">${k}</span><b style="font-weight:600">${esc(v)}</b></div>`).join('')}</div>` : ''}
+    <button class="btn btn-primary" id="stkBuy">Купить</button>
+    ${h ? '<button class="btn btn-ghost" id="stkSell">Продать</button>' : ''}<div style="height:12px"></div>`);
+  const draw = async r => {
+    $$('#stkRange .chip-f').forEach(b => b.classList.toggle('active', b.dataset.r === r));
+    const box = $('#stkChart'); if (!box) return; box.innerHTML = '<div class="empty" style="padding:24px"><span class="loader"></span></div>';
+    let cl = []; try { cl = await getHist(sym, r); } catch(e){}
+    const b2 = $('#stkChart'); if (b2) b2.innerHTML = sparkSvg(cl);
+  };
+  $$('#stkRange .chip-f').forEach(b => b.addEventListener('click', () => { haptic('light'); draw(b.dataset.r); }));
+  $('#stkBuy').addEventListener('click', () => openTrade(sym, 'buy'));
+  $('#stkSell')?.addEventListener('click', () => openTrade(sym, 'sell'));
+  draw('1M');
+}
+
+/* ---- покупка / продажа ---- */
+function tradeCalc(q, side, mode, raw){
+  const cur = S.displayCurrency, pUSD = stkUSD(q);
+  if (!FIAT || !(pUSD > 0) || !(FIAT[cur] > 0)) return {ok:false, msg:'Курс недоступен'};
+  const pD = pUSD * FIAT[cur], inp = parseAmt(raw, 8);
+  let qty, total;
+  if (side === 'buy' && mode === 'sum'){ qty = truncB(mulNum(inp, 1 / pD), 6); total = roundB(mulNum(qty, pD), 2); if (total > inp) total = inp; }
+  else { qty = truncB(inp, 6); total = roundB(mulNum(qty, pD), 2); }
+  if (!(qty > 0n) || !(total > 0n)) return {ok:false, msg: inp > 0n ? 'Слишком малая сумма' : 'Введите количество', qty, total, pD, pUSD, cur};
+  if (side === 'buy' && total > (S.balances[cur] || 0n)) return {ok:false, msg:'Недостаточно средств', qty, total, pD, pUSD, cur};
+  if (side === 'sell' && qty > (S.stocks[q.sym]?.qty || 0n)) return {ok:false, msg:'Недостаточно акций', qty, total, pD, pUSD, cur};
+  return {ok:true, qty, total, pD, pUSD, cur};
+}
+function openTrade(sym, side){
+  const q = STK[sym], h = S.stocks[sym]; if (!q) return;
+  const cur = S.displayCurrency; let mode = side === 'buy' ? 'sum' : 'qty';
+  openSheet(`<div class="sheet-handle"></div>
+    <div class="sheet-head"><div class="sheet-title">${side === 'buy' ? 'Покупка' : 'Продажа'} ${esc(sym)}</div><button class="sheet-close" data-close><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    ${side === 'buy' ? `<div class="filter-scroll" id="trMode"><button class="chip-f active" data-m="sum">На сумму (${esc(cur)})</button><button class="chip-f" data-m="qty">В штуках</button></div>` : ''}
+    <div class="field"><div class="input-box"><input type="text" id="trAmt" placeholder="0" inputmode="decimal"><button type="button" class="chip-f" id="trMax" style="min-height:30px;padding:4px 10px">${side === 'buy' ? 'Макс' : 'Все'}</button><div class="input-suffix" id="trSfx"></div></div></div>
+    <div class="rate-line"><span>Цена за акцию</span><b id="trPrice"></b></div>
+    <div class="rate-line"><span>Количество</span><b id="trQty">—</b></div>
+    <div class="rate-line"><span>${side === 'buy' ? 'Спишется' : 'Получите'}</span><b id="trTotal">—</b></div>
+    <div class="rate-line"><span>${side === 'buy' ? 'Доступно' : 'В портфеле'}</span><b id="trAvail"></b></div>
+    <button class="btn btn-primary" id="trGo" disabled>—</button><div style="height:12px"></div>`);
+  const upd = () => {
+    const c = tradeCalc(q, side, mode, $('#trAmt').value);
+    $('#trSfx').textContent = side === 'sell' || mode === 'qty' ? 'шт' : cur;
+    $('#trPrice').textContent = c.pD ? fmtMoney(c.pD, cur, 2, 2) : '—';
+    $('#trQty').textContent = c.qty > 0n ? fmtQty(c.qty) + ' шт' : '—';
+    $('#trTotal').textContent = c.total > 0n ? fmtMoney(c.total, cur) : '—';
+    $('#trAvail').textContent = side === 'buy' ? fmtMoney(S.balances[cur] || 0n, cur) : fmtQty(h?.qty || 0n) + ' шт';
+    $('#trGo').disabled = !c.ok; $('#trGo').textContent = c.ok ? (side === 'buy' ? 'Купить' : 'Продать') : c.msg;
+  };
+  $('#trAmt').addEventListener('input', upd);
+  $$('#trMode .chip-f').forEach(b => b.addEventListener('click', () => { mode = b.dataset.m; $$('#trMode .chip-f').forEach(x => x.classList.toggle('active', x === b)); $('#trAmt').value = ''; upd(); }));
+  $('#trMax').addEventListener('click', () => {
+    if (side === 'sell'){ $('#trAmt').value = dStr(h.qty); }
+    else {
+      const bal = S.balances[cur] || 0n, pD = stkUSD(q) * (FIAT?.[cur] || 0);
+      if (mode === 'sum') $('#trAmt').value = dStr(truncB(bal, 2));
+      else if (pD > 0){ let qt = truncB(mulNum(bal, 1 / pD), 6); while (qt > 0n && roundB(mulNum(qt, pD), 2) > bal) qt -= 100n; $('#trAmt').value = dStr(qt); }
+    }
+    $('#trAmt').dispatchEvent(new Event('input', {bubbles:true}));
+  });
+  $('#trGo').addEventListener('click', async () => {
+    const btn = $('#trGo'); btn.disabled = true; btn.textContent = 'Проверяем цену…';
+    let fq; try { fq = await getQuote(sym, true); } catch(e){ closeSheet(); return toast('Не удалось получить актуальную цену', 'err'); }
+    const c = tradeCalc(fq, side, mode, $('#trAmt').value);
+    if (!c.ok){ upd(); return toast(c.msg, 'err'); }
+    confirmSheet({
+      title: side === 'buy' ? 'Подтверждение покупки' : 'Подтверждение продажи',
+      rows: [['Компания', `${fq.name} (${sym})`], ['Цена за акцию', `${fmtMoney(c.pD, cur, 2, 2)} (${fmtNum(fq.price)} ${fq.cur})`],
+             ['Количество', `${fmtQty(c.qty)} шт`], [side === 'buy' ? 'Спишется' : 'Получите', fmtMoney(c.total, cur)]
+             ].concat(stkClosed(fq) ? [['Внимание', 'Биржа закрыта, цена последнего закрытия']] : []),
+      okText: side === 'buy' ? 'Купить' : 'Продать',
+      onConfirm: () => execTrade(sym, fq, side, c)
+    });
+  });
+  upd();
+}
+function execTrade(sym, q, side, c){
+  const cur = c.cur, snap = { b: {...S.balances}, s: structuredClone(S.stocks) };
+  try {
+    const bal = S.balances[cur] || 0n; let h = S.stocks[sym], realized = 0n;
+    if (side === 'buy'){
+      if (c.total > bal) throw new Error('funds');
+      S.balances[cur] = bal - c.total; if (S.balances[cur] <= 0n) delete S.balances[cur];
+      h = h || (S.stocks[sym] = {name: q.name, cur: q.cur, qty: 0n, cost: 0n});
+      h.qty += c.qty; h.cost += toUSD(c.total, cur);
+    } else {
+      if (!h || c.qty > h.qty) throw new Error('shares');
+      const removed = c.qty === h.qty ? h.cost : h.cost * c.qty / h.qty;
+      realized = toUSD(c.total, cur) - removed;
+      h.qty -= c.qty; h.cost -= removed;
+      S.balances[cur] = bal + c.total;
+      if (h.qty <= 0n) delete S.stocks[sym];
+    }
+    const buy = side === 'buy';
+    S.txs.unshift({ id: uid(), type: 'stock', title: `${buy ? 'Покупка' : 'Продажа'} ${sym}`,
+      subtitle: `${fmtQty(c.qty)} шт × ${fmtMoney(c.pD, cur, 2, 2)}` + (buy ? '' : ` · P/L ${sgn(realized, fmtMoney(fromUSD(realized, cur), cur))}`),
+      amountText: (buy ? '-' : '+') + fmtMoney(c.total, cur), amountClass: buy ? 'neg' : 'pos', amount: dStr(c.total), currency: cur,
+      date: nowDate().toISOString(), meta: { sym, side, qty: dStr(c.qty), price: q.price, priceCur: q.cur } });
+  } catch(err){
+    S.balances = snap.b; S.stocks = snap.s; closeSheet();
+    return toast('Операция не выполнена, баланс не изменён', 'err');
+  }
+  saveState(); hapticOk(); closeSheet(); renderAll(); renderStocks();
+  toast(side === 'buy' ? 'Акции куплены' : 'Акции проданы');
+}
+setInterval(() => {
+  if (document.hidden || !unlocked || !$('#page-stocks').classList.contains('active')) return;
+  stkLoad([...Object.keys(S.stocks), ...STK_LIST], false);
+}, 60000);
+
 renderCardNumber();
 applyTheme(S.displayCurrency, false);
 updateDots();
 
+/* Глобальный обработчик ввода: для всех полей с inputmode=decimal
+   переформатируем значение — добавляем разделители разрядов,
+   сохраняя позицию курсора относительно конца строки. */
 document.addEventListener('input', e => {
   const t = e.target;
-  if (t.matches?.('[inputmode=decimal]') && !t.readOnly)
-    { const v = t.value.replace(',', '.').replace(/[^\d.]/g, '').replace(/(\..*)\./g, '$1'); if (v !== t.value) t.value = v; }
+  if (t.matches?.('[inputmode=decimal]') && !t.readOnly){
+    const before = t.value;
+    const posFromEnd = before.length - (t.selectionStart ?? before.length);
+    const after = formatAmountInput(before);
+    if (after !== before){
+      t.value = after;
+      const newPos = Math.max(0, after.length - posFromEnd);
+      try { t.setSelectionRange(newPos, newPos); } catch(_){}
+    }
+  }
 });
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape' && overlay.classList.contains('show')) return closeSheet();
