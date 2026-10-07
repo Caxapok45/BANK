@@ -986,6 +986,8 @@ input,select{font-size:16px}
   .brand-name{font-size:17px}
   .user-chip #userName{max-width:160px}
 }
+.stk-ic img{background:#fff;object-fit:contain;padding:15%;box-sizing:border-box}
+.stk-ic{background:#fff1}
 </style>
 </head>
 <body>
@@ -1235,6 +1237,9 @@ input,select{font-size:16px}
       <div class="panel" id="stkResults" style="display:none"></div>
       <div class="section-head"><div class="section-title">Популярные</div><div class="section-link">Мировые биржи</div></div>
       <div class="panel" id="stkMarket"></div>
+      <div class="section-head"><div class="section-title">Все акции мира</div><div class="section-link" id="stkAllCnt" style="pointer-events:none"></div></div>
+      <div class="filter-scroll" id="stkAllX"></div>
+      <div class="panel" id="stkAll"></div>
       <div style="height:20px"></div>
     </div>
 
@@ -2441,7 +2446,7 @@ function renderHistory(){
     const note = (t.type === 'transfer' && t.meta && typeof t.meta.comment === 'string') ? t.meta.comment.trim() : '';
     return `
       <div class="row">
-        <div class="row-ic ${cls}">${iconChar}</div>
+        ${t.type === 'stock' && t.meta && symOk(String(t.meta.sym || '')) ? stkLogo(t.meta.sym, 38) : `<div class="row-ic ${cls}">${iconChar}</div>`}
         <div class="row-main">
           <div class="row-title">${esc(t.title)}</div>
           <div class="row-sub">${[esc(t.subtitle), fmtTime(t.date)].filter(Boolean).join(' · ')}</div>
@@ -2752,8 +2757,77 @@ function posInfo(sym, h){
   const val = mulNum(h.qty, p), pl = val - h.cost;
   return { val, pl, pct: h.cost > 0n ? Number(pl) / Number(h.cost) * 100 : 0 };
 }
+/* ---- логотипы: привязка по тикеру, цепочка источников, без случайных картинок ---- */
+const STK_DOM = {AAPL:'apple.com',MSFT:'microsoft.com',NVDA:'nvidia.com',TSLA:'tesla.com',AMZN:'amazon.com',GOOGL:'abc.xyz',META:'meta.com',NFLX:'netflix.com',JPM:'jpmorganchase.com',V:'visa.com',KO:'coca-colacompany.com',DIS:'disney.com',TSM:'tsmc.com',BABA:'alibabagroup.com','ASML.AS':'asml.com','SAP.DE':'sap.com','SIE.DE':'siemens.com','MC.PA':'lvmh.com','NESN.SW':'nestle.com','SHEL.L':'shell.com',NVO:'novonordisk.com','7203.T':'toyota.co.jp','005930.KS':'samsung.com','0700.HK':'tencent.com','PKN.WA':'orlen.pl','CDR.WA':'cdprojekt.com','PKO.WA':'pkobp.pl','RY.TO':'rbc.com'};
+const STK_LOGO = {};
+let STK_LOGO_OK = {}; try { STK_LOGO_OK = JSON.parse(localStorage.getItem('sayfer_stk_logo') || '{}'); } catch(e){}
+function stkLogoSrcs(sym){
+  const e = encodeURIComponent(sym), out = [];
+  if (STK_LOGO_OK[sym]) out.push(STK_LOGO_OK[sym]);
+  if (STK_LOGO[sym]) out.push(STK_LOGO[sym]);
+  out.push(`https://financialmodelingprep.com/image-stock/${e}.png`, `https://assets.parqet.com/logos/symbol/${e}?format=png`);
+  if (STK_DOM[sym]) out.push(`https://www.google.com/s2/favicons?domain=${STK_DOM[sym]}&sz=128`);
+  return [...new Set(out)];
+}
+function stkLogo(sym, size){
+  const s = String(sym || '').toUpperCase(), a = stkLogoSrcs(s), st = size ? ` style="width:${size}px;height:${size}px;flex-shrink:0"` : '';
+  return `<div class="coin-ic stk-ic" data-l="${esc(s[0] || '?')}"${st}><img src="${esc(a[0])}" data-s="${esc(a.join('|'))}" data-i="0" data-k="${esc(s)}" alt="" loading="lazy" referrerpolicy="no-referrer" onload="stkLogoOk(this)" onerror="stkLogoErr(this)"></div>`;
+}
+window.stkLogoErr = im => { const a = (im.dataset.s || '').split('|'), i = +im.dataset.i + 1; if (i < a.length){ im.dataset.i = i; im.src = a[i]; } else im.remove(); };
+window.stkLogoOk = im => {
+  if (im.naturalWidth < 24 && im.src.indexOf('favicons') < 0) return stkLogoErr(im);
+  const k = im.dataset.k; if (k && STK_LOGO_OK[k] !== im.src && /^https:/.test(im.src)){ STK_LOGO_OK[k] = im.src; try { localStorage.setItem('sayfer_stk_logo', JSON.stringify(STK_LOGO_OK)); } catch(e){} }
+};
+
+/* ---- каталог акций мира: пополняется автоматически ----
+   Источники (по порядку): STK_CATALOG_URL — свой JSON [{s:'AAPL',n:'Apple Inc.',x:'US',l:'https://…logo.png'}],
+   STK_FINNHUB_KEY — бесплатный ключ finnhub.io (списки всех бумаг ~30 бирж, кэш 24 ч), плюс всё, что найдено через поиск Yahoo. */
+const STK_FINNHUB_KEY = '';
+const STK_CATALOG_URL = '';
+const STK_EXCH = ['US','L','T','HK','TO','DE','PA','AS','SW','MI','MC','ST','OL','CO','HE','WA','KS','AX','NS','SS','SZ','SA','TA','SI','TW','BR','LS','VI','IR'];
+const CAT = STK_LIST.map(s => ({s, n: s, x: ''})), catSeen = new Set(STK_LIST);
+let CAT_X = 'ALL', CAT_N = 40, _catStarted = false;
+function catAdd(arr){
+  let n = 0;
+  for (const o of arr){
+    let s = String(o.s || '').toUpperCase(); if (o.x === 'US') s = s.replace('.', '-');
+    if (!symOk(s) || catSeen.has(s)) continue;
+    catSeen.add(s); CAT.push({s, n: String(o.n || s), x: String(o.x || '')}); n++;
+    if (o.l && /^https:\/\//.test(o.l)) STK_LOGO[s] = o.l;
+  }
+  return n;
+}
+async function catLoad(){
+  if (_catStarted) return; _catStarted = true;
+  const put = a => { if (catAdd(a)) schedStk(); };
+  try { if (STK_CATALOG_URL) put(await fetchJSON(STK_CATALOG_URL, 30000)); } catch(e){}
+  if (!STK_FINNHUB_KEY) return;
+  for (const x of STK_EXCH){
+    const k = 'sayfer_cat_' + x; let c = null; try { c = JSON.parse(localStorage.getItem(k) || 'null'); } catch(e){}
+    if (!c || Date.now() - c.at > 864e5){
+      try {
+        const d = await fetchJSON(`https://finnhub.io/api/v1/stock/symbol?exchange=${x}&token=${encodeURIComponent(STK_FINNHUB_KEY)}`, 40000);
+        c = {at: Date.now(), a: d.filter(i => /Common Stock|ADR|REIT|ETP|ETF/i.test(i.type || '')).map(i => [i.symbol, i.description])};
+        try { localStorage.setItem(k, JSON.stringify(c)); } catch(e){}
+      } catch(e){}
+      await new Promise(r => setTimeout(r, 1100));
+    }
+    if (c) put(c.a.map(i => ({s: i[0], n: i[1], x})));
+  }
+}
+const catList = () => CAT_X === 'ALL' ? CAT : CAT.filter(o => o.x === CAT_X);
+const catVisible = () => $('#page-stocks').classList.contains('active') ? catList().slice(0, CAT_N).map(o => o.s) : [];
+function renderCat(){
+  const box = $('#stkAll'); if (!box) return;
+  const xs = [...new Set(CAT.map(o => o.x).filter(Boolean))], l = catList();
+  $('#stkAllX').innerHTML = xs.length ? ['ALL', ...xs].map(x => `<button class="chip-f${x === CAT_X ? ' active' : ''}" data-x="${esc(x)}">${x === 'ALL' ? 'Все' : esc(x)}</button>`).join('') : '';
+  $('#stkAllCnt').textContent = l.length.toLocaleString('ru-RU') + ' акций';
+  box.innerHTML = l.slice(0, CAT_N).map(o => stkRow(o.s, o.n, null)).join('')
+    + (l.length > CAT_N ? `<div class="section-link" id="stkMore" style="text-align:center;padding:14px">Показать ещё (${(l.length - CAT_N).toLocaleString('ru-RU')})</div>` : '')
+    + (!STK_FINNHUB_KEY && !STK_CATALOG_URL ? '<div class="empty" style="padding:12px;font-size:12px">Полный каталог мировых бирж подключается через STK_FINNHUB_KEY или STK_CATALOG_URL. Любую акцию можно найти поиском выше.</div>' : '');
+}
 function stkRow(sym, name, h){
-  const q = STK[sym], cur = S.displayCurrency, letter = coinIcon({symbol: sym});
+  const q = STK[sym], cur = S.displayCurrency, letter = stkLogo(sym);
   let sub = esc(name), r1 = '<span class="loader" style="width:14px;height:14px"></span>', r2 = '';
   if (h){
     const pi = posInfo(sym, h);
@@ -2787,22 +2861,24 @@ function renderStocks(){
     <div style="font-size:12px;color:var(--muted);margin-top:8px">Доступно для покупок: ${hid ? '••••' : fmtMoney(S.balances[cur] || 0n, cur)}</div></div>`;
   $('#stkPortfolio').innerHTML = hs.length ? hs.map(([s, h]) => stkRow(s, h.name, h)).join('')
     : '<div class="empty"><div>У вас пока нет акций.<br>Выберите компанию ниже и купите первую.</div></div>';
-  $('#stkMarket').innerHTML = STK_LIST.map(s => stkRow(s, s, null)).join('');
+  $('#stkMarket').innerHTML = STK_LIST.map(s => stkRow(s, s, null)).join(''); renderCat();
   if (STK_LIST.every(s => STK_ERR[s]) ) $('#stkMarket').insertAdjacentHTML('afterbegin', '<div class="empty" style="padding:14px">Не удалось получить котировки. Проверьте сеть и нажмите «Обновить».</div>');
 }
 function openStocksPage(){
-  renderStocks();
-  stkLoad([...Object.keys(S.stocks), ...STK_LIST], false);
+  renderStocks(); catLoad();
+  stkLoad([...Object.keys(S.stocks), ...STK_LIST, ...catVisible()], false);
 }
 $('#stkRefresh').addEventListener('click', async () => {
   haptic('light'); toast('Обновление…');
-  await Promise.all([loadFiatRates(true), stkLoad([...Object.keys(S.stocks), ...STK_LIST], true)]);
+  await Promise.all([loadFiatRates(true), stkLoad([...Object.keys(S.stocks), ...STK_LIST, ...catVisible()], true)]);
   renderStocks(); renderAll(); toast('Котировки обновлены');
 });
-['#stkPortfolio', '#stkMarket', '#stkResults'].forEach(id => $(id).addEventListener('click', e => {
+['#stkPortfolio', '#stkMarket', '#stkResults', '#stkAll'].forEach(id => $(id).addEventListener('click', e => {
   const r = e.target.closest('.coin-row'); if (!r || !r.dataset.sym) return; haptic('light'); openStock(r.dataset.sym);
 }));
 
+$('#stkAllX').addEventListener('click', e => { const b = e.target.closest('[data-x]'); if (!b) return; haptic('light'); CAT_X = b.dataset.x; CAT_N = 40; renderCat(); stkLoad(catVisible(), false); });
+$('#stkAll').addEventListener('click', e => { if (!e.target.closest('#stkMore')) return; haptic('light'); CAT_N += 40; renderCat(); stkLoad(catVisible(), false); });
 /* ---- поиск по всему миру ---- */
 let _stkSearchT = null, _stkSearchN = 0;
 $('#stkSearch').addEventListener('input', e => {
@@ -2811,14 +2887,19 @@ $('#stkSearch').addEventListener('input', e => {
   box.style.display = ''; box.innerHTML = '<div class="empty" style="padding:14px"><span class="loader"></span></div>';
   const n = ++_stkSearchN;
   _stkSearchT = setTimeout(async () => {
-    let list = [];
+    let list = [], netErr = false;
     try {
       const d = await yf('/v1/finance/search?q=' + encodeURIComponent(q) + '&quotesCount=12&newsCount=0&listsCount=0');
       list = (d?.quotes || []).filter(x => x && STK_TYPES.includes(x.quoteType) && symOk(String(x.symbol || '').toUpperCase()));
-    } catch(err){ if (n !== _stkSearchN) return; box.innerHTML = '<div class="empty" style="padding:14px">Поиск недоступен. Проверьте сеть.</div>'; return; }
+    } catch(err){ netErr = true; }
     if (n !== _stkSearchN) return;
+    const ql = q.toLowerCase(), have = new Set(list.map(x => String(x.symbol).toUpperCase()));
+    CAT.filter(o => !have.has(o.s) && (o.s.toLowerCase().startsWith(ql) || o.n.toLowerCase().includes(ql))).slice(0, 8)
+      .forEach(o => list.push({symbol: o.s, longname: o.n, exchDisp: o.x}));
+    if (!netErr) catAdd(list.map(x => ({s: x.symbol, n: x.longname || x.shortname, x: ''})));
+    if (netErr && !list.length){ box.innerHTML = '<div class="empty" style="padding:14px">Поиск недоступен. Проверьте сеть.</div>'; return; }
     box.innerHTML = list.length ? list.map(x => { const s = String(x.symbol).toUpperCase();
-      return `<div class="coin-row" data-sym="${esc(s)}">${coinIcon({symbol: s})}<div class="coin-main"><div class="coin-name">${esc(s)}</div><div class="coin-sub">${esc(x.longname || x.shortname || '')}</div></div><div class="coin-right"><div class="coin-sub">${esc(x.exchDisp || '')}</div></div></div>`; }).join('')
+      return `<div class="coin-row" data-sym="${esc(s)}">${stkLogo(s)}<div class="coin-main"><div class="coin-name">${esc(s)}</div><div class="coin-sub">${esc(x.longname || x.shortname || '')}</div></div><div class="coin-right"><div class="coin-sub">${esc(x.exchDisp || '')}</div></div></div>`; }).join('')
       : '<div class="empty" style="padding:14px">Ничего не найдено</div>';
   }, 400);
 });
@@ -2840,7 +2921,7 @@ async function openStock(sym){
   const when = q.t ? new Date(q.t).toLocaleString(S.settings.lang === 'en' ? 'en-GB' : 'ru-RU', {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit'}) : '';
   openSheet(`<div class="sheet-handle"></div>
     <div class="sheet-head"><div class="sheet-title">${esc(sym)}</div><button class="sheet-close" data-close><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
-    <div style="padding:0 20px 6px"><div style="color:var(--muted);font-size:13px">${esc(q.name)}${q.exch ? ' · ' + esc(q.exch) : ''}</div>
+    <div style="padding:0 20px 6px"><div style="display:flex;align-items:center;gap:12px;color:var(--muted);font-size:13px">${stkLogo(sym, 44)}<span>${esc(q.name)}${q.exch ? ' · ' + esc(q.exch) : ''}</span></div>
       <div style="font-size:30px;font-weight:800;letter-spacing:-1px;margin-top:6px">${fmtMoney(fromUSD(stkUSD(q), cur), cur, 2, 2)}</div>
       <div style="font-size:12.5px;color:var(--muted)">${fmtNum(q.price)} ${esc(q.cur)} · <span class="coin-change ${chg >= 0 ? 'pos' : 'neg'}" style="display:inline">${chg >= 0 ? '+' : ''}${chg.toFixed(2)}% сегодня</span></div>
       <div style="font-size:11.5px;color:var(--muted-2);margin-top:4px">${stkClosed(q) ? 'Биржа закрыта · последняя цена ' : 'Обновлено '}${esc(when)}</div></div>
@@ -2955,7 +3036,7 @@ function execTrade(sym, q, side, c){
 }
 setInterval(() => {
   if (document.hidden || !unlocked || !$('#page-stocks').classList.contains('active')) return;
-  stkLoad([...Object.keys(S.stocks), ...STK_LIST], false);
+  stkLoad([...Object.keys(S.stocks), ...STK_LIST, ...catVisible()], false);
 }, 60000);
 
 renderCardNumber();
