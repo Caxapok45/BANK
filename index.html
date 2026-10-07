@@ -370,6 +370,7 @@
   .row-main{flex:1;min-width:0;}
   .row-title{font-size:13.5px;font-weight:600;letter-spacing:-.1px;}
   .row-sub{font-size:11.5px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .row-note{font-size:11.5px;color:var(--muted-2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .row-amt{font-size:13.5px;font-weight:700;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
   .row-amt.pos{color:var(--green);}
   .row-amt.neg{color:var(--red);}
@@ -391,18 +392,15 @@
     padding:0 14px;height:54px;
     transition:border-color .18s, background .18s;
   }
-  /* Фокус-цвет зафиксирован (золото), не зависит от темы — раньше был розовым для RUB */
   .input-box:focus-within{border-color:rgba(212,175,106,.55);background:rgba(212,175,106,.06);}
   .input-box input{
     flex:1;font-size:17px;font-weight:600;letter-spacing:-.2px;
     background:none;width:100%;color:#fff;
   }
   .input-box input::placeholder{color:var(--muted-2);font-weight:500;}
-  /* Убираем нативную обводку/подсветку, чтобы поле не «горело» розовым */
   .input-box input:focus,.input-box input:focus-visible,
   .select-box select:focus,.select-box select:focus-visible,
   input:focus,input:focus-visible,select:focus,select:focus-visible,textarea:focus,textarea:focus-visible{outline:none;box-shadow:none;}
-  /* Цвет выделения текста внутри полей — нейтральное золото, а не тема */
   input::selection,textarea::selection{background:rgba(212,175,106,.35);color:#fff}
   input::-moz-selection,textarea::-moz-selection{background:rgba(212,175,106,.35);color:#fff}
   .input-suffix{font-size:14px;font-weight:700;color:var(--muted);letter-spacing:.5px;}
@@ -687,7 +685,6 @@ body{font-family:'Manrope',-apple-system,BlinkMacSystemFont,'SF Pro Display','Se
 .nav-item.active{background:color-mix(in srgb,var(--a2) 14%,transparent)}
 .nav-item span{font-size:10px}
 .page{animation:fadeUp .3s cubic-bezier(.2,.8,.3,1)}
-/* Обводка фокуса — только для клавиатурной навигации, нейтральный цвет (без темы) */
 button:focus-visible,a:focus-visible,.nav-item:focus-visible,.action:focus-visible,.cur-btn:focus-visible,.chip-f:focus-visible{outline:2px solid rgba(212,175,106,.65);outline-offset:2px}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important;transition-duration:.01s!important}}
 @media (max-height:700px){.balance-block{padding-bottom:8px}.balance-value{font-size:34px}}
@@ -894,6 +891,74 @@ input,select{font-size:16px}
 @media (max-width:380px){#userName{max-width:44px}}
 .lock-now svg{width:16px;height:16px;stroke:var(--a1);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 @media (prefers-reduced-motion:reduce){.action:active .action-ic,.rec-chip:active{transform:none}}
+
+/* ===== calculator ===== */
+.calc-display{
+  margin:4px 20px 16px;
+  padding:20px 22px;
+  border-radius:18px;
+  background:linear-gradient(160deg,rgba(255,255,255,.055),rgba(255,255,255,.018));
+  border:1px solid var(--border);
+  font-size:clamp(26px,8vw,36px);
+  font-weight:700;
+  text-align:right;
+  letter-spacing:-.8px;
+  font-variant-numeric:tabular-nums;
+  min-height:82px;
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  overflow-x:auto;overflow-y:hidden;
+  white-space:nowrap;
+  color:#fff;
+  -webkit-overflow-scrolling:touch;
+}
+.calc-display::-webkit-scrollbar{display:none}
+.calc-keys{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+  padding:0 20px 12px;
+}
+.calc-key{
+  height:60px;border-radius:16px;
+  font-size:22px;font-weight:600;
+  background:rgba(255,255,255,.05);
+  border:1px solid var(--border);
+  color:#fff;
+  transition:transform .12s, background .12s, border-color .12s;
+  display:grid;place-items:center;
+  font-variant-numeric:tabular-nums;
+  -webkit-user-select:none;user-select:none;
+}
+.calc-key:active{transform:scale(.94);background:rgba(255,255,255,.13)}
+.calc-key.fn{
+  color:var(--a1);
+  background:color-mix(in srgb,var(--a2) 12%,transparent);
+  border-color:color-mix(in srgb,var(--a2) 30%,transparent);
+  font-size:20px;
+}
+.calc-key.op{
+  color:var(--a1);
+  background:linear-gradient(145deg,color-mix(in srgb,var(--a2) 26%,transparent),color-mix(in srgb,var(--a2) 8%,transparent));
+  border-color:color-mix(in srgb,var(--a2) 42%,transparent);
+  font-size:24px;
+}
+.calc-key.eq{
+  color:#1a1407;
+  background:linear-gradient(145deg,var(--a1),var(--a2) 55%,var(--a3));
+  border:none;
+  box-shadow:0 12px 26px -14px color-mix(in srgb,var(--a2) 90%,transparent), inset 0 1px 0 rgba(255,255,255,.5);
+  font-size:24px;font-weight:800;
+}
+.calc-key.eq:active{transform:scale(.94)}
+.calc-key svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+@media (max-width:360px){
+  .calc-display{margin-left:14px;margin-right:14px}
+  .calc-keys{padding-left:14px;padding-right:14px}
+  .calc-key{height:54px;font-size:20px}
+  .calc-key.op{font-size:22px}
+}
 </style>
 </head>
 <body>
@@ -940,6 +1005,13 @@ input,select{font-size:16px}
       </div>
     </div>
     <div class="top-right">
+      <button class="icon-btn" id="openCalc" type="button" aria-label="Калькулятор" title="Калькулятор">
+        <svg viewBox="0 0 24 24">
+          <rect x="4.5" y="3" width="15" height="18" rx="3"/>
+          <path d="M8 7h8"/>
+          <path d="M8 12h.01M12 12h.01M16 12h.01M8 16h.01M12 16h.01M16 16h.01"/>
+        </svg>
+      </button>
       <button class="icon-btn" id="openSettings" type="button" aria-label="Настройки" title="Настройки">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
       </button>
@@ -1329,9 +1401,6 @@ let CRYPTO = [];
 const $  = (s, r=document) => r.querySelector(s);
 const $$ = (s, r=document) => [...r.querySelectorAll(s)];
 
-/* ---- ФОРМАТИРОВАНИЕ ДЕНЕГ ----
-   min=0, max=2 → хвостовые нули после запятой обрезаются.
-   «0.00» → «0»,  «500.00» → «500»,  «12.50» → «12.5» */
 function fmtMoneyB(b, cur, min=0, max=2){
   if (S.settings.numberFormat === 'short'){
     const sh = fmtShortB(b);
@@ -1373,7 +1442,6 @@ function fmtMoney(n, cur, min=0, max=2){
 function fmtNum(n, dec=2){
   return new Intl.NumberFormat('en-US',{minimumFractionDigits:dec, maximumFractionDigits:dec}).format(n||0);
 }
-/* fmtCrypto — тоже обрезаем хвостовые нули */
 function fmtCrypto(n){
   const b = toB(n);
   if (b === 0n) return '0';
@@ -1835,7 +1903,6 @@ $('#linkAllAccounts').addEventListener('click', () => {
 
 const FEE = 0.005;
 const DEC = a => a.k === 'f' ? 2 : 8;
-/* fmtFixed — для полей ввода; теперь тоже без хвостовых нулей у фиата */
 const fmtFixed = (n, a) => { const {neg, i, f} = a.k === 'f' ? splitB(toB(n), 0, 2) : splitB(toB(n), 0, 8); return (neg ? '-' : '') + i + (f ? '.' + f : ''); };
 function asset(v){
   const [k, id] = String(v).split(':');
@@ -2039,11 +2106,11 @@ function openDeposit(preset){
     const delta = next - bal;
     try { setBal(a, next); } catch(e){ return toast('Некорректная сумма', 'err'); }
     if (a.k === 'c' && S.crypto[a.id] && a.usd > 0) S.crypto[a.id].usd = a.usd;
-    if (delta !== 0n){
+    if (delta !== 0n && mode === 'add'){
       const txt = a.k === 'f' ? fmtMoney(absB(delta), a.id) : `${fmtFixed(absB(delta), a)} ${a.lbl}`;
       S.txs.unshift({
         id: uid(), type: a.k === 'c' ? 'crypto' : 'deposit',
-        title: mode === 'add' ? 'Пополнение' : 'Корректировка',
+        title: 'Пополнение',
         subtitle: a.k === 'f' ? curName(a.id) : a.name,
         amountText: (delta > 0 ? '+' : '-') + txt, amountClass: delta > 0 ? 'pos' : 'neg',
         amount: dStr(delta), currency: a.lbl, date: nowDate().toISOString()
@@ -2054,10 +2121,11 @@ function openDeposit(preset){
   });
 }
 
+/* =========================================================
+   TRANSFER — всегда в валюте основного баланса (S.displayCurrency)
+   ========================================================= */
 function openTransfer(){
-  const list = FIAT_LIST.length ? FIAT_LIST : Object.keys(FIAT||{});
-  const avail = Object.entries(S.balances).filter(([c,a])=>a>0).map(([c])=>c);
-  const defCur = avail[0] || S.displayCurrency;
+  const cur = S.displayCurrency;
 
   const html = `
     <div class="sheet-handle"></div>
@@ -2075,11 +2143,9 @@ function openTransfer(){
 
     <div class="field">
       <div class="field-label">Валюта</div>
-      <div class="select-box">
-        <select id="trCur">
-          ${list.map(c => `<option value="${c}" ${c===defCur?'selected':''}>${c} — ${curName(c)}</option>`).join('')}
-        </select>
-        <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+      <div class="select-box" style="pointer-events:none;cursor:default">
+        <span style="flex:1;font-size:15px;font-weight:600;color:#fff">${esc(cur)}</span>
+        <span style="font-size:12.5px;color:var(--muted)">${esc(curName(cur))}</span>
       </div>
     </div>
 
@@ -2087,7 +2153,14 @@ function openTransfer(){
       <div class="field-label">Сумма</div>
       <div class="input-box">
         <input id="trAmt" type="text" inputmode="decimal" placeholder="0">
-        <div class="input-suffix" id="trCurLbl">${defCur}</div>
+        <div class="input-suffix" id="trCurLbl">${esc(cur)}</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-label">Комментарий</div>
+      <div class="input-box">
+        <input id="trNote" type="text" maxlength="60" placeholder="Необязательно" autocomplete="off" spellcheck="false">
       </div>
     </div>
 
@@ -2101,20 +2174,18 @@ function openTransfer(){
   openSheet(html);
 
   const upd = () => {
-    const c = $('#trCur').value;
-    $('#trCurLbl').textContent = c;
-    $('#trAvail').textContent = fmtMoney(S.balances[c]||0, c);
+    $('#trCurLbl').textContent = cur;
+    $('#trAvail').textContent = fmtMoney(S.balances[cur]||0, cur);
     const raw = $('#trAmt').value.trim();
     const amt = raw ? truncB(parseAmt(raw, 8), 2) : 0n;
-    $('#trSum').textContent = raw ? fmtMoney(amt, c) : '—';
+    $('#trSum').textContent = raw ? fmtMoney(amt, cur) : '—';
   };
-  $('#trCur').addEventListener('change', upd);
   $('#trAmt').addEventListener('input', upd);
   upd();
 
   $('#trConfirm').addEventListener('click', () => {
     const rec = $('#trRec').value;
-    const cur = $('#trCur').value;
+    const note = ($('#trNote').value || '').replace(/\s+/g, ' ').trim().slice(0, 60);
     const amt = truncB(parseAmt($('#trAmt').value, 8), 2);
     const av  = S.balances[cur] || 0n;
 
@@ -2126,6 +2197,8 @@ function openTransfer(){
       title: 'Подтверждение перевода',
       rows: [
         ['Получатель', rec],
+        ...(note ? [['Комментарий', note]] : []),
+        ['Валюта', cur],
         ['Сумма', fmtMoney(amt, cur)],
         ['Комиссия', fmtMoney(0, cur)],
         ['Итого', fmtMoney(amt, cur)]
@@ -2145,7 +2218,7 @@ function openTransfer(){
           amount: dStr(-amt),
           currency: cur,
           date: nowDate().toISOString(),
-          meta: { recipient: rec }
+          meta: note ? { recipient: rec, comment: note } : { recipient: rec }
         });
         saveState();
         hapticOk();
@@ -2263,7 +2336,7 @@ $$('#histFilters .chip-f').forEach(b => {
 
 function renderHistory(){
   const panel = $('#historyPanel');
-  let list = S.txs.slice();
+  let list = S.txs.filter(t => t.title !== 'Корректировка');
   if (histFilter !== 'all') list = list.filter(t => t.type === histFilter);
   list = list.slice(0, 200);
 
@@ -2281,12 +2354,14 @@ function renderHistory(){
       : t.type === 'transfer' ? '→'
       : t.type === 'exchange' ? '⇄'
       : t.type === 'crypto' ? '₿' : '•';
+    const note = (t.type === 'transfer' && t.meta && typeof t.meta.comment === 'string') ? t.meta.comment.trim() : '';
     return `
       <div class="row">
         <div class="row-ic ${cls}">${iconChar}</div>
         <div class="row-main">
           <div class="row-title">${esc(t.title)}</div>
           <div class="row-sub">${[esc(t.subtitle), fmtTime(t.date)].filter(Boolean).join(' · ')}</div>
+          ${note ? `<div class="row-note">${esc(note)}</div>` : ''}
         </div>
         <div class="row-amt ${cls}">${t.amountText}</div>
       </div>`;
@@ -2343,6 +2418,197 @@ function renderAll(){
   if ($('#page-crypto').classList.contains('active')) renderCrypto();
   renderHistory();
   updateExchange();
+}
+
+/* =========================================================
+   КАЛЬКУЛЯТОР — отдельная функция (BigInt, 8 знаков после запятой)
+   ========================================================= */
+const calcState = {
+  display: '0',
+  acc: null,
+  op: null,
+  justEvaluated: false,
+  error: false
+};
+
+function calcReset(){
+  calcState.display = '0';
+  calcState.acc = null;
+  calcState.op = null;
+  calcState.justEvaluated = false;
+  calcState.error = false;
+}
+
+function calcParse(s){
+  if (!s || s === 'Ошибка' || s === 'Error') return 0n;
+  const neg = s.startsWith('-');
+  const body = neg ? s.slice(1) : s;
+  const b = parseAmt(body, 8);
+  return neg ? -b : b;
+}
+
+function calcApply(a, b, op){
+  try {
+    if (op === '+') return a + b;
+    if (op === '-') return a - b;
+    if (op === '×'){
+      const prod = a * b;
+      return prod >= 0n ? (prod + SCB/2n) / SCB : -((-prod + SCB/2n) / SCB);
+    }
+    if (op === '÷'){
+      if (b === 0n) return null;
+      const n = a * SCB;
+      return n >= 0n ? (n + b/2n) / b : -((-n + b/2n) / b);
+    }
+  } catch(e){ return null; }
+  return null;
+}
+
+function calcToDisplayStr(b){
+  const neg = b < 0n; if (neg) b = -b;
+  const i = (b / SCB).toString();
+  let f = (b % SCB).toString().padStart(8, '0');
+  while (f.length > 1 && f.endsWith('0')) f = f.slice(0, -1);
+  if (f === '0') f = '';
+  return (neg ? '-' : '') + i + (f ? '.' + f : '');
+}
+
+function renderCalc(){
+  const el = $('#calcDisplay');
+  if (!el) return;
+  if (calcState.error){ el.textContent = 'Ошибка'; return; }
+  const s = calcState.display;
+  const neg = s.startsWith('-');
+  const body = neg ? s.slice(1) : s;
+  const dot = body.indexOf('.');
+  const ip = dot < 0 ? body : body.slice(0, dot);
+  const fp = dot < 0 ? '' : body.slice(dot);
+  el.textContent = (neg ? '-' : '') + groupInt(ip || '0') + fp;
+}
+
+function calcInput(d){
+  if (calcState.error) calcReset();
+  if (calcState.justEvaluated){ calcState.display = '0'; calcState.justEvaluated = false; }
+  if (calcState.display === '0') calcState.display = d;
+  else calcState.display += d;
+  if (calcState.display.replace('-','').replace('.','').length > 24){
+    calcState.display = calcState.display.slice(0, -1);
+  }
+  renderCalc();
+}
+
+function calcDot(){
+  if (calcState.error) calcReset();
+  if (calcState.justEvaluated){ calcState.display = '0'; calcState.justEvaluated = false; }
+  if (!calcState.display.includes('.')) calcState.display += '.';
+  renderCalc();
+}
+
+function calcBackspace(){
+  if (calcState.error){ calcReset(); return renderCalc(); }
+  if (calcState.justEvaluated) return;
+  calcState.display = calcState.display.slice(0, -1);
+  if (calcState.display === '' || calcState.display === '-') calcState.display = '0';
+  renderCalc();
+}
+
+function calcClear(){ calcReset(); renderCalc(); }
+
+function calcSetOp(op){
+  if (calcState.error){ calcReset(); }
+  const cur = calcParse(calcState.display);
+  if (calcState.acc === null){
+    calcState.acc = cur;
+  } else if (calcState.op){
+    const r = calcApply(calcState.acc, cur, calcState.op);
+    if (r === null){
+      calcState.error = true;
+      calcState.display = 'Ошибка';
+      calcState.acc = null;
+      calcState.op = null;
+      renderCalc();
+      return;
+    }
+    calcState.acc = r;
+  } else {
+    calcState.acc = cur;
+  }
+  calcState.op = op;
+  calcState.justEvaluated = false;
+  calcState.display = calcToDisplayStr(calcState.acc);
+  renderCalc();
+}
+
+function calcEquals(){
+  if (calcState.error){ calcReset(); return renderCalc(); }
+  if (calcState.op === null || calcState.acc === null) return;
+  const cur = calcParse(calcState.display);
+  const r = calcApply(calcState.acc, cur, calcState.op);
+  if (r === null){
+    calcState.error = true;
+    calcState.display = 'Ошибка';
+    calcState.acc = null;
+    calcState.op = null;
+    renderCalc();
+    return;
+  }
+  calcState.display = calcToDisplayStr(r);
+  calcState.acc = r;
+  calcState.op = null;
+  calcState.justEvaluated = true;
+  renderCalc();
+}
+
+function openCalc(){
+  calcReset();
+  openSheet(`
+    <div class="sheet-handle"></div>
+    <div class="sheet-head">
+      <div class="sheet-title">Калькулятор</div>
+      <button class="sheet-close" data-close aria-label="Закрыть"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="calc-display" id="calcDisplay">0</div>
+    <div class="calc-keys">
+      <button class="calc-key fn" data-c="clear">C</button>
+      <button class="calc-key fn" data-c="back" aria-label="Удалить последний символ">
+        <svg viewBox="0 0 24 24"><path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"/><line x1="18" y1="9" x2="12" y2="15"/><line x1="12" y1="9" x2="18" y2="15"/></svg>
+      </button>
+      <button class="calc-key op" data-c="op" data-op="÷">÷</button>
+      <button class="calc-key op" data-c="op" data-op="×">×</button>
+
+      <button class="calc-key" data-c="num" data-d="7">7</button>
+      <button class="calc-key" data-c="num" data-d="8">8</button>
+      <button class="calc-key" data-c="num" data-d="9">9</button>
+      <button class="calc-key op" data-c="op" data-op="-">−</button>
+
+      <button class="calc-key" data-c="num" data-d="4">4</button>
+      <button class="calc-key" data-c="num" data-d="5">5</button>
+      <button class="calc-key" data-c="num" data-d="6">6</button>
+      <button class="calc-key op" data-c="op" data-op="+">+</button>
+
+      <button class="calc-key" data-c="num" data-d="1">1</button>
+      <button class="calc-key" data-c="num" data-d="2">2</button>
+      <button class="calc-key" data-c="num" data-d="3">3</button>
+      <button class="calc-key eq" data-c="eq" style="grid-row:span 2">=</button>
+
+      <button class="calc-key" data-c="num" data-d="0" style="grid-column:span 2">0</button>
+      <button class="calc-key" data-c="dot">.</button>
+    </div>
+    <div style="height:8px"></div>
+  `);
+  $('#sheet').querySelectorAll('.calc-key').forEach(btn => {
+    btn.addEventListener('click', () => {
+      haptic('light');
+      const c = btn.dataset.c;
+      if (c === 'num') calcInput(btn.dataset.d);
+      else if (c === 'dot') calcDot();
+      else if (c === 'op') calcSetOp(btn.dataset.op);
+      else if (c === 'eq') calcEquals();
+      else if (c === 'clear') calcClear();
+      else if (c === 'back') calcBackspace();
+    });
+  });
+  renderCalc();
 }
 
 renderCardNumber();
@@ -2408,10 +2674,13 @@ const I18N_EN = {
  'Неверный текущий код':'Wrong current passcode','Код должен состоять из 4 цифр':'Passcode must be 4 digits','Коды не совпадают':'Passcodes do not match',
  'Код доступа изменён':'Passcode changed',
  'Переводишь':'You send',
+ 'Комментарий':'Comment','Необязательно':'Optional, e.g. For the game',
  'Формат сумм':'Number format',
  'Отображение больших чисел':'Display of large numbers',
  'Полный':'Full',
  'Короткий':'Short',
+ 'Калькулятор':'Calculator',
+ 'Ошибка':'Error',
  'SAYFER Bank · демо-версия. Данные хранятся только в этом браузере.':'SAYFER Bank · demo. Data is stored only in this browser.'
 };
 const I18N_RX = [
@@ -2559,6 +2828,7 @@ function openSettings(){
     });
   }));
 }
+$('#openCalc').addEventListener('click', () => { haptic('light'); openCalc(); });
 $('#openSettings').addEventListener('click', () => { haptic('light'); openSettings(); });
 $('#myAssetsEdit').addEventListener('click', () => { haptic('light'); openDeposit('c:bitcoin'); });
 document.body.classList.toggle('no-anim', S.settings.animations === false);
