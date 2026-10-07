@@ -959,6 +959,33 @@ input,select{font-size:16px}
   .calc-key{height:54px;font-size:20px}
   .calc-key.op{font-size:22px}
 }
+
+/* ===== v3: topbar fix + PC/phone responsive ===== */
+.topbar{gap:10px;flex-wrap:nowrap}
+.brand{flex:1 1 auto;min-width:0;overflow:hidden}
+.brand-mark{flex-shrink:0}
+.brand>div:last-child{flex:1 1 auto;min-width:0}
+.brand-name{display:block;max-width:100%}
+.top-right{flex:0 0 auto;gap:8px}
+.user-chip{flex:0 0 auto;max-width:none;padding:0;width:36px;height:36px;justify-content:center;gap:0}
+.user-chip #userName{display:none}
+.user-chip .user-av{width:26px;height:26px;font-size:11px}
+@media (max-width:360px){
+  .topbar{gap:8px}
+  .top-right{gap:6px}
+  .icon-btn,.user-chip{width:34px;height:34px}
+  .brand{gap:8px}
+}
+@media (max-width:330px){.brand-mark{display:none}}
+@media (min-width:520px){
+  .user-chip{width:auto;height:auto;padding:5px 12px 5px 5px;gap:8px;max-width:200px}
+  .user-chip #userName{display:block;max-width:110px}
+}
+@media (min-width:900px){
+  .icon-btn{width:40px;height:40px}
+  .brand-name{font-size:17px}
+  .user-chip #userName{max-width:160px}
+}
 </style>
 </head>
 <body>
