@@ -1813,11 +1813,11 @@ async function bootstrap(){
   renderAll();
 }
 
+function fmtCardNum(d){ return String(d || '').replace(/\D/g, '').slice(0, 16).replace(/(\d{4})(?=\d)/g, '$1 '); }
 function renderCardNumber(){
-  const n = S.card.number, last4 = n.slice(-4);
-  $('#cardNum').textContent = cardHidden
-    ? `•••• •••• •••• ${last4}`
-    : `${n.slice(0,4)} ${n.slice(4,8)} ${n.slice(8,12)} ${n.slice(12,16)}`;
+  const n = String(S.card.number || '').replace(/\D/g, '');
+  $('#cardNum').textContent = cardHidden ? `•••• •••• •••• ${n.slice(-4)}` : fmtCardNum(n);
+  if (cardFlipped) $('#cardCvv').textContent = S.card.cvv;
 }
 
 let cardHidden = true;
@@ -3120,6 +3120,7 @@ const I18N_EN = {
  'Уведомления об операциях':'Operation notifications','Всплывающие сообщения об успехе':'Pop-up success messages','Вибрация':'Haptics',
  'Отклик при нажатиях (Telegram)':'Tap feedback (Telegram)','Безопасность':'Security','Изменить код доступа':'Change passcode',
  '4-значный PIN':'4-digit PIN','Заблокировать сейчас':'Lock now','Выйти':'Log out','Завершить сеанс — потребуется PIN':'End session — PIN required','Вернуться на экран ввода кода':'Return to the passcode screen',
+ 'Банковская карта':'Bank card','Номер карты':'Card number','Номер карты должен состоять из 16 цифр':'Card number must be 16 digits','CVC должен состоять из 3 цифр':'CVC must be 3 digits','Данные карты сохранены':'Card details saved',
  'Данные':'Data','Полный сброс':'Full reset','Удалить все данные приложения':'Delete all app data',
  'Будет удалено':'Will be deleted','Все балансы, криптоактивы, история, настройки и данные пользователя':'All balances, crypto assets, history, settings and user data',
  'Это действие':'This action','Нельзя отменить':'Cannot be undone','Сбросить всё':'Reset everything',
@@ -3234,6 +3235,10 @@ function openSettings(){
       ${sw('notify', '🔔', 'Уведомления об операциях', 'Всплывающие сообщения об успехе', st.notify !== false)}
       ${sw('haptics', '📳', 'Вибрация', 'Отклик при нажатиях (Telegram)', st.haptics !== false)}
     </div>
+    <div class="set-title">Банковская карта</div>
+    <div class="field"><div class="field-label">Номер карты</div><div class="input-box"><input id="setCardNum" type="text" inputmode="numeric" autocomplete="off" maxlength="19" placeholder="1234 5678 9012 3456" value="${fmtCardNum(S.card.number)}"></div></div>
+    <div class="field"><div class="field-label">CVC</div><div class="input-box"><input id="setCardCvc" type="text" inputmode="numeric" autocomplete="off" maxlength="3" placeholder="123" value="${esc(String(S.card.cvv || '').replace(/\D/g, '').slice(0, 3))}"></div></div>
+    <button class="btn btn-primary" id="setCardSave" type="button">Сохранить</button>
     <div class="set-title">Безопасность</div>
     <div class="panel">
       ${nav('pin', '🔑', 'Изменить код доступа', '4-значный PIN')}
@@ -3244,6 +3249,25 @@ function openSettings(){
     <div class="set-foot">SAYFER Bank · демо-версия. Данные хранятся только в этом браузере.</div>
     <div style="height:12px"></div>`);
 
+  const cnIn = $('#setCardNum'), ccIn = $('#setCardCvc');
+  cnIn.addEventListener('input', () => {
+    const pos = cnIn.selectionStart == null ? cnIn.value.length : cnIn.selectionStart;
+    const before = cnIn.value.slice(0, pos).replace(/\D/g, '').length;
+    cnIn.value = fmtCardNum(cnIn.value);
+    let np = 0, seen = 0;
+    while (np < cnIn.value.length && seen < before){ if (/\d/.test(cnIn.value[np])) seen++; np++; }
+    try { cnIn.setSelectionRange(np, np); } catch(e){}
+  });
+  ccIn.addEventListener('input', () => { ccIn.value = ccIn.value.replace(/\D/g, '').slice(0, 3); });
+  $('#setCardSave').addEventListener('click', () => {
+    const num = cnIn.value.replace(/\D/g, ''), cvc = ccIn.value.replace(/\D/g, '');
+    if (num.length !== 16){ hapticErr(); return toast('Номер карты должен состоять из 16 цифр', 'err'); }
+    if (cvc.length !== 3){ hapticErr(); return toast('CVC должен состоять из 3 цифр', 'err'); }
+    S.card.number = num; S.card.cvv = cvc;
+    saveState(); renderCardNumber();
+    cnIn.value = fmtCardNum(num);
+    hapticOk(); toast('Данные карты сохранены');
+  });
   $$('.set-row[data-sw]', sheet).forEach(r => r.addEventListener('click', () => {
     haptic('light');
     const id = r.dataset.sw, sv = r.querySelector('.switch'), on = !sv.classList.contains('on');
