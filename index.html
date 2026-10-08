@@ -2518,6 +2518,7 @@ const calcState = {
   acc: null,
   op: null,
   justEvaluated: false,
+  fresh: false,   // true сразу после оператора: следующая цифра начинает новое число
   error: false
 };
 
@@ -2526,6 +2527,7 @@ function calcReset(){
   calcState.acc = null;
   calcState.op = null;
   calcState.justEvaluated = false;
+  calcState.fresh = false;
   calcState.error = false;
 }
 
@@ -2578,8 +2580,12 @@ function renderCalc(){
 
 function calcInput(d){
   if (calcState.error) calcReset();
-  if (calcState.justEvaluated){ calcState.display = '0'; calcState.justEvaluated = false; }
+  if (calcState.justEvaluated){ calcState.display = '0'; calcState.justEvaluated = false; calcState.acc = null; }
+  if (calcState.fresh){ calcState.display = '0'; calcState.fresh = false; }
+  const dot = calcState.display.indexOf('.');
+  if (dot >= 0 && calcState.display.length - dot - 1 >= 8) return;   // максимум 8 знаков после запятой
   if (calcState.display === '0') calcState.display = d;
+  else if (calcState.display === '-0') calcState.display = '-' + d;
   else calcState.display += d;
   if (calcState.display.replace('-','').replace('.','').length > 24){
     calcState.display = calcState.display.slice(0, -1);
@@ -2589,14 +2595,15 @@ function calcInput(d){
 
 function calcDot(){
   if (calcState.error) calcReset();
-  if (calcState.justEvaluated){ calcState.display = '0'; calcState.justEvaluated = false; }
+  if (calcState.justEvaluated){ calcState.display = '0'; calcState.justEvaluated = false; calcState.acc = null; }
+  if (calcState.fresh){ calcState.display = '0'; calcState.fresh = false; }
   if (!calcState.display.includes('.')) calcState.display += '.';
   renderCalc();
 }
 
 function calcBackspace(){
   if (calcState.error){ calcReset(); return renderCalc(); }
-  if (calcState.justEvaluated) return;
+  if (calcState.justEvaluated || calcState.fresh) return;
   calcState.display = calcState.display.slice(0, -1);
   if (calcState.display === '' || calcState.display === '-') calcState.display = '0';
   renderCalc();
@@ -2606,6 +2613,11 @@ function calcClear(){ calcReset(); renderCalc(); }
 
 function calcSetOp(op){
   if (calcState.error){ calcReset(); }
+  // оператор нажат повторно, не вводя второе число — просто меняем оператор
+  if (calcState.fresh && calcState.op && calcState.acc !== null){
+    calcState.op = op;
+    return;
+  }
   const cur = calcParse(calcState.display);
   if (calcState.acc === null){
     calcState.acc = cur;
@@ -2625,6 +2637,7 @@ function calcSetOp(op){
   }
   calcState.op = op;
   calcState.justEvaluated = false;
+  calcState.fresh = true;
   calcState.display = calcToDisplayStr(calcState.acc);
   renderCalc();
 }
@@ -2646,6 +2659,7 @@ function calcEquals(){
   calcState.acc = r;
   calcState.op = null;
   calcState.justEvaluated = true;
+  calcState.fresh = false;
   renderCalc();
 }
 
