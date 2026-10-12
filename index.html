@@ -988,6 +988,132 @@ input,select{font-size:16px}
 }
 .stk-ic img{background:#fff;object-fit:contain;padding:15%;box-sizing:border-box}
 .stk-ic{background:#fff1}
+
+/* ================= STOCKS — redesign ================= */
+.stk-head{display:flex;align-items:center;justify-content:space-between;padding:10px 20px 4px}
+.stk-title{font-size:27px;font-weight:800;letter-spacing:-.9px;line-height:1.05}
+.stk-mkt{display:flex;align-items:center;gap:6px;margin-top:5px;font-size:11.5px;font-weight:600;color:var(--muted)}
+.stk-dot{width:7px;height:7px;border-radius:50%;background:var(--muted-2)}
+.stk-dot.on{background:var(--green);box-shadow:0 0 0 0 rgba(55,214,122,.6);animation:stkPulse 1.8s infinite}
+.stk-dot.off{background:var(--red)}
+@keyframes stkPulse{0%{box-shadow:0 0 0 0 rgba(55,214,122,.55)}70%{box-shadow:0 0 0 7px rgba(55,214,122,0)}100%{box-shadow:0 0 0 0 rgba(55,214,122,0)}}
+.stk-icbtn{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.06);border:1px solid var(--border);transition:transform .15s,background .15s}
+.stk-icbtn:active{transform:scale(.92);background:rgba(255,255,255,.12)}
+.stk-icbtn svg{width:18px;height:18px;stroke:var(--a1);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.stk-icbtn.spin svg{animation:stkSpin .8s linear infinite}
+@keyframes stkSpin{to{transform:rotate(360deg)}}
+
+.stk-hero{position:relative;overflow:hidden;margin:10px 20px 0;padding:18px 18px 14px;border-radius:24px;
+  background:radial-gradient(120% 90% at 100% 0%,color-mix(in srgb,var(--a2) 24%,transparent),transparent 55%),
+    radial-gradient(80% 80% at 0% 100%,rgba(77,141,255,.14),transparent 60%),linear-gradient(160deg,#1b2030,#0d1018);
+  border:1px solid color-mix(in srgb,var(--a2) 24%,transparent);
+  box-shadow:0 26px 50px -30px color-mix(in srgb,var(--a2) 60%,transparent),inset 0 1px 0 rgba(255,255,255,.07)}
+.stk-hero::before{content:"";position:absolute;right:-6px;bottom:44px;width:190px;height:80px;opacity:.16;pointer-events:none;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 190 80'%3E%3Cpolyline points='0,70 22,58 40,64 66,38 88,46 114,22 140,30 168,8 190,14' fill='none' stroke='%23f0dcaa' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat center/contain}
+.stk-hero>*{position:relative}
+.stk-hero-top{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:24px}
+.stk-lbl{font-size:10.5px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--muted)}
+.stk-hero-v{font-size:clamp(30px,9.5vw,38px);font-weight:800;letter-spacing:-1.4px;margin-top:6px;line-height:1.05;font-variant-numeric:tabular-nums;
+  background:linear-gradient(180deg,#fff,#bfc4d2);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stk-hero-s{font-size:12.5px;font-weight:700;margin-top:6px;color:var(--muted)}
+.stk-hero-s.up{color:var(--green)}.stk-hero-s.dn{color:var(--red)}
+.stk-alloc{display:flex;gap:3px;height:6px;margin-top:14px;border-radius:99px;overflow:hidden}
+.stk-alloc i{display:block;height:100%;border-radius:99px;min-width:4px}
+.stk-legend{display:flex;gap:12px;margin-top:8px;font-size:10.5px;font-weight:600;color:var(--muted);white-space:nowrap;overflow:hidden}
+.stk-legend span{display:inline-flex;align-items:center;gap:5px}
+.stk-legend em{width:7px;height:7px;border-radius:50%;display:inline-block}
+.stk-stats{display:grid;grid-template-columns:repeat(3,1fr);margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.08)}
+.stk-stats>div{display:flex;flex-direction:column;gap:3px;min-width:0;padding:0 10px;border-left:1px solid rgba(255,255,255,.07)}
+.stk-stats>div:first-child{padding-left:0;border-left:none}
+.stk-stats b{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stk-stats span{font-size:9.5px;font-weight:600;letter-spacing:.9px;text-transform:uppercase;color:var(--muted-2)}
+
+.stk-search{display:flex;align-items:center;gap:10px;margin:12px 20px 0;height:46px;padding:0 8px 0 14px;border-radius:16px;
+  background:rgba(255,255,255,.05);border:1px solid var(--border);transition:border-color .18s,background .18s}
+.stk-search:focus-within{border-color:rgba(212,175,106,.55);background:rgba(212,175,106,.06)}
+.stk-search>svg{width:18px;height:18px;flex-shrink:0;stroke:var(--muted);fill:none;stroke-width:2;stroke-linecap:round}
+.stk-search input{flex:1;min-width:0;font-size:15px;font-weight:600;color:#fff}
+.stk-search input::placeholder{color:var(--muted-2);font-weight:500}
+.stk-search button{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.08)}
+.stk-search button svg{width:13px;height:13px;stroke:#c7ccd8;fill:none;stroke-width:2.4}
+
+.stk-sec{display:flex;align-items:center;justify-content:space-between;padding:20px 20px 10px}
+.stk-sec-t{font-size:15px;font-weight:700;letter-spacing:-.2px}
+.stk-sec-m{font-size:11.5px;font-weight:600;color:var(--muted)}
+.stk-tabs{display:flex;padding:3px;gap:2px;border-radius:11px;background:rgba(255,255,255,.05);border:1px solid var(--border)}
+.stk-tabs button{padding:5px 12px;border-radius:8px;font-size:11.5px;font-weight:700;color:var(--muted);transition:all .18s}
+.stk-tabs button.active{background:linear-gradient(145deg,var(--a1),var(--a2));color:#1a1407}
+.stk-tabs button.active[data-m="dn"]{background:linear-gradient(145deg,#ff9aa9,#e94b64);color:#fff}
+
+.stk-hs{display:flex;gap:10px;padding:2px 20px 4px;overflow-x:auto;scrollbar-width:none;scroll-snap-type:x proximity;overscroll-behavior-x:contain}
+.stk-hs::after{content:"";flex:0 0 1px}
+.stk-card{position:relative;overflow:hidden;flex:0 0 auto;width:144px;padding:12px;border-radius:18px;scroll-snap-align:start;cursor:pointer;
+  background:linear-gradient(160deg,rgba(255,255,255,.065),rgba(255,255,255,.018));border:1px solid var(--border);transition:transform .15s}
+.stk-card:active{transform:scale(.96)}
+.stk-card::after{content:"";position:absolute;right:-30px;top:-30px;width:90px;height:90px;border-radius:50%;pointer-events:none;filter:blur(8px)}
+.stk-card.up::after{background:radial-gradient(circle,rgba(55,214,122,.22),transparent 70%)}
+.stk-card.dn::after{background:radial-gradient(circle,rgba(255,92,114,.22),transparent 70%)}
+.stk-card-top{display:flex;align-items:center;gap:9px;min-width:0}
+.stk-card-top>div:last-child{min-width:0}
+.stk-card-t{font-size:13.5px;font-weight:800;letter-spacing:-.1px}
+.stk-card-s{font-size:10.5px;color:var(--muted);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stk-card-v{font-size:15px;font-weight:700;margin:11px 0 6px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.stk-card .stk-pill{position:relative;z-index:1}
+
+.stk-pill{display:inline-flex;align-items:center;gap:3px;padding:3px 8px;border-radius:99px;font-size:11.5px;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+.stk-pill.sm{padding:2px 7px;font-size:10.5px}
+.stk-pill.up{color:var(--green);background:rgba(55,214,122,.13)}
+.stk-pill.dn{color:var(--red);background:rgba(255,92,114,.13)}
+
+.stk-chips{display:flex;gap:6px;padding:0 20px 10px;overflow-x:auto;scrollbar-width:none}
+.stk-chips button{flex-shrink:0;padding:6px 13px;border-radius:99px;font-size:11.5px;font-weight:700;color:var(--muted);background:rgba(255,255,255,.05);border:1px solid var(--border);transition:all .18s}
+.stk-chips button.active{color:var(--a1);background:color-mix(in srgb,var(--a2) 15%,transparent);border-color:color-mix(in srgb,var(--a2) 45%,transparent)}
+
+.stk-list{margin:0 20px;border-radius:20px;overflow:hidden;background:linear-gradient(160deg,rgba(255,255,255,.045),rgba(255,255,255,.015));border:1px solid var(--border)}
+.stk-res{margin-top:10px}
+.stk-row{display:flex;align-items:center;gap:11px;padding:9px 14px;min-height:56px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.045);transition:background .15s}
+.stk-row:last-child{border-bottom:none}
+.stk-row:active{background:rgba(255,255,255,.05)}
+.stk-row-m{flex:1;min-width:0}
+.stk-row-t{font-size:13.5px;font-weight:800;letter-spacing:-.1px}
+.stk-row-n{font-size:11px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stk-row-r{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0}
+.stk-row-p{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.stk-row-x{font-size:10.5px;font-weight:700;color:var(--muted-2)}
+.stk-more{display:block;width:100%;padding:13px;text-align:center;font-size:12.5px;font-weight:700;color:var(--a2);background:rgba(255,255,255,.02)}
+.stk-more:active{background:rgba(255,255,255,.06)}
+.stk-note{padding:14px;font-size:12px;color:var(--muted);text-align:center}
+.stk-row .coin-ic,.stk-card .coin-ic,.stk-dh .coin-ic{box-shadow:0 0 0 1px rgba(255,255,255,.1)}
+.sk{display:inline-block;border-radius:6px;background:linear-gradient(90deg,rgba(255,255,255,.05),rgba(255,255,255,.13),rgba(255,255,255,.05));background-size:200% 100%;animation:skm 1.2s linear infinite}
+@keyframes skm{to{background-position:-200% 0}}
+
+/* ---- карточка акции ---- */
+.stk-dh{display:flex;align-items:center;gap:12px;padding:0 20px 12px}
+.stk-dh-m{flex:1;min-width:0}
+.stk-dh-t{font-size:21px;font-weight:800;letter-spacing:-.5px;line-height:1.1}
+.stk-dh-n{font-size:12px;color:var(--muted);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stk-tag{display:inline-block;margin-top:5px;padding:2px 8px;border-radius:6px;font-size:9.5px;font-weight:700;letter-spacing:.5px;color:var(--muted-2);background:rgba(255,255,255,.06)}
+.stk-dp{padding:0 20px}
+.stk-dp-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.stk-dp-v{font-size:32px;font-weight:800;letter-spacing:-1.2px;font-variant-numeric:tabular-nums;background:linear-gradient(180deg,#fff,#bfc4d2);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stk-dp-s{font-size:11.5px;color:var(--muted);margin-top:4px}
+.stk-ch{padding:12px 20px 4px}
+.stk-ch-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.stk-ch-hint{font-size:11px;color:var(--muted-2);font-weight:600}
+.stk-ch svg{touch-action:pan-y;cursor:crosshair}
+.stk-sg{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:8px 20px 0}
+.stk-sg>div{padding:11px 13px;border-radius:14px;background:rgba(255,255,255,.045);border:1px solid var(--border);min-width:0}
+.stk-sg span{display:block;font-size:10px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--muted-2)}
+.stk-sg b{display:block;margin-top:4px;font-size:13.5px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stk-sg b.up{color:var(--green)}.stk-sg b.dn{color:var(--red)}
+.stk-cta{display:flex;gap:10px;padding:16px 20px 0}
+.stk-cta .btn{margin:0;width:auto;flex:1}
+.btn-sell{background:rgba(255,92,114,.12);border:1px solid rgba(255,92,114,.32);color:#ff8fa0}
+.btn-sell:active{transform:scale(.975);background:rgba(255,92,114,.2)}
+@media (max-width:360px){
+  .stk-hero,.stk-search,.stk-list{margin-left:14px;margin-right:14px}
+  .stk-head,.stk-sec,.stk-chips,.stk-hs,.stk-dh,.stk-dp,.stk-ch,.stk-sg,.stk-cta{padding-left:14px;padding-right:14px}
+}
 </style>
 </head>
 <body>
@@ -1225,21 +1351,29 @@ input,select{font-size:16px}
     </div>
 
     <div class="page" id="page-stocks">
-      <div class="section-head" style="padding-top:8px">
-        <div class="section-title" style="font-size:22px;letter-spacing:-.6px;">Акции</div>
-        <div class="section-link" id="stkRefresh">Обновить</div>
+      <div class="stk-head">
+        <div class="stk-head-l"><div class="stk-title">Акции</div><div class="stk-mkt" id="stkMkt">Мировые биржи</div></div>
+        <button class="stk-icbtn" id="stkRefresh" type="button" aria-label="Обновить"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7"/><polyline points="21 3 21 9 15 9"/></svg></button>
       </div>
-      <div class="panel" id="stkSummary"></div>
-      <div class="section-head"><div class="section-title">Мой портфель</div></div>
-      <div class="panel" id="stkPortfolio"></div>
-      <div class="section-head"><div class="section-title">Поиск акций</div></div>
-      <div class="field"><div class="input-box"><input type="text" id="stkSearch" placeholder="Тикер или компания: AAPL, Siemens…" autocomplete="off" autocapitalize="off" spellcheck="false"></div></div>
-      <div class="panel" id="stkResults" style="display:none"></div>
-      <div class="section-head"><div class="section-title">Популярные</div><div class="section-link">Мировые биржи</div></div>
-      <div class="panel" id="stkMarket"></div>
-      <div class="section-head"><div class="section-title">Все акции мира</div><div class="section-link" id="stkAllCnt" style="pointer-events:none"></div></div>
-      <div class="filter-scroll" id="stkAllX"></div>
-      <div class="panel" id="stkAll"></div>
+      <div class="stk-hero" id="stkSummary"></div>
+      <div class="stk-search">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
+        <input type="text" id="stkSearch" placeholder="Тикер или компания: AAPL, Siemens…" autocomplete="off" autocapitalize="off" spellcheck="false">
+        <button type="button" id="stkClear" style="display:none" aria-label="Очистить"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <div class="stk-list stk-res" id="stkResults" style="display:none"></div>
+      <div id="stkBody">
+        <div id="stkPortWrap">
+          <div class="stk-sec"><div class="stk-sec-t">Мой портфель</div><div class="stk-sec-m" id="stkPortCnt"></div></div>
+          <div class="stk-hs" id="stkPortfolio"></div>
+        </div>
+        <div class="stk-sec"><div class="stk-sec-t">Лидеры дня</div>
+          <div class="stk-tabs" id="stkMovTabs"><button type="button" class="active" data-m="up">Рост</button><button type="button" data-m="dn">Падение</button></div></div>
+        <div class="stk-hs" id="stkMov"></div>
+        <div class="stk-sec"><div class="stk-sec-t">Рынок</div><div class="stk-sec-m" id="stkAllCnt"></div></div>
+        <div class="stk-chips" id="stkAllX"></div>
+        <div class="stk-list" id="stkAll"></div>
+      </div>
       <div style="height:20px"></div>
     </div>
 
@@ -2800,7 +2934,7 @@ const STK_FINNHUB_KEY = '';
 const STK_CATALOG_URL = '';
 const STK_EXCH = ['US','L','T','HK','TO','DE','PA','AS','SW','MI','MC','ST','OL','CO','HE','WA','KS','AX','NS','SS','SZ','SA','TA','SI','TW','BR','LS','VI','IR'];
 const CAT = STK_LIST.map(s => ({s, n: s, x: ''})), catSeen = new Set(STK_LIST);
-let CAT_X = 'ALL', CAT_N = 40, _catStarted = false;
+let CAT_X = 'ALL', CAT_N = 12, CAT_STEP = 20, MOV = 'up', _catStarted = false;
 function catAdd(arr){
   let n = 0;
   for (const o of arr){
@@ -2829,33 +2963,54 @@ async function catLoad(){
     if (c) put(c.a.map(i => ({s: i[0], n: i[1], x})));
   }
 }
-const catList = () => CAT_X === 'ALL' ? CAT : CAT.filter(o => o.x === CAT_X);
+const catRegion = s => { const m = /\.([A-Z]+)$/.exec(s); if (!m) return 'США'; const x = m[1];
+  if (['T','HK','KS','NS','SS','SZ','SI','TW','TA','BO'].includes(x)) return 'Азия';
+  if (['L','DE','PA','AS','SW','MI','MC','ST','OL','CO','HE','WA','BR','LS','VI','IR','F'].includes(x)) return 'Европа';
+  return 'Другие'; };
+const catList = () => CAT_X === 'ALL' ? CAT : CAT.filter(o => catRegion(o.s) === CAT_X);
 const catVisible = () => $('#page-stocks').classList.contains('active') ? catList().slice(0, CAT_N).map(o => o.s) : [];
+const chgPill = (v, sm) => `<span class="stk-pill ${v >= 0 ? 'up' : 'dn'}${sm ? ' sm' : ''}">${v >= 0 ? '▲' : '▼'} ${Math.abs(v).toFixed(2)}%</span>`;
+const setPill = (el, v) => { if (!el) return; el.className = 'stk-pill ' + (v >= 0 ? 'up' : 'dn'); el.textContent = (v >= 0 ? '▲ ' : '▼ ') + Math.abs(v).toFixed(2) + '%'; };
+const skel = (w, h, mt) => `<i class="sk" style="width:${w}px;height:${h}px${mt ? ';margin-top:' + mt + 'px' : ''}"></i>`;
+
 function renderCat(){
   const box = $('#stkAll'); if (!box) return;
-  const xs = [...new Set(CAT.map(o => o.x).filter(Boolean))], l = catList();
-  $('#stkAllX').innerHTML = xs.length ? ['ALL', ...xs].map(x => `<button class="chip-f${x === CAT_X ? ' active' : ''}" data-x="${esc(x)}">${x === 'ALL' ? 'Все' : esc(x)}</button>`).join('') : '';
-  $('#stkAllCnt').textContent = l.length.toLocaleString('ru-RU') + ' акций';
-  box.innerHTML = l.slice(0, CAT_N).map(o => stkRow(o.s, o.n, null)).join('')
-    + (l.length > CAT_N ? `<div class="section-link" id="stkMore" style="text-align:center;padding:14px">Показать ещё (${(l.length - CAT_N).toLocaleString('ru-RU')})</div>` : '')
-    + (!STK_FINNHUB_KEY && !STK_CATALOG_URL ? '<div class="empty" style="padding:12px;font-size:12px">Полный каталог мировых бирж подключается через STK_FINNHUB_KEY или STK_CATALOG_URL. Любую акцию можно найти поиском выше.</div>' : '');
+  const present = new Set(CAT.map(o => catRegion(o.s))), regs = ['США', 'Европа', 'Азия', 'Другие'].filter(r => present.has(r));
+  if (CAT_X !== 'ALL' && !present.has(CAT_X)) CAT_X = 'ALL';
+  const l = catList();
+  $('#stkAllX').innerHTML = regs.length > 1 ? ['ALL', ...regs].map(x => `<button type="button" class="${x === CAT_X ? 'active' : ''}" data-x="${esc(x)}">${x === 'ALL' ? 'Все' : esc(x)}</button>`).join('') : '';
+  $('#stkAllCnt').textContent = l.length.toLocaleString('ru-RU') + ' бумаг';
+  const bad = STK_LIST.every(s => STK_ERR[s]);
+  box.innerHTML = (bad ? '<div class="stk-note">Не удалось получить котировки. Проверьте сеть и нажмите ⟳ вверху.</div>' : '')
+    + l.slice(0, CAT_N).map(o => stkRow(o.s, o.n)).join('')
+    + (l.length > CAT_N ? `<button type="button" class="stk-more" id="stkMore">Показать ещё · ${Math.min(CAT_STEP, l.length - CAT_N)}</button>` : '');
 }
-function stkRow(sym, name, h){
-  const q = STK[sym], cur = S.displayCurrency, letter = stkLogo(sym);
-  let sub = esc(name), r1 = '<span class="loader" style="width:14px;height:14px"></span>', r2 = '';
-  if (h){
-    const pi = posInfo(sym, h);
-    sub = `${fmtQty(h.qty)} шт` + (q ? ` · ${fmtMoney(fromUSD(stkUSD(q), cur), cur, 0, 2)}` : '');
-    if (pi){ r1 = fmtMoney(fromUSD(pi.val, cur), cur); const cls = pi.pl >= 0n ? 'pos' : 'neg';
-      r2 = `<div class="coin-change ${cls}">${sgn(pi.pl, fmtMoney(fromUSD(pi.pl, cur), cur))} (${pi.pct >= 0 ? '+' : ''}${pi.pct.toFixed(2)}%)</div>`; }
-    else if (q){ r1 = `${fmtNum(q.price)} ${esc(q.cur)}`; }
-  } else if (q){
-    const p = stkUSD(q), chg = stkChg(q); sub = esc(q.name);
-    r1 = p > 0 ? fmtMoney(fromUSD(p, cur), cur, 0, 2) : `${fmtNum(q.price)} ${esc(q.cur)}`;
-    r2 = `<div class="coin-change ${chg >= 0 ? 'pos' : 'neg'}">${chg >= 0 ? '+' : ''}${chg.toFixed(2)}%</div>`;
-  } else if (STK_ERR[sym]) { r1 = '—'; }
-  return `<div class="coin-row" data-sym="${esc(sym)}">${letter}<div class="coin-main"><div class="coin-name">${esc(sym)}</div><div class="coin-sub">${sub}</div></div><div class="coin-right"><div class="coin-price">${r1}</div>${r2}</div></div>`;
+function stkRow(sym, name){
+  const q = STK[sym], cur = S.displayCurrency; let price, pill = '';
+  if (q){
+    const p = stkUSD(q), chg = stkChg(q); name = q.name || name;
+    price = p > 0 ? fmtMoney(fromUSD(p, cur), cur, 2, 2) : `${fmtNum(q.price)} ${esc(q.cur)}`; pill = chgPill(chg, true);
+  } else if (STK_ERR[sym]) price = '—';
+  else { price = skel(58, 13); pill = skel(44, 15); }
+  return `<div class="stk-row" data-sym="${esc(sym)}">${stkLogo(sym, 36)}<div class="stk-row-m"><div class="stk-row-t">${esc(sym)}</div><div class="stk-row-n">${esc(name && name !== sym ? name : '')}</div></div><div class="stk-row-r"><div class="stk-row-p">${price}</div>${pill}</div></div>`;
 }
+function stkCard(sym, h){
+  const cur = S.displayCurrency, pi = posInfo(sym, h); let val = skel(70, 15), pill = skel(46, 17), up = true;
+  if (pi){ up = pi.pl >= 0n; val = balHidden ? '••••' : fmtMoney(fromUSD(pi.val, cur), cur); pill = chgPill(pi.pct, true); }
+  return `<div class="stk-card ${up ? 'up' : 'dn'}" data-sym="${esc(sym)}"><div class="stk-card-top">${stkLogo(sym, 30)}<div><div class="stk-card-t">${esc(sym)}</div><div class="stk-card-s">${fmtQty(h.qty)} шт</div></div></div><div class="stk-card-v">${val}</div>${pill}</div>`;
+}
+function moverCard(q){
+  const cur = S.displayCurrency, chg = stkChg(q), p = stkUSD(q);
+  return `<div class="stk-card ${chg >= 0 ? 'up' : 'dn'}" data-sym="${esc(q.sym)}"><div class="stk-card-top">${stkLogo(q.sym, 30)}<div><div class="stk-card-t">${esc(q.sym)}</div><div class="stk-card-s">${esc(q.name)}</div></div></div><div class="stk-card-v">${fmtMoney(fromUSD(p, cur), cur, 2, 2)}</div>${chgPill(chg)}</div>`;
+}
+function renderMovers(){
+  const box = $('#stkMov'); if (!box) return;
+  const all = Object.values(STK).filter(q => stkUSD(q) > 0);
+  if (all.length < 3){ box.innerHTML = Array(4).fill(`<div class="stk-card"><div class="stk-card-top"><i class="sk" style="width:30px;height:30px;border-radius:50%"></i>${skel(50, 13)}</div><div class="stk-card-v">${skel(70, 15)}</div>${skel(46, 17)}</div>`).join(''); return; }
+  all.sort((a, b) => MOV === 'up' ? stkChg(b) - stkChg(a) : stkChg(a) - stkChg(b));
+  box.innerHTML = all.slice(0, 8).map(moverCard).join('');
+}
+const STK_COL = ['#f0dcaa', '#4d8dff', '#37d67a', '#c58bff', '#ff8fa0', '#5fd4e8'];
 const STK_ERR = {};
 let _stkT = null;
 function schedStk(){ clearTimeout(_stkT); _stkT = setTimeout(() => { if ($('#page-stocks').classList.contains('active')) renderStocks(); }, 120); }
@@ -2865,40 +3020,57 @@ async function stkLoad(list, force){
   await Promise.all([w(), w(), w(), w()]);
 }
 function renderStocks(){
-  const cur = S.displayCurrency, hs = Object.entries(S.stocks);
-  let val = 0n, pl = 0n, cost = 0n, ok = true;
-  for (const [sym, h] of hs){ const pi = posInfo(sym, h); if (!pi){ ok = false; continue; } val += pi.val; pl += pi.pl; cost += h.cost; }
-  const pct = cost > 0n ? Number(pl) / Number(cost) * 100 : 0, cls = pl >= 0n ? 'pos' : 'neg', hid = balHidden;
-  $('#stkSummary').innerHTML = `<div style="padding:16px 18px"><div style="font-size:12.5px;color:var(--muted)">Стоимость портфеля акций</div>
-    <div style="font-size:28px;font-weight:800;letter-spacing:-1px;margin-top:4px">${hid ? '••••••' : fmtMoney(fromUSD(val, cur), cur)}</div>
-    <div class="coin-change ${cls}" style="font-size:13px;margin-top:4px">${hid ? '' : hs.length && ok ? `${sgn(pl, fmtMoney(fromUSD(pl, cur), cur))} (${pct >= 0 ? '+' : ''}${pct.toFixed(2)}%) за всё время` : (hs.length ? 'Загрузка цен…' : '')}</div>
-    <div style="font-size:12px;color:var(--muted);margin-top:8px">Доступно для покупок: ${hid ? '••••' : fmtMoney(S.balances[cur] || 0n, cur)}</div></div>`;
-  $('#stkPortfolio').innerHTML = hs.length ? hs.map(([s, h]) => stkRow(s, h.name, h)).join('')
-    : '<div class="empty"><div>У вас пока нет акций.<br>Выберите компанию ниже и купите первую.</div></div>';
-  $('#stkMarket').innerHTML = STK_LIST.map(s => stkRow(s, s, null)).join(''); renderCat();
-  if (STK_LIST.every(s => STK_ERR[s]) ) $('#stkMarket').insertAdjacentHTML('afterbegin', '<div class="empty" style="padding:14px">Не удалось получить котировки. Проверьте сеть и нажмите «Обновить».</div>');
+  const cur = S.displayCurrency, hs = Object.entries(S.stocks), hid = balHidden;
+  let val = 0n, pl = 0n, cost = 0n, ok = true; const parts = [];
+  for (const [sym, h] of hs){ const pi = posInfo(sym, h); if (!pi){ ok = false; continue; } val += pi.val; pl += pi.pl; cost += h.cost; parts.push([sym, Number(pi.val)]); }
+  const have = hs.length > 0 && ok, up = pl >= 0n, pct = cost > 0n ? Number(pl) / Number(cost) * 100 : 0;
+  const us = STK.AAPL, closed = us ? stkClosed(us) : null;
+  $('#stkMkt').innerHTML = us ? `<i class="stk-dot ${closed ? 'off' : 'on'}"></i>Рынок США · ${closed ? 'закрыт' : 'открыт'}` : 'Мировые биржи';
+  let alloc = '';
+  if (have && !hid && parts.length){
+    parts.sort((a, b) => b[1] - a[1]); const tot = parts.reduce((s, p) => s + p[1], 0) || 1;
+    const top = parts.slice(0, 5), rest = parts.slice(5).reduce((s, p) => s + p[1], 0); if (rest > 0) top.push(['Др.', rest]);
+    alloc = `<div class="stk-alloc">${top.map((p, i) => `<i style="flex:${p[1] / tot};background:${STK_COL[i % STK_COL.length]}"></i>`).join('')}</div>`
+      + `<div class="stk-legend">${top.slice(0, 4).map((p, i) => `<span><em style="background:${STK_COL[i % STK_COL.length]}"></em>${esc(p[0])} ${(p[1] / tot * 100).toFixed(0)}%</span>`).join('')}</div>`;
+  }
+  const sub = hs.length ? (have ? (hid ? '' : `${sgn(pl, fmtMoney(fromUSD(pl, cur), cur))} за всё время`) : 'Загрузка цен…') : 'Выберите акцию ниже и купите первую';
+  $('#stkSummary').innerHTML = `<div class="stk-hero-top"><span class="stk-lbl">Портфель акций</span>${have && !hid ? chgPill(pct) : ''}</div>
+    <div class="stk-hero-v">${hid ? '••••••' : fmtMoney(fromUSD(val, cur), cur)}</div>
+    <div class="stk-hero-s ${have && !hid ? (up ? 'up' : 'dn') : ''}">${sub}</div>${alloc}
+    <div class="stk-stats"><div><b>${hid ? '••••' : fmtMoney(fromUSD(cost, cur), cur)}</b><span>Вложено</span></div><div><b>${hs.length}</b><span>Позиций</span></div><div><b>${hid ? '••••' : fmtMoney(S.balances[cur] || 0n, cur)}</b><span>Доступно</span></div></div>`;
+  $('#stkPortWrap').style.display = hs.length ? '' : 'none';
+  $('#stkPortCnt').textContent = hs.length ? hs.length + ' поз.' : '';
+  $('#stkPortfolio').innerHTML = hs.map(([s, h]) => stkCard(s, h)).join('');
+  renderMovers(); renderCat();
 }
 function openStocksPage(){
   renderStocks(); catLoad();
   stkLoad([...Object.keys(S.stocks), ...STK_LIST, ...catVisible()], false);
 }
 $('#stkRefresh').addEventListener('click', async () => {
-  haptic('light'); toast('Обновление…');
-  await Promise.all([loadFiatRates(true), stkLoad([...Object.keys(S.stocks), ...STK_LIST, ...catVisible()], true)]);
-  renderStocks(); renderAll(); toast('Котировки обновлены');
+  const b = $('#stkRefresh'); if (b.classList.contains('spin')) return;
+  haptic('light'); b.classList.add('spin');
+  try { await Promise.all([loadFiatRates(true), stkLoad([...Object.keys(S.stocks), ...STK_LIST, ...catVisible()], true)]); renderStocks(); renderAll(); toast('Котировки обновлены'); }
+  finally { b.classList.remove('spin'); }
 });
-['#stkPortfolio', '#stkMarket', '#stkResults', '#stkAll'].forEach(id => $(id).addEventListener('click', e => {
-  const r = e.target.closest('.coin-row'); if (!r || !r.dataset.sym) return; haptic('light'); openStock(r.dataset.sym);
+['#stkPortfolio', '#stkMov', '#stkResults', '#stkAll'].forEach(id => $(id).addEventListener('click', e => {
+  const r = e.target.closest('[data-sym]'); if (!r) return; haptic('light'); openStock(r.dataset.sym);
 }));
-
-$('#stkAllX').addEventListener('click', e => { const b = e.target.closest('[data-x]'); if (!b) return; haptic('light'); CAT_X = b.dataset.x; CAT_N = 40; renderCat(); stkLoad(catVisible(), false); });
-$('#stkAll').addEventListener('click', e => { if (!e.target.closest('#stkMore')) return; haptic('light'); CAT_N += 40; renderCat(); stkLoad(catVisible(), false); });
+$('#stkMovTabs').addEventListener('click', e => {
+  const b = e.target.closest('[data-m]'); if (!b || MOV === b.dataset.m) return; haptic('light'); MOV = b.dataset.m;
+  $$('#stkMovTabs button').forEach(x => x.classList.toggle('active', x === b)); $('#stkMov').scrollLeft = 0; renderMovers();
+});
+$('#stkAllX').addEventListener('click', e => { const b = e.target.closest('[data-x]'); if (!b) return; haptic('light'); CAT_X = b.dataset.x; CAT_N = 12; renderCat(); stkLoad(catVisible(), false); });
+$('#stkAll').addEventListener('click', e => { if (!e.target.closest('#stkMore')) return; haptic('light'); CAT_N += CAT_STEP; renderCat(); stkLoad(catVisible(), false); });
 /* ---- поиск по всему миру ---- */
 let _stkSearchT = null, _stkSearchN = 0;
+$('#stkClear').addEventListener('click', () => { const i = $('#stkSearch'); i.value = ''; i.dispatchEvent(new Event('input')); i.focus(); });
 $('#stkSearch').addEventListener('input', e => {
   const q = e.target.value.trim(), box = $('#stkResults'); clearTimeout(_stkSearchT);
+  $('#stkClear').style.display = e.target.value ? '' : 'none';
+  $('#stkBody').style.display = q ? 'none' : '';
   if (q.length < 1){ box.style.display = 'none'; return; }
-  box.style.display = ''; box.innerHTML = '<div class="empty" style="padding:14px"><span class="loader"></span></div>';
+  box.style.display = ''; box.innerHTML = '<div class="empty" style="padding:22px"><span class="loader"></span></div>';
   const n = ++_stkSearchN;
   _stkSearchT = setTimeout(async () => {
     let list = [], netErr = false;
@@ -2911,21 +3083,46 @@ $('#stkSearch').addEventListener('input', e => {
     CAT.filter(o => !have.has(o.s) && (o.s.toLowerCase().startsWith(ql) || o.n.toLowerCase().includes(ql))).slice(0, 8)
       .forEach(o => list.push({symbol: o.s, longname: o.n, exchDisp: o.x}));
     if (!netErr) catAdd(list.map(x => ({s: x.symbol, n: x.longname || x.shortname, x: ''})));
-    if (netErr && !list.length){ box.innerHTML = '<div class="empty" style="padding:14px">Поиск недоступен. Проверьте сеть.</div>'; return; }
+    if (netErr && !list.length){ box.innerHTML = '<div class="stk-note">Поиск недоступен. Проверьте сеть.</div>'; return; }
     box.innerHTML = list.length ? list.map(x => { const s = String(x.symbol).toUpperCase();
-      return `<div class="coin-row" data-sym="${esc(s)}">${stkLogo(s)}<div class="coin-main"><div class="coin-name">${esc(s)}</div><div class="coin-sub">${esc(x.longname || x.shortname || '')}</div></div><div class="coin-right"><div class="coin-sub">${esc(x.exchDisp || '')}</div></div></div>`; }).join('')
-      : '<div class="empty" style="padding:14px">Ничего не найдено</div>';
+      return `<div class="stk-row" data-sym="${esc(s)}">${stkLogo(s, 36)}<div class="stk-row-m"><div class="stk-row-t">${esc(s)}</div><div class="stk-row-n">${esc(x.longname || x.shortname || '')}</div></div><div class="stk-row-x">${esc(x.exchDisp || '')}</div></div>`; }).join('')
+      : '<div class="stk-note">Ничего не найдено</div>';
   }, 400);
 });
 
 /* ---- карточка акции ---- */
-function sparkSvg(cl){
-  if (cl.length < 2) return '<div class="empty" style="padding:24px">Нет данных графика</div>';
-  const W = 300, H = 90, mn = Math.min(...cl), mx = Math.max(...cl), sp = (mx - mn) || 1;
-  const pts = cl.map((v, i) => `${(i / (cl.length - 1) * W).toFixed(1)},${(H - 6 - (v - mn) / sp * (H - 12)).toFixed(1)}`).join(' ');
-  const up = cl[cl.length - 1] >= cl[0], col = up ? 'var(--green)' : 'var(--red)', ch = (cl[cl.length - 1] / cl[0] - 1) * 100;
-  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" style="width:100%;height:110px;display:block"><polyline points="${pts}" fill="none" stroke="${col}" stroke-width="2" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg>
-    <div class="coin-change ${up ? 'pos' : 'neg'}" style="text-align:center;margin-top:6px">${ch >= 0 ? '+' : ''}${ch.toFixed(2)}% за период</div>`;
+function sparkSvg(cl, lbl){
+  if (cl.length < 2) return '<div class="empty" style="padding:28px">Нет данных графика</div>';
+  const W = 340, H = 150, P = 8, mn = Math.min(...cl), mx = Math.max(...cl), sp = (mx - mn) || 1;
+  const X = i => i / (cl.length - 1) * W, Y = v => H - P - (v - mn) / sp * (H - 2 * P);
+  const pts = cl.map((v, i) => `${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join(' ');
+  const last = cl[cl.length - 1], up = last >= cl[0], col = up ? '#37d67a' : '#ff5c72', ch = (last / cl[0] - 1) * 100, base = Y(cl[0]).toFixed(1);
+  return `<div class="stk-ch"><div class="stk-ch-top">${chgPill(ch).replace('class="stk-pill', 'id="stkChPill" class="stk-pill')}<span class="stk-ch-hint" id="stkChHint">${esc(lbl)}</span></div>
+    <svg viewBox="0 0 ${W} ${H}" id="stkSvg" style="width:100%;height:auto;display:block;overflow:visible">
+      <defs><linearGradient id="stkGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${col}" stop-opacity=".34"/><stop offset="1" stop-color="${col}" stop-opacity="0"/></linearGradient></defs>
+      <line x1="0" x2="${W}" y1="${base}" y2="${base}" stroke="rgba(255,255,255,.16)" stroke-dasharray="3 5"/>
+      <polygon points="0,${H} ${pts} ${W},${H}" fill="url(#stkGrad)"/>
+      <polyline points="${pts}" fill="none" stroke="${col}" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+      <circle id="stkEnd" cx="${X(cl.length - 1).toFixed(1)}" cy="${Y(last).toFixed(1)}" r="4" fill="${col}"/>
+      <g id="stkCur" style="display:none"><line id="stkCurL" y1="0" y2="${H}" stroke="rgba(255,255,255,.4)"/><circle id="stkCurD" r="5" fill="${col}" stroke="#0f1219" stroke-width="2.5"/></g>
+    </svg></div>`;
+}
+function bindScrub(cl, lbl){
+  const svg = $('#stkSvg'); if (!svg || cl.length < 2) return;
+  const W = 340, H = 150, P = 8, mn = Math.min(...cl), sp = (Math.max(...cl) - mn) || 1;
+  const cur = $('#stkCur'), L = $('#stkCurL'), D = $('#stkCurD'), end = $('#stkEnd'), pill = $('#stkChPill'), hint = $('#stkChHint');
+  let on = false;
+  const move = e => {
+    const r = svg.getBoundingClientRect(), t = Math.min(1, Math.max(0, (e.clientX - r.left) / (r.width || 1))), i = Math.round(t * (cl.length - 1));
+    const x = i / (cl.length - 1) * W, y = H - P - (cl[i] - mn) / sp * (H - 2 * P);
+    cur.style.display = ''; end.style.display = 'none';
+    L.setAttribute('x1', x); L.setAttribute('x2', x); D.setAttribute('cx', x); D.setAttribute('cy', y);
+    setPill(pill, (cl[i] / cl[0] - 1) * 100); hint.textContent = 'с начала периода';
+  };
+  const stop = () => { if (!on) return; on = false; cur.style.display = 'none'; end.style.display = ''; setPill(pill, (cl[cl.length - 1] / cl[0] - 1) * 100); hint.textContent = lbl; };
+  svg.addEventListener('pointerdown', e => { on = true; try { svg.setPointerCapture(e.pointerId); } catch(_){} haptic('light'); move(e); });
+  svg.addEventListener('pointermove', e => { if (on) move(e); });
+  ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(ev => svg.addEventListener(ev, stop));
 }
 async function openStock(sym){
   openSheet(`<div class="sheet-handle"></div><div class="empty"><span class="loader"></span><div style="margin-top:12px">Загрузка котировки…</div></div>`);
@@ -2933,26 +3130,26 @@ async function openStock(sym){
   if (!(stkUSD(q) > 0)) { closeSheet(); return toast('Курс валюты ' + q.cur + ' недоступен', 'err'); }
   const cur = S.displayCurrency, h = S.stocks[sym], chg = stkChg(q), pi = h ? posInfo(sym, h) : null;
   const when = q.t ? new Date(q.t).toLocaleString(S.settings.lang === 'en' ? 'en-GB' : 'ru-RU', {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit'}) : '';
+  const tile = (k, v, c) => `<div><span>${k}</span><b${c ? ` class="${c}"` : ''}>${esc(v)}</b></div>`;
   openSheet(`<div class="sheet-handle"></div>
-    <div class="sheet-head"><div class="sheet-title">${esc(sym)}</div><button class="sheet-close" data-close><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
-    <div style="padding:0 20px 6px"><div style="display:flex;align-items:center;gap:12px;color:var(--muted);font-size:13px">${stkLogo(sym, 44)}<span>${esc(q.name)}${q.exch ? ' · ' + esc(q.exch) : ''}</span></div>
-      <div style="font-size:30px;font-weight:800;letter-spacing:-1px;margin-top:6px">${fmtMoney(fromUSD(stkUSD(q), cur), cur, 2, 2)}</div>
-      <div style="font-size:12.5px;color:var(--muted)">${fmtNum(q.price)} ${esc(q.cur)} · <span class="coin-change ${chg >= 0 ? 'pos' : 'neg'}" style="display:inline">${chg >= 0 ? '+' : ''}${chg.toFixed(2)}% сегодня</span></div>
-      <div style="font-size:11.5px;color:var(--muted-2);margin-top:4px">${stkClosed(q) ? 'Биржа закрыта · последняя цена ' : 'Обновлено '}${esc(when)}</div></div>
-    <div class="filter-scroll" id="stkRange" style="padding-top:10px"><button class="chip-f" data-r="1D">1 день</button><button class="chip-f active" data-r="1M">1 месяц</button><button class="chip-f" data-r="1Y">1 год</button></div>
-    <div id="stkChart" style="padding:4px 20px 8px"><div class="empty" style="padding:24px"><span class="loader"></span></div></div>
-    ${h ? `<div style="padding:0 20px 8px">${[['В портфеле', `${fmtQty(h.qty)} шт`], ['Средняя цена', fmtMoney(fromUSD(mulNum(h.cost, 1) * SCB / h.qty, cur), cur, 2, 2)],
-        ['Стоимость', pi ? fmtMoney(fromUSD(pi.val, cur), cur) : '—'], ['Прибыль/убыток', pi ? `${sgn(pi.pl, fmtMoney(fromUSD(pi.pl, cur), cur))} (${pi.pct >= 0 ? '+' : ''}${pi.pct.toFixed(2)}%)` : '—']]
-      .map(([k, v]) => `<div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:13.5px"><span style="color:var(--muted)">${k}</span><b style="font-weight:600">${esc(v)}</b></div>`).join('')}</div>` : ''}
-    <button class="btn btn-primary" id="stkBuy">Купить</button>
-    ${h ? '<button class="btn btn-ghost" id="stkSell">Продать</button>' : ''}<div style="height:12px"></div>`);
+    <div class="stk-dh">${stkLogo(sym, 52)}<div class="stk-dh-m"><div class="stk-dh-t">${esc(sym)}</div><div class="stk-dh-n">${esc(q.name)}</div>${q.exch ? `<span class="stk-tag">${esc(q.exch)}</span>` : ''}</div>
+      <button class="sheet-close" data-close><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="stk-dp"><div class="stk-dp-row"><div class="stk-dp-v">${fmtMoney(fromUSD(stkUSD(q), cur), cur, 2, 2)}</div>${chgPill(chg)}</div>
+      <div class="stk-dp-s">${fmtNum(q.price)} ${esc(q.cur)} · ${stkClosed(q) ? 'биржа закрыта, цена на ' : 'обновлено '}${esc(when)}</div></div>
+    <div class="stk-ch" style="padding-bottom:0"><div class="toggle-row" id="stkRange" style="margin:6px 0 0"><button type="button" data-r="1D">День</button><button type="button" class="active" data-r="1M">Месяц</button><button type="button" data-r="1Y">Год</button></div></div>
+    <div id="stkChart"><div class="empty" style="padding:50px 20px"><span class="loader"></span></div></div>
+    ${h ? `<div class="stk-sg">${tile('В портфеле', `${fmtQty(h.qty)} шт`)}${tile('Средняя цена', fmtMoney(fromUSD(mulNum(h.cost, 1) * SCB / h.qty, cur), cur, 2, 2))}
+      ${tile('Стоимость', pi ? fmtMoney(fromUSD(pi.val, cur), cur) : '—')}${tile('Прибыль / убыток', pi ? `${sgn(pi.pl, fmtMoney(fromUSD(pi.pl, cur), cur))} (${pi.pct >= 0 ? '+' : ''}${pi.pct.toFixed(2)}%)` : '—', pi ? (pi.pl >= 0n ? 'up' : 'dn') : '')}</div>` : ''}
+    <div class="stk-cta"><button class="btn btn-primary" id="stkBuy" type="button">Купить</button>${h ? '<button class="btn btn-sell" id="stkSell" type="button">Продать</button>' : ''}</div><div style="height:8px"></div>`);
+  const LBL = {'1D': 'за день', '1M': 'за месяц', '1Y': 'за год'};
   const draw = async r => {
-    $$('#stkRange .chip-f').forEach(b => b.classList.toggle('active', b.dataset.r === r));
-    const box = $('#stkChart'); if (!box) return; box.innerHTML = '<div class="empty" style="padding:24px"><span class="loader"></span></div>';
+    $$('#stkRange button').forEach(b => b.classList.toggle('active', b.dataset.r === r));
+    const box = $('#stkChart'); if (!box) return; box.innerHTML = '<div class="empty" style="padding:50px 20px"><span class="loader"></span></div>';
     let cl = []; try { cl = await getHist(sym, r); } catch(e){}
-    const b2 = $('#stkChart'); if (b2) b2.innerHTML = sparkSvg(cl);
+    const b2 = $('#stkChart'); if (!b2) return;
+    b2.innerHTML = sparkSvg(cl, LBL[r]); bindScrub(cl, LBL[r]);
   };
-  $$('#stkRange .chip-f').forEach(b => b.addEventListener('click', () => { haptic('light'); draw(b.dataset.r); }));
+  $$('#stkRange button').forEach(b => b.addEventListener('click', () => { haptic('light'); draw(b.dataset.r); }));
   $('#stkBuy').addEventListener('click', () => openTrade(sym, 'buy'));
   $('#stkSell')?.addEventListener('click', () => openTrade(sym, 'sell'));
   draw('1M');
