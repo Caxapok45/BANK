@@ -2,21 +2,10 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0a0b10">
 <title>SAYFER Bank</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<script>
-(function(){
-  var stop=function(e){ e.preventDefault(); };
-  ['gesturestart','gesturechange','gestureend'].forEach(function(t){ document.addEventListener(t,stop,{passive:false}); });
-  document.addEventListener('touchmove',function(e){ if(e.touches&&e.touches.length>1) e.preventDefault(); },{passive:false});
-  document.addEventListener('wheel',function(e){ if(e.ctrlKey) e.preventDefault(); },{passive:false});
-  var reset=function(){ if(window.scrollX||window.scrollY) window.scrollTo(0,0); var de=document.documentElement; if(de.scrollTop||de.scrollLeft){de.scrollTop=0;de.scrollLeft=0;} };
-  window.addEventListener('scroll',reset,{passive:true});
-  if(window.visualViewport){ visualViewport.addEventListener('scroll',reset); visualViewport.addEventListener('resize',reset); }
-})();
-</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
@@ -1114,6 +1103,34 @@ input,select{font-size:16px}
   .stk-hero,.stk-search,.stk-list{margin-left:14px;margin-right:14px}
   .stk-head,.stk-sec,.stk-chips,.stk-hs,.stk-dh,.stk-dp,.stk-ch,.stk-sg,.stk-cta{padding-left:14px;padding-right:14px}
 }
+
+/* ===== SAYFER v2: Business, Auto and desktop polish ===== */
+.nav{grid-template-columns:repeat(7,minmax(0,1fr));width:min(calc(100% - 20px - var(--safe-left) - var(--safe-right)),720px);height:68px}
+.nav-item{min-width:0;gap:2px;padding:3px 1px}
+.nav-item svg{width:19px;height:19px;flex-shrink:0}
+.nav-item span{font-size:clamp(7px,1.8vw,9px);white-space:nowrap;letter-spacing:-.15px}
+#page-business,#page-auto{padding:8px 0 20px}
+.market-hero{margin:8px 20px 18px;padding:20px;border:1px solid var(--border-2);border-radius:22px;background:linear-gradient(145deg,rgba(212,175,106,.14),rgba(255,255,255,.025));}
+.market-hero .eyebrow{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.9px;text-transform:uppercase}
+.market-hero .big{font-size:clamp(25px,7vw,36px);font-weight:800;letter-spacing:-1.2px;margin-top:8px;overflow-wrap:anywhere}
+.market-hero .hint{font-size:12px;color:var(--muted);line-height:1.5;margin-top:6px}
+.market-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:0 20px}
+.market-card{min-width:0;padding:15px;border-radius:18px;border:1px solid var(--border);background:linear-gradient(155deg,rgba(255,255,255,.055),rgba(255,255,255,.018));display:flex;flex-direction:column;gap:9px}
+.market-card .emoji{font-size:25px}
+.market-card h3{font-size:14px;line-height:1.25;font-weight:800}
+.market-card .desc{font-size:11px;line-height:1.45;color:var(--muted);min-height:32px}
+.market-card .price{font-size:15px;font-weight:800;letter-spacing:-.3px}
+.market-card .meta{font-size:11px;color:var(--muted)}
+.market-card .btn{width:100%;margin:0;min-height:40px;padding:9px 10px;font-size:12px}
+.market-card .btn:disabled{opacity:.48}
+.market-subnav{display:flex;gap:8px;padding:0 20px 14px}
+.market-subnav button{flex:1;border:1px solid var(--border-2);border-radius:12px;padding:11px 8px;font-size:12px;font-weight:800;color:var(--muted);background:rgba(255,255,255,.025)}
+.market-subnav button.active{color:var(--a1);border-color:color-mix(in srgb,var(--a2) 45%,transparent);background:color-mix(in srgb,var(--a2) 12%,transparent)}
+.market-empty{grid-column:1/-1;text-align:center;padding:32px 18px;color:var(--muted);font-size:13px;border:1px dashed var(--border-2);border-radius:18px;line-height:1.6}
+@media(max-width:380px){.market-grid{padding:0 14px;gap:8px}.market-hero{margin-left:14px;margin-right:14px;padding:16px}.market-card{padding:12px}.nav{width:calc(100% - 12px);padding:5px 3px}.nav-item svg{width:17px;height:17px}.nav-item span{font-size:7px}}
+@media(min-width:700px){.market-grid{grid-template-columns:repeat(3,minmax(0,1fr));max-width:1040px;margin:0 auto}.market-hero{max-width:1000px;margin-left:auto;margin-right:auto}.market-subnav{max-width:1000px;margin:auto}.nav{height:70px}}
+@media(min-width:1000px){#page-business,#page-auto{max-width:1100px}.market-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.market-card{padding:20px}}
+
 </style>
 </head>
 <body>
@@ -1389,11 +1406,37 @@ input,select{font-size:16px}
         <button class="chip-f" data-f="exchange">Обмен</button>
         <button class="chip-f" data-f="crypto">Крипто</button>
         <button class="chip-f" data-f="stock">Акции</button>
+        <button class="chip-f" data-f="business">Бизнес</button>
+        <button class="chip-f" data-f="auto">Авто</button>
       </div>
 
       <div style="height:14px"></div>
       <div class="panel" id="historyPanel"></div>
       <div style="height:20px"></div>
+
+    <div class="page" id="page-business">
+      <div class="section-head" style="padding-top:8px">
+        <div class="section-title" style="font-size:22px;letter-spacing:-.6px;">Мои предприятия</div>
+        <div class="section-link" id="businessRefresh">Обновить</div>
+      </div>
+      <div id="businessHero"></div>
+      <div class="section-head"><div class="section-title">Каталог бизнеса</div></div>
+      <div class="market-grid" id="businessGrid"></div>
+      <div style="height:20px"></div>
+    </div>
+
+    <div class="page" id="page-auto">
+      <div class="section-head" style="padding-top:8px">
+        <div class="section-title" style="font-size:22px;letter-spacing:-.6px;">Автомобили</div>
+      </div>
+      <div class="market-hero"><div class="eyebrow">Автопарк SAYFER</div><div class="big" id="garageCount">0 автомобилей</div><div class="hint">Покупайте автомобили и продавайте их обратно по исходной цене покупки — без амортизации и комиссий.</div></div>
+      <div class="market-subnav">
+        <button type="button" class="active" data-auto-tab="salon">Автосалон</button>
+        <button type="button" data-auto-tab="garage">Мой гараж</button>
+      </div>
+      <div class="market-grid" id="carGrid"></div>
+      <div style="height:20px"></div>
+    </div>
     </div>
 
   </div>
@@ -1415,6 +1458,14 @@ input,select{font-size:16px}
     <button class="nav-item" data-page="stocks">
       <svg viewBox="0 0 24 24"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="15 7 21 7 21 13"/></svg>
       <span>Акции</span>
+    </button>
+    <button class="nav-item" data-page="business">
+      <svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 10h1m4 0h1M9 14h1m4 0h1M10 21v-4h4v4"/></svg>
+      <span>Бизнес</span>
+    </button>
+    <button class="nav-item" data-page="auto">
+      <svg viewBox="0 0 24 24"><path d="m5 11 1.5-4.5A2 2 0 0 1 8.4 5h7.2a2 2 0 0 1 1.9 1.5L19 11M3 11h18v8H3zM6 19v2m12-2v2M6 15h2m8 0h2"/></svg>
+      <span>Авто</span>
     </button>
     <button class="nav-item" data-page="history">
       <svg viewBox="0 0 24 24"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><polyline points="12 7 12 12 16 14"/></svg>
@@ -1576,6 +1627,12 @@ const DEFAULT_STATE = {
 };
 
 let S = loadState();
+if (!Array.isArray(S.businesses)) S.businesses = [];
+else S.businesses = S.businesses.filter(x => x && typeof x === 'object' && typeof x.id === 'string' && Number.isFinite(Number(x.income)) && Number(x.income) >= 0)
+  .map(x => ({id:String(x.id).slice(0,40),name:String(x.name||'Предприятие').slice(0,80),income:Math.floor(Number(x.income)),boughtAt:String(x.boughtAt||''),lastClaim:String(x.lastClaim||'')}));
+if (!Array.isArray(S.ownedCars)) S.ownedCars = [];
+else S.ownedCars = S.ownedCars.filter(x => x && typeof x === 'object' && typeof x.uid === 'string' && Number.isSafeInteger(Number(x.purchasePrice)) && Number(x.purchasePrice) > 0)
+  .map(x => ({uid:String(x.uid).slice(0,80),id:String(x.id||'').slice(0,40),name:String(x.name||'Автомобиль').slice(0,80),icon:String(x.icon||'🚘').slice(0,8),type:String(x.type||'Автомобиль').slice(0,80),purchasePrice:Number(x.purchasePrice),boughtAt:String(x.boughtAt||'')}));
 (function(){ const o = (S.stocks && typeof S.stocks === 'object') ? S.stocks : {}; S.stocks = {};
   for (const [k,v] of Object.entries(o)){ try { const q = toB(v.qty), c = toB(v.cost); if (q > 0n && /^[A-Z0-9.\-^=]{1,15}$/.test(k)) S.stocks[k] = {name:String(v.name||k), cur:String(v.cur||'USD'), qty:q, cost:c}; } catch(e){} } })();
 HAPTICS = S.settings.haptics !== false;
@@ -2087,6 +2144,108 @@ function openCurrencyPicker(){
   });
 }
 
+
+/* =========================================================
+   ВИРТУАЛЬНЫЙ БИЗНЕС И АВТОПАРК
+   Все цены в этом модуле — игровая экономика в USD.
+   Прибыль предприятия можно получить один раз за календарный день.
+   ========================================================= */
+const BUSINESS_CATALOG = [
+  {id:'coffee',name:'Кофейня',icon:'☕',desc:'Небольшая городская кофейня с постоянными клиентами.',price:2500,income:75},
+  {id:'studio',name:'Дизайн-студия',icon:'🎨',desc:'Креативная команда, работающая с брендами.',price:12000,income:320},
+  {id:'logistics',name:'Логистика',icon:'🚚',desc:'Региональные перевозки и складские услуги.',price:45000,income:1100},
+  {id:'hotel',name:'Бутик-отель',icon:'🏨',desc:'Премиальный сервис и стабильный поток гостей.',price:125000,income:3100},
+  {id:'tech',name:'IT-компания',icon:'💻',desc:'Цифровые продукты и корпоративные решения.',price:350000,income:9200},
+  {id:'energy',name:'Энергетическая компания',icon:'⚡',desc:'Крупный инфраструктурный бизнес.',price:1000000,income:28000}
+];
+const CAR_CATALOG = [
+  {id:'city',name:'SAYFER City',icon:'🚙',type:'Городской',price:8500,desc:'Экономичный автомобиль для ежедневных поездок.'},
+  {id:'sedan',name:'SAYFER Executive',icon:'🚘',type:'Бизнес-седан',price:28500,desc:'Комфортный салон и сдержанный премиальный стиль.'},
+  {id:'sport',name:'SAYFER GT',icon:'🏎️',type:'Спорткар',price:78000,desc:'Динамика, выразительный дизайн и высокая мощность.'},
+  {id:'suv',name:'SAYFER Summit',icon:'🚙',type:'Премиальный SUV',price:112000,desc:'Просторный внедорожник для любых маршрутов.'},
+  {id:'electric',name:'SAYFER Volt',icon:'🔋',type:'Электромобиль',price:64500,desc:'Тихий ход и современная электрическая платформа.'},
+  {id:'hyper',name:'SAYFER Hyperion',icon:'🏁',type:'Гиперкар',price:1250000,desc:'Коллекционный автомобиль высшего класса.'}
+];
+let autoTab = 'salon';
+const usdBalance = () => S.balances.USD || 0n;
+const moneyUSD = n => fmtMoneyB(typeof n === 'bigint' ? n : toB(String(n)), 'USD', 0, 2);
+const businessOwned = id => S.businesses.find(x => x.id === id);
+const ownedCar = id => S.ownedCars.find(x => x.uid === id);
+function logEconomyTx(type, title, subtitle, amount, amountClass='gold'){
+  S.txs.unshift({id:uid(),type,title,subtitle,amountText:amount,amountClass,date:nowDate().toISOString(),meta:{source:'virtual-economy'}});
+  S.txs = S.txs.slice(0,500);
+}
+function renderBusiness(){
+  const totalIncome = S.businesses.reduce((n,b)=>n+(Number(b.income)||0),0);
+  $('#businessHero').innerHTML = `<div class="market-hero"><div class="eyebrow">Ежедневная прибыль · виртуальная экономика</div><div class="big">${moneyUSD(totalIncome)} <span style="font-size:13px;color:var(--muted)">/ день</span></div><div class="hint">В собственности: ${S.businesses.length} ${S.businesses.length===1?'предприятие':S.businesses.length>=2&&S.businesses.length<=4?'предприятия':'предприятий'}. Начисление доступно один раз в календарный день для каждого предприятия.</div><button type="button" class="btn btn-primary" id="claimBusinessIncome" style="width:100%;margin:16px 0 0" ${S.businesses.length?'':'disabled'}>Получить доступную прибыль</button></div>`;
+  const grid=$('#businessGrid');
+  grid.innerHTML = BUSINESS_CATALOG.map(b=>{
+    const own=businessOwned(b.id);
+    return `<article class="market-card"><div class="emoji">${b.icon}</div><h3>${b.name}</h3><div class="desc">${b.desc}</div><div class="price">${moneyUSD(b.price)}</div><div class="meta">Доход: ${moneyUSD(b.income)} / день</div><button type="button" class="btn ${own?'btn-ghost':'btn-primary'}" data-buy-business="${b.id}" ${own?'disabled':''}>${own?'В собственности':'Купить бизнес'}</button></article>`;
+  }).join('');
+  $('#claimBusinessIncome')?.addEventListener('click', claimBusinessIncome);
+  grid.querySelectorAll('[data-buy-business]').forEach(btn=>btn.addEventListener('click',()=>buyBusiness(btn.dataset.buyBusiness)));
+}
+function buyBusiness(id){
+  const b=BUSINESS_CATALOG.find(x=>x.id===id); if(!b||businessOwned(id))return;
+  const cost=toB(String(b.price));
+  if(usdBalance()<cost)return toast('Недостаточно средств в USD','err');
+  S.balances.USD=usdBalance()-cost;
+  S.businesses.push({id:b.id,name:b.name,income:b.income,boughtAt:new Date().toISOString(),lastClaim:''});
+  logEconomyTx('business',`Покупка бизнеса: ${b.name}`,`Стоимость ${moneyUSD(cost)}`,`-${moneyUSD(cost)}`,'neg');
+  saveState();renderBusiness();renderBalance();renderAccounts();renderHistory();hapticOk();toast(`Куплен бизнес «${b.name}»`);
+}
+function claimBusinessIncome(){
+  const now=new Date();
+  const day=[now.getFullYear(),String(now.getMonth()+1).padStart(2,'0'),String(now.getDate()).padStart(2,'0')].join('-');
+  const due=S.businesses.filter(b=>b.lastClaim!==day);
+  if(!due.length)return toast('Сегодня прибыль уже получена','err');
+  const total=due.reduce((n,b)=>n+Math.max(0,Number(b.income)||0),0);
+  if(!Number.isSafeInteger(total))return toast('Не удалось рассчитать прибыль','err');
+  due.forEach(b=>b.lastClaim=day);
+  const amount=toB(String(total));
+  S.balances.USD=usdBalance()+amount;
+  logEconomyTx('business','Прибыль предприятий',`${due.length} предприятий · ${day}`,`+${moneyUSD(amount)}`,'pos');
+  saveState();renderBusiness();renderBalance();renderAccounts();renderHistory();hapticOk();toast(`Зачислено ${moneyUSD(amount)}`);
+}
+function renderAuto(){
+  $('#garageCount').textContent=`${S.ownedCars.length} ${S.ownedCars.length===1?'автомобиль':S.ownedCars.length>=2&&S.ownedCars.length<=4?'автомобиля':'автомобилей'}`;
+  $$('[data-auto-tab]').forEach(b=>b.classList.toggle('active',b.dataset.autoTab===autoTab));
+  const grid=$('#carGrid');
+  if(autoTab==='salon'){
+    grid.innerHTML=CAR_CATALOG.map(c=>{
+      const price=toB(String(c.price));
+      return `<article class="market-card"><div class="emoji">${c.icon}</div><h3>${c.name}</h3><div class="desc">${c.desc}</div><div class="meta">${c.type}</div><div class="price">${moneyUSD(price)}</div><button type="button" class="btn btn-primary" data-buy-car="${c.id}">Купить</button></article>`;
+    }).join('');
+    grid.querySelectorAll('[data-buy-car]').forEach(btn=>btn.addEventListener('click',()=>buyCar(btn.dataset.buyCar)));
+  }else{
+    if(!S.ownedCars.length){grid.innerHTML='<div class="market-empty">В гараже пока нет автомобилей.<br>Перейдите в автосалон, чтобы купить первый автомобиль.</div>';return;}
+    grid.innerHTML=S.ownedCars.map(c=>`<article class="market-card"><div class="emoji">${c.icon}</div><h3>${esc(c.name)}</h3><div class="desc">${esc(c.type||'Автомобиль')} · куплен ${esc((c.boughtAt||'').slice(0,10))}</div><div class="price">${moneyUSD(toB(String(c.purchasePrice)))}</div><div class="meta">Цена продажи = цена покупки</div><button type="button" class="btn btn-primary" data-sell-car="${esc(c.uid)}">Продать за ${moneyUSD(toB(String(c.purchasePrice)))}</button></article>`).join('');
+    grid.querySelectorAll('[data-sell-car]').forEach(btn=>btn.addEventListener('click',()=>sellCar(btn.dataset.sellCar)));
+  }
+}
+function buyCar(id){
+  const c=CAR_CATALOG.find(x=>x.id===id);if(!c)return;
+  const cost=toB(String(c.price));
+  if(usdBalance()<cost)return toast('Недостаточно средств в USD','err');
+  S.balances.USD=usdBalance()-cost;
+  const car={uid:uid(),id:c.id,name:c.name,icon:c.icon,type:c.type,purchasePrice:c.price,boughtAt:new Date().toISOString()};
+  S.ownedCars.push(car);
+  logEconomyTx('auto',`Покупка автомобиля: ${c.name}`,`Автосалон · ${moneyUSD(cost)}`,`-${moneyUSD(cost)}`,'neg');
+  saveState();renderAuto();renderBalance();renderAccounts();renderHistory();hapticOk();toast(`${c.name} добавлен в гараж`);
+}
+function sellCar(uid0){
+  const idx=S.ownedCars.findIndex(c=>c.uid===uid0);if(idx<0)return;
+  const car=S.ownedCars[idx], value=toB(String(car.purchasePrice));
+  if(value<0n)return toast('Некорректная цена автомобиля','err');
+  S.balances.USD=usdBalance()+value;
+  S.ownedCars.splice(idx,1);
+  logEconomyTx('auto',`Продажа автомобиля: ${car.name}`,`Возврат по цене покупки`, `+${moneyUSD(value)}`,'pos');
+  saveState();renderAuto();renderBalance();renderAccounts();renderHistory();hapticOk();toast(`Продано за ${moneyUSD(value)}`);
+}
+$$('[data-auto-tab]').forEach(btn=>btn.addEventListener('click',()=>{autoTab=btn.dataset.autoTab;renderAuto();}));
+$('#businessRefresh')?.addEventListener('click',()=>{renderBusiness();toast('Данные бизнеса обновлены');});
+
 $$('.nav-item').forEach(btn => {
   btn.addEventListener('click', () => {
     haptic('light');
@@ -2097,6 +2256,8 @@ $$('.nav-item').forEach(btn => {
     if (page === 'history') renderHistory();
     if (page === 'crypto') renderCrypto();
     if (page === 'stocks') openStocksPage();
+    if (page === 'business') renderBusiness();
+    if (page === 'auto') renderAuto();
     if (page === 'exchange') updateExchange();
     if (page === 'home') renderAll();
   });
@@ -2576,7 +2737,7 @@ function renderHistory(){
     const iconChar = t.type === 'deposit' ? '+'
       : t.type === 'transfer' ? '→'
       : t.type === 'exchange' ? '⇄'
-      : t.type === 'crypto' ? '₿' : t.type === 'stock' ? '📈' : '•';
+      : t.type === 'crypto' ? '₿' : t.type === 'stock' ? '📈' : t.type === 'business' ? '🏢' : t.type === 'auto' ? '🚘' : '•';
     const note = (t.type === 'transfer' && t.meta && typeof t.meta.comment === 'string') ? t.meta.comment.trim() : '';
     return `
       <div class="row">
