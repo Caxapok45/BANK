@@ -1114,6 +1114,110 @@ input,select{font-size:16px}
   .stk-hero,.stk-search,.stk-list{margin-left:14px;margin-right:14px}
   .stk-head,.stk-sec,.stk-chips,.stk-hs,.stk-dh,.stk-dp,.stk-ch,.stk-sg,.stk-cta{padding-left:14px;padding-right:14px}
 }
+
+/* ================= БИЗНЕС (этап 1) ================= */
+#page-business{max-width:860px}
+.biz-entry{margin-top:18px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.biz-entry:active{transform:scale(.985)}
+.biz-entry .row-amt{font-size:12.5px}
+.biz-top{display:flex;align-items:center;gap:12px;padding:8px 20px 0}
+.biz-back{width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid var(--border);display:grid;place-items:center;flex-shrink:0;position:relative}
+.biz-back::after{content:"";position:absolute;inset:-6px}
+.biz-back svg{width:18px;height:18px;stroke:#c7ccd8;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.biz-ttl{font-size:22px;font-weight:800;letter-spacing:-.6px}
+.biz-sum{margin:14px 20px 0;padding:16px;border-radius:var(--radius);background:linear-gradient(160deg,rgba(255,255,255,.055),rgba(255,255,255,.02));border:1px solid var(--border);display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 14px}
+.biz-sum>div:last-child{grid-column:1/-1}
+.biz-sum small,.biz-fin small{display:block;font-size:11px;color:var(--muted);font-weight:600}
+.biz-sum b,.biz-fin b{display:block;font-size:14.5px;font-weight:700;margin-top:3px;font-variant-numeric:tabular-nums;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.biz-pos{color:var(--green)}.biz-neg{color:var(--red)}
+.biz-tabs{display:flex;gap:8px;flex-wrap:wrap;padding:16px 20px 0}
+.biz-list{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;padding:14px 20px 0}
+.biz-card{padding:14px 16px;border-radius:var(--radius);background:linear-gradient(160deg,rgba(255,255,255,.045),rgba(255,255,255,.015));border:1px solid var(--border);min-width:0}
+.biz-h{display:flex;align-items:center;gap:12px}
+.biz-ic{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;font-size:21px;flex-shrink:0;background:color-mix(in srgb,var(--a2) 13%,transparent);border:1px solid color-mix(in srgb,var(--a2) 24%,transparent)}
+.biz-hm{flex:1;min-width:0}
+.biz-name{font-size:14px;font-weight:700;overflow-wrap:anywhere;line-height:1.25}
+.biz-meta{font-size:11.5px;color:var(--muted);margin-top:2px}
+.biz-price{font-size:14px;font-weight:800;color:var(--a1);white-space:nowrap;flex-shrink:0;font-variant-numeric:tabular-nums}
+.biz-desc{font-size:12px;color:var(--muted);line-height:1.45;margin:10px 0 0}
+.biz-fin{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.05)}
+.biz-foot{display:flex;justify-content:space-between;gap:10px;font-size:11.5px;color:var(--muted);margin-top:10px}
+.biz-foot b{color:#e6e9f0;font-weight:600}
+.biz-buy{width:100%;height:44px;margin-top:12px;border-radius:13px;font-size:14px;font-weight:700;background:linear-gradient(145deg,var(--a1),var(--a2) 55%,var(--a3));color:#1a1407;transition:transform .15s}
+.biz-buy:active{transform:scale(.975)}
+.biz-buy.low{background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--muted)}
+.biz-buy.own{background:rgba(55,214,122,.1);border:1px solid rgba(55,214,122,.25);color:var(--green);cursor:default}
+.biz-note{font-size:11.5px;color:var(--muted-2);padding:12px 20px 0;line-height:1.4}
+@media (min-width:700px){
+  .biz-list{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .biz-sum{grid-template-columns:repeat(5,minmax(0,1fr))}
+  .biz-sum>div:last-child{grid-column:auto}
+}
+@media (max-width:360px){.biz-top,.biz-sum,.biz-tabs,.biz-list,.biz-note{margin-left:0;margin-right:0}.biz-sum{margin-left:14px;margin-right:14px}.biz-fin b{font-size:13px}}
+/* ===== БИЗНЕС — этап 2: управление предприятием ===== */
+#bizManage{display:none;padding-bottom:8px}
+#page-business.biz-managing{max-width:1080px}
+#page-business.biz-managing #bizManage{display:block}
+#page-business.biz-managing #bizSummary,#page-business.biz-managing #bizTabs,#page-business.biz-managing #bizCats,#page-business.biz-managing #bizList,#page-business.biz-managing .biz-note{display:none!important}
+.bz-head{display:flex;align-items:center;gap:12px;padding:14px 20px 0}
+.bz-hm{flex:1;min-width:0}
+.bz-tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 20px 0}
+.bz-tile{padding:10px 11px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid var(--border);min-width:0}
+.bz-tile small{display:block;font-size:10.5px;color:var(--muted);font-weight:600}
+.bz-tile b{display:block;font-size:13px;font-weight:700;margin-top:3px;font-variant-numeric:tabular-nums;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bz-chips{display:flex;flex-wrap:wrap;gap:6px;padding:10px 20px 0}
+.bz-chip{display:inline-block;font-size:11px;font-weight:600;padding:5px 10px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--muted);line-height:1.2}
+.bz-chip.good{color:var(--green);border-color:rgba(55,214,122,.3);background:rgba(55,214,122,.08)}
+.bz-chip.bad{color:var(--red);border-color:rgba(255,92,114,.3);background:rgba(255,92,114,.08)}
+.bz-chip.warn{color:var(--a1);border-color:color-mix(in srgb,var(--a2) 40%,transparent);background:color-mix(in srgb,var(--a2) 12%,transparent)}
+.bz-tabs{padding-top:14px}
+.bz-body{padding:12px 20px 0}
+.bz-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;align-items:start}
+.bz-grid>div{display:grid;gap:12px;min-width:0}
+.bz-sec{border-radius:var(--radius);border:1px solid var(--border);background:linear-gradient(160deg,rgba(255,255,255,.045),rgba(255,255,255,.015));min-width:0}
+.bz-sec>summary{list-style:none;cursor:pointer;min-height:48px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 14px;font-size:13.5px;font-weight:700;-webkit-tap-highlight-color:transparent}
+.bz-sec>summary::-webkit-details-marker{display:none}
+.bz-sec>summary::after{content:"";width:7px;height:7px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);margin:-3px 2px 0 6px;flex-shrink:0;transition:transform .2s}
+.bz-sec[open]>summary::after{transform:rotate(-135deg);margin-top:3px}
+.bz-sec>summary span{flex:1;min-width:0}
+.bz-sec>summary em{font-style:normal;font-size:11.5px;font-weight:600;color:var(--muted);text-align:right;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:48%}
+.bz-sb{padding:0 14px 4px;border-top:1px solid rgba(255,255,255,.05)}
+.bz-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.bz-row:last-child{border-bottom:0}
+.bz-ri{flex:1;min-width:0}
+.bz-rt{font-size:13px;font-weight:700;overflow-wrap:anywhere;line-height:1.3}
+.bz-rs{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.45;overflow-wrap:anywhere}
+.bz-btn{flex-shrink:0;min-width:96px;min-height:44px;padding:6px 12px;border-radius:13px;font-size:12.5px;font-weight:700;background:linear-gradient(145deg,var(--a1),var(--a2) 55%,var(--a3));color:#1a1407;display:inline-flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.15;transition:transform .15s;text-align:center}
+.bz-btn small{font-size:10.5px;font-weight:600;opacity:.8;margin-top:1px}
+.bz-btn:active{transform:scale(.97)}
+.bz-btn.low{background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--muted)}
+.bz-btn.ghost{background:rgba(255,255,255,.07);border:1px solid var(--border-2);color:#e6e9f0}
+.bz-btn.danger{background:linear-gradient(180deg,#ff8a9a,#ff4d66);color:#2a0710}
+.bz-seg{display:flex;flex-wrap:wrap;gap:6px;padding-top:12px}
+.bz-seg .chip-f{flex:1 1 auto;text-align:center;min-height:42px}
+.bz-hf{padding-top:0;padding-bottom:12px}
+.bz-hf .bz-btn{flex:1 1 0;min-width:64px}
+.bz-kv{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:12.5px}
+.bz-kv span{color:var(--muted);min-width:0}
+.bz-kv b{font-weight:600;text-align:right;min-width:0;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+.bz-bar{height:6px;border-radius:99px;background:rgba(255,255,255,.07);overflow:hidden;margin-top:7px}
+.bz-bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--a3),var(--a1))}
+.bz-adv{margin:10px 0;padding:11px 12px;border-radius:13px;font-size:12.5px;line-height:1.45;background:rgba(255,255,255,.04);border:1px solid var(--border)}
+.bz-adv.good{color:var(--green);border-color:rgba(55,214,122,.28);background:rgba(55,214,122,.07)}
+.bz-adv.bad{color:#ff9aa8;border-color:rgba(255,92,114,.28);background:rgba(255,92,114,.07)}
+.bz-adv.warn{color:var(--a1);border-color:color-mix(in srgb,var(--a2) 35%,transparent);background:color-mix(in srgb,var(--a2) 10%,transparent)}
+.bz-log{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.bz-log:last-child{border-bottom:0}
+.bz-li{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;background:rgba(255,255,255,.05);font-size:14px;flex-shrink:0}
+.bz-log b{font-size:12px;font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
+.bz-mini{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:11.5px;color:var(--muted);margin-top:10px}
+.bz-mini b{color:#e6e9f0;font-weight:600}
+@media (min-width:760px){
+  .bz-tiles{grid-template-columns:repeat(6,minmax(0,1fr))}
+  .bz-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  .bz-grid>div{gap:14px}
+}
+@media (max-width:360px){.bz-head,.bz-chips{padding-left:14px;padding-right:14px}.bz-tiles{margin-left:14px;margin-right:14px}.bz-body{padding-left:14px;padding-right:14px}.bz-btn{min-width:84px}.bz-sec>summary em{display:none}}
 </style>
 </head>
 <body>
@@ -1274,6 +1378,14 @@ input,select{font-size:16px}
         </button>
       </div>
 
+      <div class="panel biz-entry" id="bizEntry" role="button" tabindex="0" aria-label="Бизнес">
+        <div class="row">
+          <div class="row-ic gold">🏢</div>
+          <div class="row-main"><div class="row-title">Бизнес</div><div class="row-sub" id="bizEntrySub">Каталог предприятий</div></div>
+          <div class="row-amt pos" id="bizEntryAmt"></div>
+        </div>
+      </div>
+
       <div class="section-head">
         <div class="section-title">Валютные счета</div>
         <div class="section-link" id="linkAllAccounts">Сменить валюту</div>
@@ -1394,6 +1506,23 @@ input,select{font-size:16px}
       <div style="height:14px"></div>
       <div class="panel" id="historyPanel"></div>
       <div style="height:20px"></div>
+    </div>
+
+    <div class="page" id="page-business">
+      <div class="biz-top">
+        <button class="biz-back" id="bizBack" type="button" aria-label="Назад"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <div class="biz-ttl">Бизнес</div>
+      </div>
+      <div class="biz-sum" id="bizSummary"></div>
+      <div class="biz-tabs" id="bizTabs">
+        <button class="chip-f active" type="button" data-biz-tab="mine">Мои бизнесы</button>
+        <button class="chip-f" type="button" data-biz-tab="shop">Каталог</button>
+      </div>
+      <div class="biz-tabs" id="bizCats" style="display:none;padding-top:10px"></div>
+      <div class="biz-list" id="bizList"></div>
+      <div id="bizManage"></div>
+      <div class="biz-note">Покупка и доход проходят через счёт USD. Прибыль начисляется автоматически, в том числе пока приложение закрыто.</div>
+      <div style="height:24px"></div>
     </div>
 
   </div>
@@ -2576,7 +2705,7 @@ function renderHistory(){
     const iconChar = t.type === 'deposit' ? '+'
       : t.type === 'transfer' ? '→'
       : t.type === 'exchange' ? '⇄'
-      : t.type === 'crypto' ? '₿' : t.type === 'stock' ? '📈' : '•';
+      : t.type === 'crypto' ? '₿' : t.type === 'stock' ? '📈' : t.type === 'business' ? '🏢' : '•';
     const note = (t.type === 'transfer' && t.meta && typeof t.meta.comment === 'string') ? t.meta.comment.trim() : '';
     return `
       <div class="row">
@@ -3559,6 +3688,866 @@ document.body.classList.toggle('no-anim', S.settings.animations === false);
   document.addEventListener('visibilitychange', () => { if (document.hidden) flush(); });
   try { navigator.storage?.persist?.(); } catch(e){}
 })();
+
+/* =========================================================
+   БИЗНЕС — этап 1 (основа): каталог, покупка, доход, сохранение
+   Данные: S.biz = { v:1, owned:{ [id]:{level,boughtAt,lastTs,acc,earnedC} } }
+   Деньги — со счёта USD (BigInt, как весь проект). Суммы в S.biz — целые центы (Number).
+   ========================================================= */
+const BIZ_PERIOD = 10000;           // период начисления, мс
+const BIZ_PER_HOUR = 360;           // периодов в часе (3 600 000 / 10 000)
+const BIZ_CENT = SCB / 100n;        // 1 цент в единицах BigInt-баланса
+const BIZ_CATS = ['Общепит','Торговля','Авто','Недвижимость','Производство','IT','Логистика','Крупные'];
+/* inc/exp — доход и расходы в $ за час при уровне 1 */
+const BIZ_CATALOG = [
+  {id:'cafe',     ic:'☕', cat:'Общепит',      name:'Кафе «Уютный угол»',       price:5000,     inc:160,    exp:85,     desc:'Небольшое кафе у метро: кофе, выпечка, быстрые обеды.'},
+  {id:'restaurant',ic:'🍽️', cat:'Общепит',      name:'Ресторан «Панорама»',      price:45000,    inc:1300,   exp:800,    desc:'Ресторан с панорамными окнами и постоянной клиентурой.'},
+  {id:'kiosk',    ic:'🏪', cat:'Торговля',     name:'Круглосуточный киоск',     price:2500,     inc:80,     exp:48,     desc:'Минимальные вложения и стабильный поток покупателей.'},
+  {id:'grocery',  ic:'🛒', cat:'Торговля',     name:'Продуктовый магазин',      price:18000,    inc:520,    exp:330,    desc:'Магазин у дома с широким ассортиментом.'},
+  {id:'carwash',  ic:'🚿', cat:'Авто',         name:'Автомойка',                price:12000,    inc:350,    exp:215,    desc:'Автомойка на четыре поста с самообслуживанием.'},
+  {id:'autoservice',ic:'🔧', cat:'Авто',       name:'Автосервис',               price:30000,    inc:900,    exp:560,    desc:'Ремонт, диагностика и шиномонтаж.'},
+  {id:'gas',      ic:'⛽', cat:'Авто',         name:'Заправочная станция',      price:120000,   inc:3600,   exp:2350,   desc:'АЗС на трассе с магазином и кафе.'},
+  {id:'apartments',ic:'🏠', cat:'Недвижимость', name:'Сдаваемые квартиры',       price:60000,    inc:1500,   exp:780,    desc:'Несколько квартир в аренду: коммуналка и обслуживание за ваш счёт.'},
+  {id:'hotel',    ic:'🏨', cat:'Недвижимость', name:'Гостиница',                price:250000,   inc:7200,   exp:4400,   desc:'Городская гостиница на 40 номеров.'},
+  {id:'farm',     ic:'🌾', cat:'Производство', name:'Ферма',                    price:22000,    inc:640,    exp:410,    desc:'Овощи и молочная продукция для местных магазинов.'},
+  {id:'brewery',  ic:'🍺', cat:'Производство', name:'Пивоварня',                price:80000,    inc:2300,   exp:1450,   desc:'Крафтовое производство с поставками в бары.'},
+  {id:'factory',  ic:'🏭', cat:'Производство', name:'Фабрика',                  price:150000,   inc:4500,   exp:2900,   desc:'Серийное производство товаров повседневного спроса.'},
+  {id:'eshop',    ic:'📦', cat:'IT',           name:'Онлайн-магазин',           price:35000,    inc:1150,   exp:700,    desc:'Интернет-магазин с доставкой по стране.'},
+  {id:'itstudio', ic:'💻', cat:'IT',           name:'IT-компания',              price:100000,   inc:3400,   exp:2100,   desc:'Студия разработки программного обеспечения на заказ.'},
+  {id:'warehouse',ic:'🏬', cat:'Логистика',    name:'Склад',                    price:70000,    inc:2000,   exp:1250,   desc:'Склад ответственного хранения для интернет-магазинов.'},
+  {id:'transport',ic:'🚚', cat:'Логистика',    name:'Транспортная компания',    price:180000,   inc:5400,   exp:3400,   desc:'Парк грузовиков для региональных перевозок.'},
+  {id:'logistics',ic:'🚢', cat:'Логистика',    name:'Логистический оператор',   price:400000,   inc:12500,  exp:7800,   desc:'Комплексная доставка: склады, транспорт и таможня.'},
+  {id:'mall',     ic:'🏢', cat:'Крупные',      name:'Торговый центр',           price:1500000,  inc:48000,  exp:30000,  desc:'Крупный ТЦ: арендаторы, парковка и кинотеатр.'},
+  {id:'techpark', ic:'🧪', cat:'Крупные',      name:'Технопарк',                price:5000000,  inc:170000, exp:108000, desc:'Кампус для технологических компаний и лабораторий.'},
+  {id:'holding',  ic:'🌐', cat:'Крупные',      name:'Промышленный холдинг',     price:20000000, inc:700000, exp:450000, desc:'Группа заводов и компаний с высокой выручкой.'}
+];
+const BIZ_BY_ID = Object.fromEntries(BIZ_CATALOG.map(d => [d.id, d]));
+
+/* ---------- ЭТАП 2: данные и модель управления (расширяет этап 1, ничего не заменяет) ----------
+   Состояние предприятия S.biz.owned[id] дополнено полями: up{eq,prem,cap}, auto, asr, br, skill, staff,
+   rep, cond, set{price,sup,mnt}, inv, rev, cost, mk, ev, offer, deal, disc, goals, ver.
+   При параметрах «по умолчанию» экономика совпадает с этапом 1 (доход = inc·ур., расходы = exp·ур.). */
+const BIZ_MAXLV = 10, BIZ_MAXINC = 4.5;
+const BIZ_PRICES = [0.8, 0.9, 1, 1.1, 1.2, 1.3];
+const BIZ_SUP = {
+  eco:  { n:'Эконом',   cost:0.8, dem:0.94, rep:-6, lv:1, d:'Закупки −20%, спрос −6%, репутация ниже' },
+  std:  { n:'Стандарт', cost:1,   dem:1,    rep:0,  lv:1, d:'Базовое качество без изменений' },
+  prem: { n:'Премиум',  cost:1.3, dem:1.07, rep:6,  lv:3, d:'Закупки +30%, спрос +7%, репутация выше' }
+};
+const BIZ_MNT = {
+  low:  { n:'Минимальный', cost:0.75, wear:1.5,  lv:1, d:'Расходы на обслуживание −25%, износ быстрее на 50%' },
+  norm: { n:'Обычный',     cost:1,    wear:1,    lv:1, d:'Стандартный износ и расходы' },
+  high: { n:'Усиленный',   cost:1.35, wear:0.6,  lv:2, d:'Расходы +35%, износ медленнее на 40%' }
+};
+/* sp/ss/sr/so — доли расходов: зарплаты / закупки / аренда / прочее (сумма = 1).
+   gEq,gPr,gCap,gSk,gMk,gAsr,gAu — сила эффекта оборудования, помещения, мощностей, квалификации, рекламы, ассортимента, автоматизации.
+   el — чувствительность спроса к цене; wear — скорость износа. */
+const BIZ_PROF = {
+  'Общепит':      { sp:.38, ss:.38, sr:.16, so:.08, gEq:1,   gPr:1.3, gCap:1,   gSk:1.3, gMk:1.4, gAsr:1.2, gAu:.9,  el:1,   wear:.9,  brk:'сломалось кухонное оборудование',
+                    eq:'Кухонное оборудование', pr:'Зал и интерьер',         cp:'Мощность кухни',      asr:['Десерты и выпечка','Доставка заказов','Банкеты и кейтеринг'],
+                    focus:'Зависит от персонала, сервиса и рекламы' },
+  'Торговля':     { sp:.25, ss:.5,  sr:.17, so:.08, gEq:.8,  gPr:1,   gCap:1.1, gSk:.8,  gMk:1.2, gAsr:1.5, gAu:1.1, el:1.3, wear:.8,  brk:'отказал холодильный шкаф',
+                    eq:'Торговое оборудование', pr:'Торговый зал',           cp:'Склад и выкладка',    asr:['Свежая выпечка','Товары под заказ','Онлайн-витрина'],
+                    focus:'Широкий ассортимент и аккуратные цены' },
+  'Авто':         { sp:.35, ss:.3,  sr:.2,  so:.15, gEq:1.6, gPr:.8,  gCap:1.2, gSk:1.4, gMk:.9,  gAsr:1.1, gAu:1,   el:1,   wear:1.2, brk:'вышел из строя подъёмник',
+                    eq:'Диагностика и подъёмники', pr:'Боксы и зона ожидания', cp:'Количество постов',  asr:['Шиномонтаж','Детейлинг','Эвакуатор'],
+                    focus:'Оборудование и квалификация мастеров' },
+  'Недвижимость': { sp:.15, ss:.25, sr:.35, so:.25, gEq:.6,  gPr:1.8, gCap:.8,  gSk:.5,  gMk:1,   gAsr:.8,  gAu:.8,  el:.8,  wear:.7,  brk:'прорыв труб',
+                    eq:'Инженерные системы', pr:'Ремонт и отделка',          cp:'Площадь объектов',    asr:['Меблированные квартиры','Посуточная аренда','Услуги управления'],
+                    focus:'Состояние помещений и репутация арендодателя' },
+  'Производство': { sp:.3,  ss:.42, sr:.1,  so:.18, gEq:1.5, gPr:.6,  gCap:1.6, gSk:1,   gMk:.7,  gAsr:1,   gAu:1.4, el:.9,  wear:1.4, brk:'остановился станок',
+                    eq:'Станки и линии', pr:'Цеха и склады',                 cp:'Производственные мощности', asr:['Новая продуктовая линия','Фасовка и упаковка','Экспортная продукция'],
+                    focus:'Оборудование, материалы и производительность' },
+  'IT':           { sp:.62, ss:.08, sr:.12, so:.18, gEq:.7,  gPr:.8,  gCap:1,   gSk:1.7, gMk:1,   gAsr:1.1, gAu:1.5, el:.8,  wear:.5,  brk:'сбой серверов',
+                    eq:'Серверы и ПО', pr:'Офис и рабочие места',            cp:'Команда проектов',    asr:['Мобильная разработка','Поддержка и сопровождение','Консалтинг'],
+                    focus:'Квалификация команды и автоматизация' },
+  'Логистика':    { sp:.3,  ss:.35, sr:.15, so:.2,  gEq:1.4, gPr:.6,  gCap:1.7, gSk:1,   gMk:.8,  gAsr:1,   gAu:1.3, el:.9,  wear:1.5, brk:'поломка грузовика',
+                    eq:'Автопарк и техника', pr:'Терминалы и склады',        cp:'Грузоподъёмность',    asr:['Холодовая цепь','Экспресс-доставка','Таможенное оформление'],
+                    focus:'Мощности, парк техники и топливо' },
+  'Крупные':      { sp:.25, ss:.25, sr:.3,  so:.2,  gEq:1,   gPr:1.4, gCap:1.2, gSk:1,   gMk:1.6, gAsr:1.3, gAu:1.2, el:.8,  wear:.8,  brk:'авария инженерных систем',
+                    eq:'Инженерия и безопасность', pr:'Общие зоны и фасады', cp:'Арендопригодная площадь', asr:['Фуд-корт','Кинотеатр','Премиум-арендаторы'],
+                    focus:'Масштаб, филиалы и реклама' }
+};
+const BIZ_CAMP = [
+  { id:'flyer',  n:'Листовки и объявления', h:6,  boost:.10, f:.80, lv:1 },
+  { id:'online', n:'Онлайн-реклама',        h:12, boost:.18, f:.85, lv:2 },
+  { id:'tv',     n:'ТВ и наружная реклама', h:24, boost:.30, f:.90, lv:4 }
+];
+const BIZ_OFFERS = {
+  bulk:  { n:'Оптовая закупка',        t:'Поставщик предлагает партию со скидкой: закупки −25% на 8 ч.', h:8,  cf:.35 },
+  blog:  { n:'Реклама у блогера',      t:'Всплеск интереса: спрос +30% на 3 ч.',                         h:3,  cf:.5  },
+  grant: { n:'Грант на модернизацию',  t:'Скидка 25% на следующее улучшение в течение 24 ч. Бесплатно.', h:24, cf:0   }
+};
+const BIZ_GOALS = [
+  { id:'g_lv3',  t:'Опытный управляющий',   d:'Достигнуть 3-го уровня',                p:(b,d)=>[b.level, 3],               r:.01  },
+  { id:'g_rep',  t:'Безупречная репутация', d:'Репутация 85 и выше',                   p:(b,d)=>[Math.floor(b.rep), 85],    r:.015 },
+  { id:'g_br2',  t:'Своя сеть',             d:'Открыть 2 филиала',                     p:(b,d)=>[b.br, 2],                  r:.02  },
+  { id:'g_au',   t:'Полная автоматизация',  d:'Автоматизация 4-го уровня',             p:(b,d)=>[b.auto, 4],                r:.02  },
+  { id:'g_earn', t:'Окупить бизнес',        d:'Заработать сумму, равную цене бизнеса', p:(b,d)=>[b.earnedC, d.price * 100], r:.03  },
+  { id:'g_lv10', t:'Магнат',                d:'Достигнуть 10-го уровня',               p:(b,d)=>[b.level, 10],              r:.08  }
+];
+const BIZ_CAT_IDX = Object.fromEntries(BIZ_CATS.map((c, i) => [c, i]));
+const bizNotes = [];
+let bizView = null, bizVTab = 'ov', bizPtr = 0, bizLockUntil = 0, bizSelling = false;
+
+const bizClamp = (x, a, b) => Math.min(b, Math.max(a, x));
+const bizInt = (v, a, b) => Math.min(b, Math.max(a, Math.floor(+v) || 0));
+const bizNref = d => bizClamp(Math.round(Math.cbrt(d.price) / 4), 2, 15);          // базовый штат
+const bizBr = b => 1 + 0.55 * (b.br || 0);                                          // множитель масштаба от филиалов
+const bizNeed = (d, b) => Math.max(1, Math.round(bizNref(d) * Math.max(1, b.level | 0) * bizBr(b)));
+const bizWage = d => BIZ_PROF[d.cat].sp * d.exp * 100 / bizNref(d);                 // центы/ч за сотрудника
+
+/* Доля окна [t0,t1], в течение которой действует временный эффект (для корректного офлайн-начисления) */
+function bizTf(until, win){
+  if (!until || win === 'base') return 0;
+  if (!win) return until > Date.now() ? 1 : 0;
+  const span = win.t1 - win.t0;
+  if (span <= 0) return until > win.t1 ? 1 : 0;
+  return bizClamp((Math.min(until, win.t1) - win.t0) / span, 0, 1);
+}
+/* Рынок: детерминированная плавная функция времени (шаг 6 ч), 0.90…1.10 */
+function bizMarket(cat, t){
+  const SL = 6 * 3600000, s = Math.floor(t / SL), f = (t - s * SL) / SL, sm = f * f * (3 - 2 * f), ci = (BIZ_CAT_IDX[cat] || 0) + 1;
+  const h = n => { const x = Math.sin(n * 12.9898 + ci * 78.233) * 43758.5453; return 0.9 + 0.2 * (x - Math.floor(x)); };
+  return h(s) + (h(s + 1) - h(s)) * sm;
+}
+
+/* Экономика предприятия на заданном уровне (в центах за час).
+   Без b — прежняя формула этапа 1 (каталог). С b — полная модель управления. */
+function bizStats(d, level, b, win, ov){
+  const m = Math.max(1, level | 0);
+  if (!b){ const incC = d.inc * 100 * m, expC = d.exp * 100 * m; return { incC, expC, netC: incC - expC }; }
+  const P = BIZ_PROF[d.cat];
+  const rep = ov && ov.rep != null ? ov.rep : b.rep, cond = ov && ov.cond != null ? ov.cond : b.cond;
+  const scale = m * bizBr(b), incBase = d.inc * 100 * scale, expBase = d.exp * 100 * scale;
+  const sup = BIZ_SUP[b.set.sup] || BIZ_SUP.std, mnt = BIZ_MNT[b.set.mnt] || BIZ_MNT.norm, pr = b.set.price, up = b.up, au = b.auto * P.gAu;
+  const mkc  = b.mk ? 1 + (b.mk.boost - 1) * bizTf(b.mk.until, win) : 1;
+  const evD  = b.ev && b.ev.dem ? 1 + (b.ev.dem - 1) * bizTf(b.ev.until, win) : 1;
+  const evE  = b.ev && b.ev.exp ? 1 + (b.ev.exp - 1) * bizTf(b.ev.until, win) : 1;
+  const dlD  = b.deal && b.deal.dem ? 1 + (b.deal.dem - 1) * bizTf(b.deal.until, win) : 1;
+  const dlS  = b.deal && b.deal.sup ? 1 - (1 - b.deal.sup) * bizTf(b.deal.until, win) : 1;
+  const elas = bizClamp(1.6 - rep / 100, 0.55, 1.6) * P.el;
+  const demPrice = pr >= 1 ? Math.max(0.25, 1 - elas * (pr - 1)) : 1 + 0.9 * elas * (1 - pr);
+  const demand = (0.7 + 0.006 * rep) * demPrice * sup.dem * (1 + 0.09 * P.gAsr * b.asr) * mkc * evD * dlD;
+  const ceil = 1.45 + 0.26 * P.gCap * up.cap + 0.10 * P.gPr * up.prem + 0.08 * P.gEq * up.eq;
+  const served = demand <= ceil ? demand : ceil + 0.3 * (demand - ceil);              // спрос выше мощностей теряется
+  const need = bizNeed(d, b), cov = need > 0 ? b.staff / need : 1;
+  const staffEff = cov < 1 ? Math.pow(Math.max(0, cov), 0.9) : 1 + 0.1 * Math.min(cov - 1, 0.3) / 0.3;
+  const condEff = cond >= 70 ? 1 : 0.6 + 0.4 * cond / 70;
+  const eff = 1 + 0.04 * P.gEq * up.eq + 0.035 * P.gPr * up.prem + 0.05 * P.gCap * up.cap + 0.09 * P.gSk * (b.skill - 1);
+  const mult = Math.min(BIZ_MAXINC, Math.max(0, served * staffEff * condEff * pr * eff));
+  const incC = Math.round(incBase * mult);
+  const pay  = Math.round(b.staff * bizWage(d) * (1 + 0.22 * (b.skill - 1)) * Math.max(0.4, 1 - 0.09 * au));
+  const spl  = Math.round(P.ss * expBase * served * sup.cost * (1 + 0.10 * b.asr) * Math.max(0.5, 1 - 0.04 * au) * dlS * evE);
+  const rent = Math.round(P.sr * expBase * (1 + 0.06 * up.prem));
+  const oth  = Math.round(P.so * expBase * mnt.cost * Math.max(0.4, 1 - 0.12 * au) * (1 + 0.03 * up.eq + 0.03 * up.cap) * evE);
+  const expC = Math.max(0, pay + spl + rent + oth);
+  return { incC, expC, netC: incC - expC, pay, sup: spl, rent, oth, demand, ceil, served, cov, need, staffEff, condEff, eff, mult };
+}
+
+function bizAddStaff(b, n){            // новые сотрудники приходят с квалификацией 1 — средняя квалификация разбавляется
+  const tot = b.staff + n; if (n <= 0) return;
+  b.skill = bizClamp((b.staff * b.skill + n) / tot, 1, 5); b.staff = tot;
+}
+function bizNewState(d, now){
+  const b = { level: 1, boughtAt: now, lastTs: now, acc: 0, earnedC: 0,
+    up: { eq: 0, prem: 0, cap: 0 }, auto: 0, asr: 0, br: 0, skill: 1, staff: 0, rep: 50, cond: 100,
+    set: { price: 1, sup: 'std', mnt: 'norm' }, inv: 0, rev: 0, cost: 0,
+    mk: null, ev: null, offer: null, deal: null, disc: null, goals: {}, ver: 0 };
+  b.staff = bizNeed(d, b); return b;
+}
+function bizLog(id, k, x, c){
+  const L = S.biz.log; L.unshift({ id, t: Date.now(), k, x: String(x).slice(0, 90), c: Math.round(c) || 0 });
+  if (L.length > 200) L.length = 200;
+}
+const bizTouch = b => { b.ver = (b.ver | 0) + 1; };
+function bizFlushNotes(){
+  if (!bizNotes.length) return;
+  const x = bizNotes[0], more = bizNotes.length - 1; bizNotes.length = 0;
+  if (!document.hidden) toast(x.t + (more ? ' (+' + more + ')' : ''), x.type);
+}
+
+function bizNormalize(){
+  const o = (S.biz && typeof S.biz === 'object') ? S.biz : {};
+  const src = (o.owned && typeof o.owned === 'object') ? o.owned : {};
+  const now = Date.now(), own = {};
+  const okT = (v, k) => v && typeof v === 'object' && Number.isFinite(+v[k]) && +v[k] > 0;
+  for (const [id, v] of Object.entries(src)){
+    if (!BIZ_BY_ID[id] || !v || typeof v !== 'object') continue;
+    const d = BIZ_BY_ID[id];
+    const bought = Number.isFinite(+v.boughtAt) && +v.boughtAt > 0 ? Math.min(+v.boughtAt, now) : now;
+    const last = Number.isFinite(+v.lastTs) && +v.lastTs > 0 ? Math.min(+v.lastTs, now) : bought;
+    const s = (v.set && typeof v.set === 'object') ? v.set : {}, u = (v.up && typeof v.up === 'object') ? v.up : {};
+    const b = {
+      level: bizInt(v.level, 1, BIZ_MAXLV) || 1,
+      boughtAt: bought, lastTs: last,
+      acc: Math.min(BIZ_PER_HOUR - 1, Math.max(0, Math.floor(+v.acc) || 0)),
+      earnedC: Math.max(0, Math.floor(+v.earnedC) || 0),
+      up: { eq: bizInt(u.eq, 0, 5), prem: bizInt(u.prem, 0, 5), cap: bizInt(u.cap, 0, 5) },
+      auto: bizInt(v.auto, 0, 4), asr: bizInt(v.asr, 0, 3), br: bizInt(v.br, 0, 4),
+      skill: bizClamp(Number.isFinite(+v.skill) && +v.skill > 0 ? +v.skill : 1, 1, 5),
+      staff: 0,
+      rep: bizClamp(v.rep != null && Number.isFinite(+v.rep) ? +v.rep : 50, 0, 100),
+      cond: bizClamp(v.cond != null && Number.isFinite(+v.cond) ? +v.cond : 100, 0, 100),
+      set: { price: BIZ_PRICES.includes(+s.price) ? +s.price : 1, sup: BIZ_SUP[s.sup] ? s.sup : 'std', mnt: BIZ_MNT[s.mnt] ? s.mnt : 'norm' },
+      inv: Math.max(0, Math.floor(+v.inv) || 0),
+      rev: Math.max(0, Number.isFinite(+v.rev) ? +v.rev : 0),
+      cost: Math.max(0, Number.isFinite(+v.cost) ? +v.cost : 0),
+      mk: okT(v.mk, 'until') ? { id: String(v.mk.id || ''), boost: bizClamp(+v.mk.boost || 1, 1, 2), until: +v.mk.until } : null,
+      ev: okT(v.ev, 'until') ? { id: String(v.ev.id || ''), n: String(v.ev.n || 'Событие').slice(0, 60),
+            dem: v.ev.dem ? bizClamp(+v.ev.dem, 0.5, 1.5) : undefined, exp: v.ev.exp ? bizClamp(+v.ev.exp, 0.8, 1.5) : undefined, until: +v.ev.until } : null,
+      offer: okT(v.offer, 'exp') && BIZ_OFFERS[v.offer.id] ? { id: v.offer.id, exp: +v.offer.exp } : null,
+      deal: okT(v.deal, 'until') ? { n: String(v.deal.n || 'Предложение').slice(0, 60),
+            sup: v.deal.sup ? bizClamp(+v.deal.sup, 0.5, 1) : undefined, dem: v.deal.dem ? bizClamp(+v.deal.dem, 1, 1.5) : undefined, until: +v.deal.until } : null,
+      disc: okT(v.disc, 'until') ? { pct: bizClamp(+v.disc.pct || 0, 0, 0.5), until: +v.disc.until } : null,
+      goals: {}, ver: Math.max(0, Math.floor(+v.ver) || 0)
+    };
+    if (v.goals && typeof v.goals === 'object') for (const g of BIZ_GOALS) if (Number.isFinite(+v.goals[g.id]) && +v.goals[g.id] > 0) b.goals[g.id] = +v.goals[g.id];
+    const need = bizNeed(d, b);
+    b.staff = v.staff != null && Number.isFinite(+v.staff) ? bizInt(v.staff, 0, Math.ceil(need * 1.5)) : need;
+    own[id] = b;
+  }
+  const log = Array.isArray(o.log) ? o.log.filter(x => x && typeof x === 'object' && BIZ_BY_ID[x.id] && Number.isFinite(+x.t))
+    .slice(0, 200).map(x => ({ id: x.id, t: +x.t, k: String(x.k || ''), x: String(x.x || '').slice(0, 90), c: Math.round(+x.c) || 0 })) : [];
+  S.biz = { ...o, v: 2, owned: own, log };
+}
+
+/* Износ, репутация, события — за k завершённых периодов. Возвращает чистую прибыль в центах/ч для начисления. */
+function bizRepTarget(d, b, cov, cond){
+  const sup = BIZ_SUP[b.set.sup] || BIZ_SUP.std, pr = b.set.price;
+  let T = 50 + 4 * (b.skill - 1) + sup.rep + 2 * b.up.prem + 1.5 * b.asr + 1.5 * b.up.eq;
+  if (cov < 1) T -= 35 * (1 - cov);
+  if (cond < 70) T -= 0.35 * (70 - cond);
+  if (pr > 1.1) T -= 55 * (pr - 1.1); else if (pr < 0.95) T += 25 * (0.95 - pr);
+  return bizClamp(T, 0, 100);
+}
+function bizAdvance(id, b, k, t0){
+  const d = BIZ_BY_ID[id], P = BIZ_PROF[d.cat], t1 = t0 + k * BIZ_PERIOD, hrs = k * BIZ_PERIOD / 3600000, now = Date.now();
+  const wear = 0.6 * P.wear * (BIZ_MNT[b.set.mnt] || BIZ_MNT.norm).wear * Math.max(0.3, 1 - 0.07 * b.up.eq - 0.05 * b.auto);
+  const cond1 = Math.max(0, b.cond - wear * hrs);
+  const cov = b.staff / bizNeed(d, b);
+  const T = bizRepTarget(d, b, cov, (b.cond + cond1) / 2);
+  const rep1 = bizClamp(b.rep + (T - b.rep) * (1 - Math.exp(-hrs / 18)), 0, 100);
+  const st = bizStats(d, b.level, b, { t0, t1 }, { cond: (b.cond + cond1) / 2, rep: (b.rep + rep1) / 2 });
+  b.rev += st.incC * hrs; b.cost += st.expC * hrs; b.cond = cond1; b.rep = rep1;
+  if (b.ev && b.ev.until <= now) b.ev = null;
+  if (b.offer && b.offer.exp <= now) b.offer = null;
+  if (b.mk && b.mk.until <= now) b.mk = null;
+  if (b.deal && b.deal.until <= now) b.deal = null;
+  if (b.disc && b.disc.until <= now) b.disc = null;
+  let p = 0.12 * hrs, n = 0;                                    // ≈ одно событие за 8 часов
+  while (p > 0 && n < 3){ if (Math.random() < Math.min(1, p)) n++; p -= 1; }
+  for (let i = 0; i < n; i++) bizSpawn(id, b, d, P, now);
+  return st.netC;
+}
+function bizSpawn(id, b, d, P, now){
+  const r = Math.random(), H = 3600000;
+  if (r < 0.24){
+    if (b.cond <= 8) return;
+    const was = b.cond; b.cond = Math.max(5, b.cond - (20 + Math.floor(Math.random() * 16)));
+    const t = 'Поломка: ' + P.brk + ' (состояние −' + Math.round(was - b.cond) + '%)';
+    bizLog(id, 'event', t, 0); bizNotes.push({ t: '🔧 ' + d.name + ': ' + t, type: 'err' });
+  } else if (r < 0.42){
+    if (b.ev) return; b.ev = { id: 'cost', n: 'Рост цен на закупки', exp: 1.2, until: now + 6 * H };
+    bizLog(id, 'event', 'Рост цен на закупки: расходы +20% на 6 ч', 0); bizNotes.push({ t: '📈 ' + d.name + ': рост цен на закупки', type: 'err' });
+  } else if (r < 0.60){
+    if (b.ev) return; b.ev = { id: 'surge', n: 'Всплеск спроса', dem: 1.25, until: now + 4 * H };
+    bizLog(id, 'event', 'Всплеск спроса: +25% на 4 ч', 0); bizNotes.push({ t: '🔥 ' + d.name + ': всплеск спроса', type: 'ok' });
+  } else if (r < 0.72){
+    if (b.ev) return; b.ev = { id: 'drop', n: 'Спад спроса', dem: 0.82, until: now + 4 * H };
+    bizLog(id, 'event', 'Спад спроса: −18% на 4 ч', 0); bizNotes.push({ t: '📉 ' + d.name + ': спад спроса', type: 'err' });
+  } else {
+    if (b.offer) return; const keys = Object.keys(BIZ_OFFERS), key = keys[Math.floor(Math.random() * keys.length)];
+    b.offer = { id: key, exp: now + 6 * H };
+    bizLog(id, 'event', 'Предложение: ' + BIZ_OFFERS[key].n, 0); bizNotes.push({ t: '💡 ' + d.name + ': ' + BIZ_OFFERS[key].n, type: 'ok' });
+  }
+}
+
+/* Оценка продажи. Итог не выше 95% суммарных затрат (цена + вложения) и после комиссии 3% —
+   поэтому «купить → улучшить → продать» не приносит прибыли без реальной работы предприятия. */
+function bizAppraise(id, b){
+  const d = BIZ_BY_ID[id], st = bizStats(d, b.level, b, 'base');
+  const basisC = d.price * 100 + b.inv, asset = 0.6 * basisC, earn = Math.max(0, st.netC) * 48, raw = 0.5 * asset + 0.5 * earn;
+  const lvM = 1 + 0.015 * (b.level - 1), repM = 0.9 + 0.2 * b.rep / 100, condM = 0.75 + 0.25 * b.cond / 100, mk = bizMarket(d.cat, Date.now());
+  const capC = 0.95 * basisC, pre = raw * lvM * repM * condM * mk, gross = Math.min(pre, capC), fee = gross * 0.03;
+  return { id, basisC, asset, earn, lvM, repM, condM, mk, capC, gross, fee, netC: Math.max(0, Math.floor(gross - fee)), capped: pre > capC, st, ver: b.ver, ts: Date.now() };
+}
+
+bizNormalize();
+
+const bizC = c => fmtMoney(BigInt(Math.round(c)) * BIZ_CENT, 'USD', 0, 2);
+const bizPl = n => { const a = n % 10, b = n % 100; return a === 1 && b !== 11 ? 'предприятие' : (a >= 2 && a <= 4 && (b < 12 || b > 14)) ? 'предприятия' : 'предприятий'; };
+let bizTab = 'mine', bizCat = 'all';
+
+function bizTotals(){
+  let inc = 0, exp = 0, earned = 0;
+  for (const [id, b] of Object.entries(S.biz.owned)){
+    const st = bizStats(BIZ_BY_ID[id], b.level, b);
+    inc += st.incC; exp += st.expC; earned += b.earnedC;
+  }
+  return { inc, exp, net: inc - exp, earned, n: Object.keys(S.biz.owned).length };
+}
+
+/* Начисление: только за ПОЛНЫЕ завершённые периоды; lastTs сдвигается ровно на их число,
+   поэтому один и тот же период не начисляется дважды (в т.ч. после перезагрузки). */
+function bizTick(){
+  const now = Date.now(); let credit = 0n, dirty = false;
+  for (const [id, b] of Object.entries(S.biz.owned)){
+    if (b.lastTs > now){ b.lastTs = now; dirty = true; continue; }   // часы переведены назад
+    const k = Math.floor((now - b.lastTs) / BIZ_PERIOD);
+    if (k < 1) continue;
+    const t0 = b.lastTs; b.lastTs += k * BIZ_PERIOD; dirty = true;
+    const net = bizAdvance(id, b, k, t0);          // этап 2: износ, репутация, события; возвращает чистую прибыль/ч
+    if (net <= 0) continue;
+    const units = BigInt(net) * BigInt(k) + BigInt(b.acc);
+    const cents = units / BigInt(BIZ_PER_HOUR);
+    b.acc = Number(units % BigInt(BIZ_PER_HOUR));
+    b.earnedC += Number(cents); credit += cents;
+  }
+  if (!dirty) return;
+  if (credit > 0n) S.balances.USD = (S.balances.USD || 0n) + credit * BIZ_CENT;
+  saveState();
+  if (credit > 0n && unlocked && FIAT){ renderBalance(); renderAccounts(); }
+  if ($('#page-business').classList.contains('active') && Date.now() - bizPtr > 900){
+    bizRenderSummary(); if (bizView) bizRenderLive(); else if (bizTab === 'mine') bizRenderList();
+  }
+  bizRenderEntry(); bizFlushNotes();
+}
+
+function bizBuy(id){
+  const d = BIZ_BY_ID[id]; if (!d) return;
+  if (S.biz.owned[id]) return toast('Это предприятие уже куплено', 'err');
+  const price = BigInt(d.price) * SCB;
+  if ((S.balances.USD || 0n) < price){ hapticErr(); return toast('Недостаточно средств на счёте USD', 'err'); }
+  const st = bizStats(d, 1);
+  confirmSheet({ title: 'Покупка бизнеса', okText: 'Купить',
+    rows: [['Предприятие', d.name], ['Категория', d.cat], ['Цена', fmtMoney(price, 'USD')], ['Чистая прибыль', '+' + bizC(st.netC) + ' / ч'], ['Баланс после', fmtMoney((S.balances.USD || 0n) - price, 'USD')]],
+    onConfirm: () => bizDoBuy(id) });
+}
+function bizDoBuy(id){
+  const d = BIZ_BY_ID[id], price = d ? BigInt(d.price) * SCB : 0n;
+  if (!d || S.biz.owned[id]){ closeSheet(); return toast('Это предприятие уже куплено', 'err'); }   // защита от повторной покупки
+  const snapBal = S.balances.USD, snapOwned = S.biz.owned[id], snapTx = S.txs.length;
+  try {
+    const bal = S.balances.USD || 0n;
+    if (bal < price) throw new Error('funds');
+    const now = Date.now();
+    S.balances.USD = bal - price; if (S.balances.USD <= 0n) delete S.balances.USD;
+    S.biz.owned[id] = bizNewState(d, now); bizLog(id, 'buy', 'Покупка: ' + d.name, -d.price * 100);
+    S.txs.unshift({ id: uid(), type: 'business', title: 'Покупка бизнеса', subtitle: d.name,
+      amountText: '-' + fmtMoney(price, 'USD'), amountClass: 'neg', amount: dStr(price), currency: 'USD',
+      date: new Date(now).toISOString(), meta: { biz: id } });
+  } catch(err){
+    if (snapBal === undefined) delete S.balances.USD; else S.balances.USD = snapBal;
+    if (snapOwned === undefined) delete S.biz.owned[id]; else S.biz.owned[id] = snapOwned;
+    if (S.txs.length > snapTx) S.txs.shift();
+    closeSheet(); hapticErr();
+    return toast('Недостаточно средств на счёте USD', 'err');
+  }
+  saveState(); hapticOk(); closeSheet(); renderAll(); bizRender();
+  toast('Бизнес куплен: ' + d.name);
+}
+
+function bizFinHtml(st){
+  return `<div class="biz-fin">
+    <div><small>Доход / ч</small><b class="biz-pos">+${bizC(st.incC)}</b></div>
+    <div><small>Расходы / ч</small><b class="biz-neg">−${bizC(st.expC)}</b></div>
+    <div><small>Чистая / ч</small><b class="${st.netC >= 0 ? 'biz-pos' : 'biz-neg'}">${st.netC >= 0 ? '+' : '−'}${bizC(Math.abs(st.netC))}</b></div></div>`;
+}
+function bizCardHtml(d, b){
+  const st = bizStats(d, b ? b.level : 1, b || undefined), bal = S.balances.USD || 0n, price = BigInt(d.price) * SCB;
+  const head = `<div class="biz-h"><div class="biz-ic">${d.ic}</div><div class="biz-hm"><div class="biz-name">${esc(d.name)}</div>
+    <div class="biz-meta">${esc(d.cat)} · Ур. ${b ? b.level : 1}</div></div>${b ? '' : `<div class="biz-price">${fmtMoney(price, 'USD')}</div>`}</div>`;
+  let tail;
+  if (b){
+    tail = `<div class="biz-foot"><span>Заработано: <b>${bizC(b.earnedC)}</b></span><span>Куплено: <b>${new Date(b.boughtAt).toLocaleDateString(S.settings.lang === 'en' ? 'en-GB' : 'ru-RU')}</b></span></div>${bizCardExtra(d, b)}`;
+  } else if (S.biz.owned[d.id]){
+    tail = `<button class="biz-buy own" type="button" disabled>Уже куплено</button>`;
+  } else {
+    const hrs = st.netC > 0 ? Math.ceil(d.price * 100 / st.netC) : 0;
+    tail = `<div class="biz-foot"><span>Окупаемость: <b>≈ ${hrs} ч</b></span></div>
+      <button class="biz-buy${bal < price ? ' low' : ''}" type="button" data-biz-buy="${d.id}">${bal < price ? 'Не хватает средств' : 'Купить'}</button>`;
+  }
+  return `<div class="biz-card">${head}<div class="biz-desc">${esc(d.desc)}</div>${bizFinHtml(st)}${tail}</div>`;
+}
+
+function bizRenderSummary(){
+  const t = bizTotals(), bal = S.balances.USD || 0n;
+  $('#bizSummary').innerHTML = `
+    <div><small>Счёт USD</small><b>${balHidden ? '••••' : fmtMoney(bal, 'USD')}</b></div>
+    <div><small>Доход / ч</small><b class="biz-pos">+${bizC(t.inc)}</b></div>
+    <div><small>Расходы / ч</small><b class="biz-neg">−${bizC(t.exp)}</b></div>
+    <div><small>Чистая / ч</small><b class="${t.net >= 0 ? 'biz-pos' : 'biz-neg'}">${t.net >= 0 ? '+' : '−'}${bizC(Math.abs(t.net))}</b></div>
+    <div><small>Всего заработано</small><b>${bizC(t.earned)}</b></div>`;
+}
+function bizRenderList(){
+  const box = $('#bizList');
+  if (bizTab === 'mine'){
+    const ids = Object.keys(S.biz.owned).sort((a, b) => S.biz.owned[a].boughtAt - S.biz.owned[b].boughtAt);
+    box.innerHTML = ids.length ? ids.map(id => bizCardHtml(BIZ_BY_ID[id], S.biz.owned[id])).join('')
+      : `<div class="empty" style="grid-column:1/-1"><div>У вас пока нет предприятий</div><div style="margin-top:6px;font-size:12px;color:var(--muted-2)">Откройте «Каталог» и купите первое</div></div>`;
+  } else {
+    box.innerHTML = BIZ_CATALOG.filter(d => bizCat === 'all' || d.cat === bizCat).map(d => bizCardHtml(d, null)).join('');
+  }
+}
+function bizRenderEntry(){
+  const t = bizTotals();
+  $('#bizEntrySub').textContent = t.n ? `${t.n} ${bizPl(t.n)}` : 'Каталог предприятий';
+  $('#bizEntryAmt').textContent = t.n ? '+' + bizC(t.net) + '/ч' : '';
+}
+function bizRender(){
+  if (bizView && !S.biz.owned[bizView]) bizView = null;
+  $('#page-business').classList.toggle('biz-managing', !!bizView);
+  if (bizView){ bizRenderManage(); bizRenderEntry(); return; }
+  $$('#bizTabs [data-biz-tab]').forEach(b => b.classList.toggle('active', b.dataset.bizTab === bizTab));
+  const cats = $('#bizCats'); cats.style.display = bizTab === 'shop' ? '' : 'none';
+  cats.innerHTML = ['all', ...BIZ_CATS].map(c => `<button class="chip-f${bizCat === c ? ' active' : ''}" type="button" data-biz-cat="${c}">${c === 'all' ? 'Все' : c}</button>`).join('');
+  bizRenderSummary(); bizRenderList(); bizRenderEntry();
+}
+function openBusiness(){
+  haptic('light'); bizTick(); bizView = null;
+  $$('.nav-item').forEach(b => b.classList.remove('active'));
+  $$('.page').forEach(p => p.classList.toggle('active', p.id === 'page-business'));
+  $('#content').scrollTop = 0;
+  bizRender();
+}
+
+$('#bizEntry').addEventListener('click', openBusiness);
+$('#bizEntry').addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openBusiness(); } });
+$('#page-business').addEventListener('click', e => {
+  const t = e.target.closest('#bizBack, [data-biz-tab], [data-biz-cat], [data-biz-buy], [data-bz-open], [data-bz], [data-bzt]'); if (!t) return;
+  if (t.dataset.bzOpen || t.dataset.bz || t.dataset.bzt) return bizClick(t);
+  if (t.id === 'bizBack'){ haptic('light'); if (bizView){ bizView = null; return bizRender(); } return $('.nav-item[data-page="home"]').click(); }
+  if (t.dataset.bizTab){ haptic('light'); bizTab = t.dataset.bizTab; return bizRender(); }
+  if (t.dataset.bizCat){ haptic('light'); bizCat = t.dataset.bizCat; return bizRender(); }
+  if (t.dataset.bizBuy){ haptic('light'); bizBuy(t.dataset.bizBuy); }
+});
+
+/* ---------- ЭТАП 2: интерфейс управления предприятием ---------- */
+const bizOpen = {};
+const BZ_TR = { eq: 'eq', prem: 'pr', cap: 'cp' }, BZ_UPF = { eq: .14, prem: .12, cap: .16 };
+document.addEventListener('pointerdown', () => { bizPtr = Date.now(); }, true);
+
+const bzH = h => (!isFinite(h) || h < 0) ? '—' : h >= 100 ? String(Math.round(h)) : String(Math.round(h * 10) / 10);
+const bzLeft = until => { const m = Math.max(1, Math.ceil((until - Date.now()) / 60000)); return m >= 60 ? Math.floor(m / 60) + ' ч ' + (m % 60) + ' мин' : m + ' мин'; };
+const bzSign = c => (c >= 0 ? '+' : '−') + bizC(Math.abs(c));
+const bzPct = (x, dg) => (Math.round(x * 100 * (dg ? 10 : 1)) / (dg ? 10 : 1)).toString();
+const bzPay = (cost, dn) => dn > 0 ? 'окупится ≈ ' + bzH(cost / dn) + ' ч' : 'прибыль не растёт';
+function bizDelta(id, b, mut){
+  const d = BIZ_BY_ID[id], b2 = JSON.parse(JSON.stringify(b)); mut(b2);
+  return bizStats(d, b2.level, b2, 'base').netC - bizStats(d, b.level, b, 'base').netC;
+}
+function bzCost(b, c){ const disc = b.disc && b.disc.until > Date.now() ? b.disc.pct : 0; return { cents: Math.max(0, Math.ceil(c * (1 - disc))), disc }; }
+const bzLow = c => BigInt(Math.max(0, Math.ceil(c))) * BIZ_CENT > (S.balances.USD || 0n);
+
+function bzBtn(act, arg, exp, cost, label, o){
+  o = o || {};
+  const low = !o.why && cost > 0 && bzLow(cost);
+  return `<button class="bz-btn${o.why || low ? ' low' : o.cls ? ' ' + o.cls : ''}" type="button" data-bz="${act}"${arg != null ? ` data-arg="${esc(arg)}"` : ''}${exp != null ? ` data-exp="${exp}"` : ''}${o.why ? ` data-why="${esc(o.why)}"` : ''}>${label}${cost > 0 ? `<small>${bizC(cost)}</small>` : ''}</button>`;
+}
+const bzRow = (t, s, btn) => `<div class="bz-row"><div class="bz-ri"><div class="bz-rt">${t}</div><div class="bz-rs">${s}</div></div>${btn || ''}</div>`;
+const bzKv = (k, v, cls) => `<div class="bz-kv"><span>${k}</span><b${cls ? ` class="${cls}"` : ''}>${v}</b></div>`;
+const bzBar = p => `<div class="bz-bar"><i style="width:${bizClamp(p, 0, 100)}%"></i></div>`;
+function bzSec(key, title, hint, inner, def){
+  const open = bizOpen[key] != null ? bizOpen[key] : !!def;
+  return `<details class="bz-sec" data-k="${key}"${open ? ' open' : ''}><summary><span>${title}</span><em>${hint || ''}</em></summary><div class="bz-sb">${inner}</div></details>`;
+}
+function bzSeg(act, items, cur){
+  return `<div class="bz-seg">${items.map(([v, label, why]) => `<button class="chip-f${String(v) === String(cur) ? ' active' : ''}" type="button" data-bz="${act}" data-arg="${esc(v)}"${why ? ` data-why="${esc(why)}"` : ''}>${label}</button>`).join('')}</div>`;
+}
+
+/* ---- верхняя «живая» панель ---- */
+function bzLiveHtml(d, b, st){
+  const mk = bizMarket(d.cat, Date.now()), mkT = mk >= 1.04 ? ['▲ Подъём', 'biz-pos'] : mk <= 0.96 ? ['▼ Спад', 'biz-neg'] : ['● Стабильно', ''];
+  const chips = [];
+  if (st.netC <= 0) chips.push(['bad', 'Убыток']);
+  if (st.cov < 0.95) chips.push(['bad', 'Не хватает персонала']);
+  if (b.cond < 70) chips.push(['bad', 'Износ оборудования']);
+  if (b.ev) chips.push([(b.ev.dem && b.ev.dem < 1) || (b.ev.exp && b.ev.exp > 1) ? 'bad' : 'good', esc(b.ev.n) + ' · ' + bzLeft(b.ev.until)]);
+  if (b.mk) chips.push(['good', 'Реклама · ' + bzLeft(b.mk.until)]);
+  if (b.deal) chips.push(['good', esc(b.deal.n) + ' · ' + bzLeft(b.deal.until)]);
+  if (b.disc) chips.push(['good', 'Скидка −' + Math.round(b.disc.pct * 100) + '% · ' + bzLeft(b.disc.until)]);
+  if (b.offer) chips.push(['warn', 'Есть предложение']);
+  return `<div class="bz-tiles">
+    <div class="bz-tile"><small>Доход / ч</small><b class="biz-pos">+${bizC(st.incC)}</b></div>
+    <div class="bz-tile"><small>Расходы / ч</small><b class="biz-neg">−${bizC(st.expC)}</b></div>
+    <div class="bz-tile"><small>Чистая / ч</small><b class="${st.netC >= 0 ? 'biz-pos' : 'biz-neg'}">${bzSign(st.netC)}</b></div>
+    <div class="bz-tile"><small>Репутация</small><b>${Math.round(b.rep)} / 100</b></div>
+    <div class="bz-tile"><small>Состояние</small><b class="${b.cond < 70 ? 'biz-neg' : ''}">${Math.round(b.cond)}%</b></div>
+    <div class="bz-tile"><small>Рынок</small><b class="${mkT[1]}">${mkT[0]}</b></div></div>
+    ${chips.length ? `<div class="bz-chips">${chips.map(c => `<span class="bz-chip ${c[0]}">${c[1]}</span>`).join('')}</div>` : ''}`;
+}
+function bizRenderLive(){
+  const b = S.biz.owned[bizView], box = $('#bzLive'); if (!b || !box) return;
+  const d = BIZ_BY_ID[bizView]; box.innerHTML = bzLiveHtml(d, b, bizStats(d, b.level, b));
+}
+
+/* ---- вкладки ---- */
+function bzAdvice(d, b, st){
+  const o = [];
+  if (st.netC <= 0) o.push(['bad', 'Предприятие убыточно: прибыль не начисляется. Проверьте цены, персонал и закупки.']);
+  if (st.cov < 0.95) o.push(['bad', `Не хватает персонала (${b.staff} из ${st.need}) — доход падает. Наймите сотрудников во вкладке «Команда».`]);
+  if (b.cond < 70) o.push(['bad', 'Оборудование изношено, доход снижен. Выполните ремонт во вкладке «Цены и бюджет».']);
+  if (st.demand > st.ceil * 1.02) o.push(['warn', 'Спрос превышает мощности — часть клиентов теряется. Улучшайте мощности и помещение.']);
+  if (b.rep < 40) o.push(['warn', 'Низкая репутация снижает спрос. Повысьте качество: закупки, обучение, ремонт, честные цены.']);
+  if (b.offer) o.push(['warn', 'Есть выгодное предложение — оно действует ограниченное время.']);
+  if (!o.length) o.push(['good', 'Всё стабильно. Вкладывайтесь в развитие: улучшения, обучение, реклама и филиалы.']);
+  return o.map(x => `<div class="bz-adv ${x[0]}">${x[1]}</div>`).join('');
+}
+function bzOffer(d, b){
+  const o = b.offer; if (!o) return '';
+  const def = BIZ_OFFERS[o.id], inc = bizStats(d, b.level, b, 'base').incC, cost = Math.ceil(inc * def.cf);
+  let gain = 0;
+  if (o.id === 'bulk') gain = bizDeltaLive(b, d, x => { x.deal = { sup: .75, until: Date.now() + def.h * 3600000 }; }) * def.h;
+  if (o.id === 'blog') gain = bizDeltaLive(b, d, x => { x.deal = { dem: 1.3, until: Date.now() + def.h * 3600000 }; }) * def.h;
+  const hint = o.id === 'grant' ? 'Бесплатно' : `Цена ${bizC(cost)} · ожидаемый результат ${bzSign(gain - cost)}`;
+  const busy = o.id === 'grant' ? !!b.disc : !!b.deal;
+  return bzSec('ov.offer', '💡 ' + def.n, 'ещё ' + bzLeft(o.exp), bzRow(def.t, hint + (busy ? '<br>Сейчас уже действует другое предложение.' : ''),
+    bzBtn('offer', 'yes', null, cost, 'Принять', busy ? { why: 'Дождитесь окончания текущего предложения' } : {})) +
+    `<div style="padding:0 0 10px"><button class="bz-btn ghost" type="button" data-bz="offer" data-arg="no" style="width:100%">Отклонить</button></div>`, true);
+}
+function bizDeltaLive(b, d, mut){
+  const b2 = JSON.parse(JSON.stringify(b)); mut(b2);
+  return bizStats(d, b2.level, b2, null).netC - bizStats(d, b.level, b, null).netC;
+}
+function bzGoals(d, b){
+  return BIZ_GOALS.map(g => {
+    const [cur, tar] = g.p(b, d), done = !!b.goals[g.id], ok = cur >= tar, rew = Math.round(d.price * 100 * g.r);
+    const btn = done ? `<span class="bz-chip good">Получено</span>` : bzBtn('goal', g.id, null, 0, ok ? 'Забрать<small>+' + bizC(rew) + '</small>' : 'Не выполнено', ok ? {} : { why: 'Цель ещё не выполнена: ' + g.d });
+    const prog = g.id === 'g_earn' ? `${bizC(Math.min(cur, tar))} из ${bizC(tar)}` : `${Math.min(cur, tar)} из ${tar}`;
+    return bzRow(esc(g.t), `${esc(g.d)} · ${prog}<br>Награда: ${bizC(rew)}` + bzBar(Math.min(1, cur / tar) * 100), btn);
+  }).join('');
+}
+function bzTabOv(id, d, b, st, P){
+  const incs = [['Выручка', '+' + bizC(st.incC), 'biz-pos'], ['Зарплаты', '−' + bizC(st.pay), ''], ['Закупки', '−' + bizC(st.sup), ''], ['Аренда и коммунальные', '−' + bizC(st.rent), ''], ['Обслуживание и прочее', '−' + bizC(st.oth), ''], ['Чистая прибыль / ч', bzSign(st.netC), st.netC >= 0 ? 'biz-pos' : 'biz-neg']];
+  const dem = `<div class="bz-rs" style="margin:10px 0 2px">Спрос ${Math.round(st.demand * 100)}% · потолок мощностей ${Math.round(st.ceil * 100)}%</div>${bzBar(st.demand / st.ceil * 100)}`;
+  const done = BIZ_GOALS.filter(g => b.goals[g.id]).length;
+  return `<div class="bz-grid">
+    <div>${bzSec('ov.adv', 'Рекомендации', P.focus, bzAdvice(d, b, st), true)}${bzOffer(d, b)}</div>
+    <div>${bzSec('ov.pl', 'Доходы и расходы в час', bzSign(st.netC), incs.map(x => bzKv(x[0], x[1], x[2])).join('') + dem, true)}
+    ${bzSec('ov.goals', 'Долгосрочные цели', done + ' из ' + BIZ_GOALS.length, bzGoals(d, b), false)}</div></div>`;
+}
+function bzTabDev(id, d, b, st, P){
+  const L = b.level, brm = bizBr(b);
+  /* уровень */
+  let lvl;
+  if (L >= BIZ_MAXLV) lvl = bzRow('Максимальный уровень', 'Предприятие достигло вершины развития.', '<span class="bz-chip good">Ур. ' + L + '</span>');
+  else {
+    const addN = bizNeed(d, { level: L + 1, br: b.br }) - bizNeed(d, b), fee = Math.ceil(addN * bizWage(d) * 12);
+    const base = d.price * 100 * 0.9 * L * brm, c = bzCost(b, base).cents, tot = c + fee;
+    const have = b.up.eq + b.up.prem + b.up.cap, reqUp = L, reqRep = 35 + 2 * L;
+    const dn = bizDelta(id, b, x => { x.level++; bizAddStaff(x, addN); });
+    const why = have < reqUp ? `Нужно улучшений: ${reqUp} (сейчас ${have})` : b.rep < reqRep ? `Нужна репутация ${reqRep} (сейчас ${Math.floor(b.rep)})` : '';
+    lvl = bzRow(`Уровень ${L} → ${L + 1}`, `Доход и расходы масштабируются (×${((L + 1) / L).toFixed(2)}), +${addN} сотрудников. Прибыль ${bzSign(dn)}/ч, ${bzPay(tot, dn)}.<br>Условия: улучшений ≥ ${reqUp}, репутация ≥ ${reqRep}.`,
+      bzBtn('lvl', null, L, tot, 'Повысить', why ? { why } : {}));
+  }
+  lvl += `<div class="bz-rs" style="padding:0 0 12px">Цель: уровень ${BIZ_MAXLV}${bzBar(L / BIZ_MAXLV * 100)}</div>`;
+  /* улучшения */
+  const upTxt = { eq: `+${(4 * P.gEq).toFixed(1)}% дохода, износ −7%`, prem: `+${(3.5 * P.gPr).toFixed(1)}% дохода, репутация +2, аренда +6%`, cap: `+${(5 * P.gCap).toFixed(1)}% дохода, потолок спроса +${Math.round(26 * P.gCap)}%` };
+  const ups = ['eq', 'prem', 'cap'].map(tr => {
+    const k = b.up[tr], name = P[BZ_TR[tr]];
+    if (k >= 5) return bzRow(`${name} · ур. 5/5`, 'Максимальный уровень улучшения.', '<span class="bz-chip good">Макс.</span>');
+    const c = bzCost(b, d.price * 100 * L * brm * BZ_UPF[tr] * Math.pow(1.5, k)).cents;
+    const dn = bizDelta(id, b, x => { x.up[tr]++; });
+    return bzRow(`${name} · ур. ${k}/5`, `${upTxt[tr]}. Прибыль ${bzSign(dn)}/ч, ${bzPay(c, dn)}.`, bzBtn('up', tr, k, c, 'Улучшить', k + 1 > L ? { why: 'Нужен уровень предприятия ' + (k + 1) } : {}));
+  }).join('');
+  /* ассортимент */
+  const asr = P.asr.map((nm, i) => {
+    if (i < b.asr) return bzRow(esc(nm), `Спрос +${(9 * P.gAsr).toFixed(1)}%, закупки +10%.`, '<span class="bz-chip good">Открыто</span>');
+    const c = bzCost(b, d.price * 100 * L * brm * 0.30 * (1 + i)).cents, dn = bizDelta(id, b, x => { x.asr++; });
+    const why = i > b.asr ? 'Сначала откройте предыдущую позицию' : L < 2 * (i + 1) ? 'Нужен уровень предприятия ' + 2 * (i + 1) : '';
+    return bzRow(esc(nm), `Спрос +${(9 * P.gAsr).toFixed(1)}%, закупки +10%. Прибыль ${bzSign(dn)}/ч, ${bzPay(c, dn)}.`, bzBtn('asr', null, b.asr, c, 'Открыть', why ? { why } : {}));
+  }).join('');
+  /* автоматизация */
+  let au;
+  if (b.auto >= 4) au = bzRow('Автоматизация · ур. 4/4', 'Максимальная автоматизация процессов.', '<span class="bz-chip good">Макс.</span>');
+  else {
+    const c = bzCost(b, d.price * 100 * L * brm * 0.20 * Math.pow(1.6, b.auto)).cents, dn = bizDelta(id, b, x => { x.auto++; });
+    au = bzRow(`Автоматизация · ур. ${b.auto}/4`, `Зарплаты −${(9 * P.gAu).toFixed(1)}%, закупки −${(4 * P.gAu).toFixed(1)}%, прочее −${(12 * P.gAu).toFixed(1)}%, износ медленнее. Прибыль ${bzSign(dn)}/ч, ${bzPay(c, dn)}.`,
+      bzBtn('auto', null, b.auto, c, 'Внедрить', L < b.auto + 2 ? { why: 'Нужен уровень предприятия ' + (b.auto + 2) } : {}));
+  }
+  /* филиалы */
+  let br;
+  if (b.br >= 4) br = bzRow('Филиалы · 4/4', 'Сеть достигла максимального размера.', '<span class="bz-chip good">Макс.</span>');
+  else {
+    const addN = bizNeed(d, { level: L, br: b.br + 1 }) - bizNeed(d, b), fee = Math.ceil(addN * bizWage(d) * 12);
+    const c = bzCost(b, d.price * 100 * L * 0.85 * (1 + 0.3 * b.br)).cents, tot = c + fee, dn = bizDelta(id, b, x => { x.br++; bizAddStaff(x, addN); });
+    br = bzRow(`Филиал №${b.br + 1}`, `Масштаб +55%, +${addN} сотрудников (найм входит в цену). Прибыль ${bzSign(dn)}/ч, ${bzPay(tot, dn)}.`,
+      bzBtn('br', null, b.br, tot, 'Открыть', L < b.br + 3 ? { why: 'Нужен уровень предприятия ' + (b.br + 3) } : {}));
+  }
+  return `<div class="bz-grid"><div>${bzSec('dev.lvl', 'Уровень предприятия', 'Ур. ' + L + ' / ' + BIZ_MAXLV, lvl, true)}${bzSec('dev.up', 'Улучшения', 'помещения, оборудование, мощности', ups, true)}</div>
+    <div>${bzSec('dev.asr', 'Ассортимент', b.asr + ' из 3', asr, false)}${bzSec('dev.au', 'Автоматизация', b.auto + ' из 4', au, false)}${bzSec('dev.br', 'Филиалы', b.br + ' из 4', br, false)}</div></div>`;
+}
+function bzTabTeam(id, d, b, st, P){
+  const wage = bizWage(d) * (1 + 0.22 * (b.skill - 1)), max = Math.ceil(st.need * 1.5);
+  const info = bzKv('Сотрудников', `${b.staff} из ${st.need} нужных (макс. ${max})`, st.cov < 0.95 ? 'biz-neg' : '') +
+    bzKv('Укомплектованность', Math.round(st.cov * 100) + '%', st.cov < 0.95 ? 'biz-neg' : '') +
+    bzKv('Зарплата сотрудника / ч', bizC(wage * Math.max(0.4, 1 - 0.09 * b.auto * P.gAu))) +
+    bzKv('Фонд оплаты / ч', '−' + bizC(st.pay)) +
+    bzKv('Квалификация (средняя)', b.skill.toFixed(1) + ' / 5') +
+    bzKv('Эффект персонала на доход', '×' + st.staffEff.toFixed(2) + (st.cov < 1 ? ' (нехватка людей)' : '')) + bzBar(st.cov * 100 / 1.3);
+  const hf = Math.ceil(bizWage(d) * 12), ff = Math.ceil(bizWage(d) * 6);
+  const ctl = `<div class="bz-rs" style="padding:12px 0 8px">Найм: взнос ${bizC(hf)} за человека, новые сотрудники приходят с квалификацией 1. Увольнение: выплата ${bizC(ff)} за человека. Недостаток персонала снижает доход, избыток лишь повышает расходы.</div>
+    <div class="bz-seg bz-hf"><button class="bz-btn ghost" type="button" data-bz="fire" data-arg="5">−5</button><button class="bz-btn ghost" type="button" data-bz="fire" data-arg="1">−1</button><button class="bz-btn" type="button" data-bz="hire" data-arg="1">+1</button><button class="bz-btn" type="button" data-bz="hire" data-arg="5">+5</button></div>`;
+  let tr;
+  if (b.skill >= 4.995) tr = bzRow('Квалификация 5/5', 'Команда достигла максимального уровня.', '<span class="bz-chip good">Макс.</span>');
+  else {
+    const s = b.skill, c = Math.ceil(b.staff * wage * 24 * Math.floor(s)), ns = Math.min(5, s + 1);
+    const dn = bizDelta(id, b, x => { x.skill = Math.min(5, x.skill + 1); });
+    tr = bzRow(`Повышение квалификации ${s.toFixed(1)} → ${ns.toFixed(1)}`, `Доход +${(9 * P.gSk).toFixed(1)}% на уровень, зарплаты +22%, репутация выше. Прибыль ${bzSign(dn)}/ч, ${bzPay(c, dn)}.`,
+      bzBtn('train', null, Math.round(s * 100), c, 'Обучить', Math.floor(s) > b.level ? { why: 'Нужен уровень предприятия ' + Math.floor(s) } : (b.staff < 1 ? { why: 'Нет сотрудников для обучения' } : {})));
+  }
+  return `<div class="bz-grid"><div>${bzSec('team.st', 'Персонал', b.staff + ' чел.', info + ctl, true)}</div><div>${bzSec('team.tr', 'Квалификация', b.skill.toFixed(1) + ' / 5', tr, true)}</div></div>`;
+}
+function bzTabPrice(id, d, b, st, P){
+  const best = BIZ_PRICES.map(p => [p, bizDelta(id, b, x => { x.set.price = p; })]).sort((a, c) => c[1] - a[1])[0][0];
+  const pr = bzSeg('price', BIZ_PRICES.map(p => [p, Math.round(p * 100) + '%' + (p === best ? ' ★' : '')]), b.set.price);
+  const pp = b.set.price, el = bizClamp(1.6 - b.rep / 100, 0.55, 1.6) * P.el, dp = pp >= 1 ? Math.max(0.25, 1 - el * (pp - 1)) : 1 + 0.9 * el * (1 - pp);
+  const prTxt = `<div class="bz-rs" style="padding:10px 0 12px">Выручка с клиента ×${pp.toFixed(1)}, спрос от цены ×${dp.toFixed(2)}. Репутация клиентов делает их менее чувствительными к цене. ★ — лучшая цена по прибыли сейчас. Цена выше 110% снижает репутацию, ниже 95% повышает.</div>`;
+  const sup = bzSeg('sup', Object.entries(BIZ_SUP).map(([k, v]) => [k, v.n, v.lv > b.level ? 'Нужен уровень предприятия ' + v.lv : ''])
+    , b.set.sup) + `<div class="bz-rs" style="padding:10px 0 12px">${BIZ_SUP[b.set.sup].d}. Закупки сейчас: −${bizC(st.sup)} / ч.</div>`;
+  const repC = Math.ceil((100 - b.cond) / 100 * d.price * 100 * 0.05 * b.level * bizBr(b) * Math.max(0.5, 1 - 0.05 * b.up.eq));
+  const mnt = bzSeg('mnt', Object.entries(BIZ_MNT).map(([k, v]) => [k, v.n, v.lv > b.level ? 'Нужен уровень предприятия ' + v.lv : '']), b.set.mnt) +
+    `<div class="bz-rs" style="padding:10px 0 4px">${BIZ_MNT[b.set.mnt].d}.</div>` +
+    bzRow(`Состояние оборудования: ${Math.round(b.cond)}%`, `Ниже 70% доход падает (сейчас ×${st.condEff.toFixed(2)}), ниже 40% — репутация. Износ идёт постоянно.${bzBar(b.cond)}`,
+      bzBtn('repair', null, null, repC, 'Ремонт', b.cond >= 99.5 ? { why: 'Оборудование в идеальном состоянии' } : {}));
+  return `<div class="bz-grid"><div>${bzSec('price.pr', 'Цены', Math.round(b.set.price * 100) + '%', pr + prTxt, true)}${bzSec('price.sup', 'Закупки', BIZ_SUP[b.set.sup].n, sup, true)}</div>
+    <div>${bzSec('price.mnt', 'Бюджет обслуживания', BIZ_MNT[b.set.mnt].n, mnt, true)}</div></div>`;
+}
+function bzTabMk(id, d, b, st, P){
+  const T = bizRepTarget(d, b, st.cov, b.cond), tr = T > b.rep + 0.5 ? '▲ растёт' : T < b.rep - 0.5 ? '▼ падает' : '● стабильна';
+  const rep = bzKv('Репутация', Math.round(b.rep) + ' / 100') + bzBar(b.rep) + bzKv('Цель репутации', Math.round(T) + ' (' + tr + ')') +
+    bzKv('Влияние на спрос', '×' + (0.7 + 0.006 * b.rep).toFixed(2)) +
+    `<div class="bz-rs" style="padding:8px 0 10px">Репутацию повышают: квалификация, премиум-закупки, помещение, ассортимент, оборудование, хорошее состояние и честные цены. Понижают: нехватка персонала, износ, завышенные цены.</div>`;
+  const inc = bizStats(d, b.level, b, 'base').incC;
+  const camps = BIZ_CAMP.map(c => {
+    const cost = Math.ceil(inc * c.boost * c.h * c.f), bst = 1 + c.boost * P.gMk;
+    const dn = bizDeltaLive(b, d, x => { x.mk = { boost: bst, until: Date.now() + c.h * 3600000 }; }) * c.h - cost;
+    const why = b.mk ? 'Кампания уже идёт (ещё ' + bzLeft(b.mk.until) + ')' : c.lv > b.level ? 'Нужен уровень предприятия ' + c.lv : '';
+    return bzRow(esc(c.n), `Спрос +${bzPct(c.boost * P.gMk, 1)}% на ${c.h} ч. Ожидаемый результат ${bzSign(dn)}. Эффект ограничен мощностями.`, bzBtn('camp', c.id, null, cost, 'Запустить', why ? { why } : {}));
+  }).join('');
+  const act = b.mk ? `<div class="bz-adv good">Идёт кампания: спрос +${bzPct(b.mk.boost - 1, 1)}%, осталось ${bzLeft(b.mk.until)}.</div>` : '';
+  return `<div class="bz-grid"><div>${bzSec('mk.rep', 'Репутация', Math.round(b.rep) + ' / 100', rep, true)}</div><div>${bzSec('mk.camp', 'Рекламные кампании', b.mk ? 'идёт' : 'доступны', act + camps, true)}</div></div>`;
+}
+function bzTabFin(id, d, b, st, P){
+  const basis = d.price * 100 + b.inv, ret = basis > 0 ? b.earnedC / basis : 0;
+  const fin = bzKv('Выручка за всё время', bizC(b.rev)) + bzKv('Расходы за всё время', '−' + bizC(b.cost)) + bzKv('Чистая прибыль начислена', bizC(b.earnedC), 'biz-pos') +
+    bzKv('Цена покупки', bizC(d.price * 100)) + bzKv('Вложено в развитие', bizC(b.inv)) + bzKv('Возврат вложений', bzPct(ret, 1) + '%') + bzBar(ret * 100) +
+    `<div class="bz-rs" style="padding:8px 0 10px">Выручка и расходы считаются по текущим параметрам. Прибыль начисляется на счёт USD автоматически; при убытке начисления нет, но деньги не списываются.</div>`;
+  const KI = { buy: '🛒', up: '⬆️', sale: '💰', event: '⚡', goal: '🏆', hire: '👥', fire: '👥', repair: '🔧', offer: '💡', camp: '📣', train: '🎓' };
+  const logs = S.biz.log.filter(x => x.id === id).slice(0, 30);
+  const hist = logs.length ? logs.map(x => `<div class="bz-log"><span class="bz-li">${KI[x.k] || '•'}</span><div class="bz-ri"><div class="bz-rt">${esc(x.x)}</div><div class="bz-rs">${fmtTime(x.t)}</div></div><b class="${x.c > 0 ? 'biz-pos' : x.c < 0 ? 'biz-neg' : ''}">${x.c ? bzSign(x.c) : ''}</b></div>`).join('') : '<div class="bz-rs" style="padding:12px 0">Операций пока нет</div>';
+  const q = bizAppraise(id, b), mkTxt = q.mk >= 1.04 ? 'подъём' : q.mk <= 0.96 ? 'спад' : 'стабильный';
+  const sale = bzKv('Цена покупки + вложения', bizC(q.basisC)) + bzKv('Оценка активов (60%)', bizC(q.asset)) + bzKv('Прибыльность (48 ч прибыли)', bizC(q.earn)) +
+    bzKv('Уровень', '×' + q.lvM.toFixed(2)) + bzKv('Репутация', '×' + q.repM.toFixed(2)) + bzKv('Состояние оборудования', '×' + q.condM.toFixed(2)) + bzKv('Рынок (' + mkTxt + ')', '×' + q.mk.toFixed(2)) +
+    (q.capped ? bzKv('Ограничение', 'не выше 95% затрат') : '') + bzKv('Комиссия сделки 3%', '−' + bizC(q.fee)) + bzKv('Цена продажи', bizC(q.netC), 'biz-pos') +
+    `<div style="padding:12px 0 12px"><button class="bz-btn danger" type="button" data-bz="sell" style="width:100%">Продать предприятие</button></div>`;
+  return `<div class="bz-grid"><div>${bzSec('fin.tot', 'Финансы', 'итоги', fin, true)}${bzSec('fin.sale', 'Продажа предприятия', bizC(q.netC), sale, false)}</div>
+    <div>${bzSec('fin.log', 'История операций', logs.length + ' записей', hist, true)}</div></div>`;
+}
+function bizRenderManage(){
+  const id = bizView, b = S.biz.owned[id]; if (!b){ bizView = null; return bizRender(); }
+  const d = BIZ_BY_ID[id], P = BIZ_PROF[d.cat], st = bizStats(d, b.level, b);
+  const tabs = [['ov', 'Обзор'], ['dev', 'Развитие'], ['team', 'Команда'], ['price', 'Цены и бюджет'], ['mk', 'Маркетинг'], ['fin', 'Финансы']];
+  const fn = { ov: bzTabOv, dev: bzTabDev, team: bzTabTeam, price: bzTabPrice, mk: bzTabMk, fin: bzTabFin }[bizVTab] || bzTabOv;
+  $('#bizManage').innerHTML = `<div class="bz-head"><div class="biz-ic">${d.ic}</div><div class="bz-hm"><div class="biz-name">${esc(d.name)}</div>
+    <div class="biz-meta">${esc(d.cat)} · Уровень ${b.level}/${BIZ_MAXLV}${b.br ? ' · филиалов: ' + b.br : ''}</div></div></div>
+    <div id="bzLive">${bzLiveHtml(d, b, st)}</div>
+    <div class="biz-tabs bz-tabs">${tabs.map(([k, n]) => `<button class="chip-f${k === bizVTab ? ' active' : ''}" type="button" data-bzt="${k}">${n}</button>`).join('')}</div>
+    <div class="bz-body" id="bzBody">${fn(id, d, b, st, P)}</div>`;
+}
+$('#bizManage').addEventListener('toggle', e => { const k = e.target && e.target.dataset && e.target.dataset.k; if (k) bizOpen[k] = e.target.open; }, true);
+
+/* ---- действия ---- */
+function bizSpend(id, b, cents, title, kind, invest){
+  cents = Math.max(0, Math.ceil(cents)); const cost = BigInt(cents) * BIZ_CENT, bal = S.balances.USD || 0n;
+  if (cost > bal){ hapticErr(); toast('Недостаточно средств на счёте USD', 'err'); return false; }
+  if (cents > 0){
+    S.balances.USD = bal - cost; if (S.balances.USD <= 0n) delete S.balances.USD;
+    S.txs.unshift({ id: uid(), type: 'business', title: 'Бизнес: ' + title, subtitle: BIZ_BY_ID[id].name, amountText: '-' + fmtMoney(cost, 'USD'),
+      amountClass: 'neg', amount: dStr(cost), currency: 'USD', date: new Date().toISOString(), meta: { biz: id } });
+  }
+  if (invest) b.inv += cents;
+  bizTouch(b); bizLog(id, kind, title, -cents); return true;
+}
+function bizCommit(msg){ saveState(); hapticOk(); renderAll(); bizRender(); if (msg) toast(msg); }
+
+function bzDoLevel(id, b, d, exp){
+  if (b.level !== exp) return bizRender();
+  const L = b.level; if (L >= BIZ_MAXLV) return toast('Максимальный уровень', 'err');
+  const have = b.up.eq + b.up.prem + b.up.cap;
+  if (have < L) return toast('Нужно улучшений: ' + L, 'err');
+  if (b.rep < 35 + 2 * L) return toast('Нужна репутация ' + (35 + 2 * L), 'err');
+  const addN = bizNeed(d, { level: L + 1, br: b.br }) - bizNeed(d, b), fee = Math.ceil(addN * bizWage(d) * 12);
+  const { cents, disc } = bzCost(b, d.price * 100 * 0.9 * L * bizBr(b));
+  const dn = bizDelta(id, b, x => { x.level++; bizAddStaff(x, addN); });
+  confirmSheet({ title: 'Повышение уровня', okText: 'Повысить',
+    rows: [['Предприятие', d.name], ['Новый уровень', L + ' → ' + (L + 1)], ['Стоимость', bizC(cents) + (disc ? ' (скидка ' + Math.round(disc * 100) + '%)' : '')], ['Набор персонала', '+' + addN + ' чел. · ' + bizC(fee)],
+      ['Прибыль / ч', bzSign(dn)], ['Баланс после', fmtMoney((S.balances.USD || 0n) - BigInt(cents + fee) * BIZ_CENT, 'USD')]],
+    onConfirm: () => {
+      if (!S.biz.owned[id] || S.biz.owned[id].level !== L){ closeSheet(); return bizRender(); }   // повторное нажатие
+      if (bzLow(cents + fee)){ closeSheet(); hapticErr(); return toast('Недостаточно средств на счёте USD', 'err'); }
+      if (!bizSpend(id, b, cents + fee, 'Повышение до ур. ' + (L + 1), 'up', false)) return closeSheet();
+      b.inv += cents; b.level = L + 1; bizAddStaff(b, addN); if (disc) b.disc = null;
+      closeSheet(); bizCommit('Уровень повышен: ' + (L + 1));
+    } });
+}
+function bzDoUp(id, b, d, tr, exp){
+  const k = b.up[tr]; if (!(tr in b.up) || k !== exp) return bizRender();
+  if (k >= 5) return toast('Максимальный уровень улучшения', 'err');
+  if (k + 1 > b.level) return toast('Нужен уровень предприятия ' + (k + 1), 'err');
+  const { cents, disc } = bzCost(b, d.price * 100 * b.level * bizBr(b) * BZ_UPF[tr] * Math.pow(1.5, k));
+  if (!bizSpend(id, b, cents, BIZ_PROF[d.cat][BZ_TR[tr]] + ': ур. ' + (k + 1), 'up', true)) return;
+  b.up[tr] = k + 1; if (disc) b.disc = null; bizCommit('Улучшение выполнено');
+}
+function bzDoAsr(id, b, d, exp){
+  const i = b.asr; if (i !== exp) return bizRender(); if (i >= 3) return toast('Весь ассортимент открыт', 'err');
+  if (b.level < 2 * (i + 1)) return toast('Нужен уровень предприятия ' + 2 * (i + 1), 'err');
+  const { cents, disc } = bzCost(b, d.price * 100 * b.level * bizBr(b) * 0.30 * (1 + i));
+  if (!bizSpend(id, b, cents, 'Ассортимент: ' + BIZ_PROF[d.cat].asr[i], 'up', true)) return;
+  b.asr = i + 1; if (disc) b.disc = null; bizCommit('Новая позиция в ассортименте');
+}
+function bzDoAuto(id, b, d, exp){
+  const a = b.auto; if (a !== exp) return bizRender(); if (a >= 4) return toast('Максимальная автоматизация', 'err');
+  if (b.level < a + 2) return toast('Нужен уровень предприятия ' + (a + 2), 'err');
+  const { cents, disc } = bzCost(b, d.price * 100 * b.level * bizBr(b) * 0.20 * Math.pow(1.6, a));
+  if (!bizSpend(id, b, cents, 'Автоматизация: ур. ' + (a + 1), 'up', true)) return;
+  b.auto = a + 1; if (disc) b.disc = null; bizCommit('Автоматизация внедрена');
+}
+function bzDoBranch(id, b, d, exp){
+  if (b.br !== exp) return bizRender(); if (b.br >= 4) return toast('Достигнут предел филиалов', 'err');
+  if (b.level < b.br + 3) return toast('Нужен уровень предприятия ' + (b.br + 3), 'err');
+  const addN = bizNeed(d, { level: b.level, br: b.br + 1 }) - bizNeed(d, b), fee = Math.ceil(addN * bizWage(d) * 12), n0 = b.br;
+  const { cents, disc } = bzCost(b, d.price * 100 * b.level * 0.85 * (1 + 0.3 * b.br)), dn = bizDelta(id, b, x => { x.br++; bizAddStaff(x, addN); });
+  confirmSheet({ title: 'Открытие филиала', okText: 'Открыть',
+    rows: [['Предприятие', d.name], ['Филиал', '№' + (n0 + 1)], ['Стоимость', bizC(cents) + (disc ? ' (скидка ' + Math.round(disc * 100) + '%)' : '')], ['Набор персонала', '+' + addN + ' чел. · ' + bizC(fee)],
+      ['Прибыль / ч', bzSign(dn)], ['Баланс после', fmtMoney((S.balances.USD || 0n) - BigInt(cents + fee) * BIZ_CENT, 'USD')]],
+    onConfirm: () => {
+      if (!S.biz.owned[id] || S.biz.owned[id].br !== n0){ closeSheet(); return bizRender(); }
+      if (bzLow(cents + fee)){ closeSheet(); hapticErr(); return toast('Недостаточно средств на счёте USD', 'err'); }
+      if (!bizSpend(id, b, cents + fee, 'Открыт филиал №' + (n0 + 1), 'up', false)) return closeSheet();
+      b.inv += cents; b.br = n0 + 1; bizAddStaff(b, addN); if (disc) b.disc = null; closeSheet(); bizCommit('Филиал открыт');
+    } });
+}
+function bzDoHire(id, b, d, n){
+  const max = Math.ceil(bizNeed(d, b) * 1.5); n = Math.min(n, max - b.staff);
+  if (n <= 0) return toast('Достигнут предел штата: ' + max, 'err');
+  if (!bizSpend(id, b, Math.ceil(bizWage(d) * 12 * n), 'Найм: +' + n + ' чел.', 'hire', false)) return;
+  bizAddStaff(b, n); bizCommit();
+}
+function bzDoFire(id, b, d, n){
+  n = Math.min(n, b.staff); if (n <= 0) return toast('Увольнять некого', 'err');
+  if (!bizSpend(id, b, Math.ceil(bizWage(d) * 6 * n), 'Увольнение: −' + n + ' чел.', 'fire', false)) return;
+  b.staff -= n; bizCommit();
+}
+function bzDoTrain(id, b, d, exp){
+  const s = b.skill; if (Math.round(s * 100) !== exp) return bizRender(); if (s >= 4.995) return toast('Максимальная квалификация', 'err');
+  if (Math.floor(s) > b.level) return toast('Нужен уровень предприятия ' + Math.floor(s), 'err'); if (b.staff < 1) return toast('Нет сотрудников для обучения', 'err');
+  const c = Math.ceil(b.staff * bizWage(d) * (1 + 0.22 * (s - 1)) * 24 * Math.floor(s));
+  if (!bizSpend(id, b, c, 'Обучение персонала', 'train', false)) return;
+  b.skill = Math.min(5, s + 1); bizCommit('Квалификация повышена');
+}
+function bzDoRepair(id, b, d){
+  if (b.cond >= 99.5) return toast('Оборудование в порядке', 'err');
+  const c = Math.ceil((100 - b.cond) / 100 * d.price * 100 * 0.05 * b.level * bizBr(b) * Math.max(0.5, 1 - 0.05 * b.up.eq));
+  if (!bizSpend(id, b, c, 'Ремонт оборудования', 'repair', false)) return;
+  b.cond = 100; bizCommit('Ремонт выполнен');
+}
+function bzDoCamp(id, b, d, cid){
+  const c = BIZ_CAMP.find(x => x.id === cid), P = BIZ_PROF[d.cat]; if (!c) return;
+  if (b.mk && b.mk.until > Date.now()) return toast('Кампания уже идёт', 'err'); if (b.level < c.lv) return toast('Нужен уровень предприятия ' + c.lv, 'err');
+  const cost = Math.ceil(bizStats(d, b.level, b, 'base').incC * c.boost * c.h * c.f);
+  if (!bizSpend(id, b, cost, 'Реклама: ' + c.n, 'camp', false)) return;
+  b.mk = { id: c.id, boost: 1 + c.boost * P.gMk, until: Date.now() + c.h * 3600000 }; bizCommit('Кампания запущена');
+}
+function bzDoOffer(id, b, d, yes){
+  const o = b.offer; if (!o || o.exp <= Date.now()){ b.offer = null; return bizRender(); }
+  const def = BIZ_OFFERS[o.id];
+  if (yes !== 'yes'){ b.offer = null; bizTouch(b); saveState(); return bizRender(); }
+  if (o.id === 'grant' ? b.disc : b.deal) return toast('Сейчас уже действует другое предложение', 'err');
+  const cost = Math.ceil(bizStats(d, b.level, b, 'base').incC * def.cf);
+  if (!bizSpend(id, b, cost, def.n, 'offer', false)) return;
+  const until = Date.now() + def.h * 3600000;
+  if (o.id === 'bulk') b.deal = { n: def.n, sup: 0.75, until }; else if (o.id === 'blog') b.deal = { n: def.n, dem: 1.3, until }; else b.disc = { pct: 0.25, until };
+  b.offer = null; bizCommit('Принято: ' + def.n);
+}
+function bzDoGoal(id, b, d, gid){
+  const g = BIZ_GOALS.find(x => x.id === gid); if (!g || b.goals[gid]) return;
+  const [cur, tar] = g.p(b, d); if (cur < tar) return toast('Цель ещё не выполнена', 'err');
+  const cents = Math.round(d.price * 100 * g.r), credit = BigInt(cents) * BIZ_CENT;
+  b.goals[gid] = Date.now(); S.balances.USD = (S.balances.USD || 0n) + credit; bizTouch(b); bizLog(id, 'goal', 'Цель: ' + g.t, cents);
+  S.txs.unshift({ id: uid(), type: 'business', title: 'Бизнес: награда за цель', subtitle: d.name + ' · ' + g.t, amountText: '+' + fmtMoney(credit, 'USD'),
+    amountClass: 'pos', amount: dStr(credit), currency: 'USD', date: new Date().toISOString(), meta: { biz: id } });
+  bizCommit('Награда получена: ' + bizC(cents));
+}
+function bzSell(id){
+  const b = S.biz.owned[id], d = BIZ_BY_ID[id]; if (!b || !d) return toast('Предприятие уже продано', 'err');
+  bizTick(); const q = bizAppraise(id, b), bal = S.balances.USD || 0n, credit = BigInt(q.netC) * BIZ_CENT;
+  confirmSheet({ title: 'Продажа предприятия', okText: 'Продать', danger: true,
+    rows: [['Предприятие', d.name], ['Цена продажи', bizC(q.netC)], ['Вложено всего', bizC(q.basisC)], ['Итог к вложениям', bzSign(q.netC - q.basisC)],
+      ['Уровень / репутация', b.level + ' / ' + Math.round(b.rep)], ['Состояние', Math.round(b.cond) + '%'], ['Баланс после', fmtMoney(bal + credit, 'USD')], ['Внимание', 'Действие необратимо']],
+    onConfirm: () => bzDoSell(id, q) });
+}
+function bzDoSell(id, q){
+  if (bizSelling) return; bizSelling = true;
+  try {
+    const b = S.biz.owned[id], d = BIZ_BY_ID[id];
+    if (!b || !d){ closeSheet(); return toast('Предприятие уже продано', 'err'); }                  // повторная продажа исключена
+    if (!q || q.id !== id || q.ver !== b.ver || Date.now() - q.ts > 90000){ closeSheet(); toast('Оценка устарела — пересчитана', 'err'); return setTimeout(() => bzSell(id), 350); }
+    bizTick();                                                                                        // начисляем накопленную прибыль до продажи
+    const credit = BigInt(q.netC) * BIZ_CENT;
+    S.balances.USD = (S.balances.USD || 0n) + credit;
+    delete S.biz.owned[id];
+    bizLog(id, 'sale', 'Продажа: ' + d.name, q.netC);
+    S.txs.unshift({ id: uid(), type: 'business', title: 'Продажа бизнеса', subtitle: d.name, amountText: '+' + fmtMoney(credit, 'USD'),
+      amountClass: 'pos', amount: dStr(credit), currency: 'USD', date: new Date().toISOString(), meta: { biz: id } });
+    bizView = null; bizTab = 'mine'; saveState(); hapticOk(); closeSheet(); renderAll(); bizRender(); toast('Предприятие продано: ' + bizC(q.netC));
+  } finally { bizSelling = false; }
+}
+
+function bizClick(t){
+  if (t.dataset.bzOpen){
+    haptic('light'); const id = t.dataset.bzOpen;
+    if (S.biz.owned[id]){ bizView = id; bizVTab = 'ov'; bizRender(); $('#content').scrollTop = 0; } return;
+  }
+  if (t.dataset.bzt){ haptic('light'); bizVTab = t.dataset.bzt; return bizRenderManage(); }
+  if (t.dataset.why){ hapticErr(); return toast(t.dataset.why, 'err'); }
+  const id = bizView, b = id && S.biz.owned[id]; if (!b) return;
+  const d = BIZ_BY_ID[id], act = t.dataset.bz, arg = t.dataset.arg, exp = t.dataset.exp != null ? +t.dataset.exp : null;
+  const quick = act === 'hire' || act === 'fire' || act === 'price' || act === 'sup' || act === 'mnt', now = Date.now();
+  if (now < bizLockUntil) return; bizLockUntil = now + (quick ? 120 : 500);            // защита от двойного нажатия
+  haptic('light');
+  const setOpt = fn => { fn(); bizTouch(b); saveState(); bizRender(); };
+  switch (act){
+    case 'lvl': return bzDoLevel(id, b, d, exp);
+    case 'up': return bzDoUp(id, b, d, arg, exp);
+    case 'asr': return bzDoAsr(id, b, d, exp);
+    case 'auto': return bzDoAuto(id, b, d, exp);
+    case 'br': return bzDoBranch(id, b, d, exp);
+    case 'hire': return bzDoHire(id, b, d, bizInt(arg, 1, 10));
+    case 'fire': return bzDoFire(id, b, d, bizInt(arg, 1, 10));
+    case 'train': return bzDoTrain(id, b, d, exp);
+    case 'repair': return bzDoRepair(id, b, d);
+    case 'camp': return bzDoCamp(id, b, d, arg);
+    case 'offer': return bzDoOffer(id, b, d, arg);
+    case 'goal': return bzDoGoal(id, b, d, arg);
+    case 'sell': return bzSell(id);
+    case 'price': { const p = +arg; if (BIZ_PRICES.includes(p)) setOpt(() => { b.set.price = p; }); return; }
+    case 'sup': { const s = BIZ_SUP[arg]; if (s && b.level >= s.lv) setOpt(() => { b.set.sup = arg; }); return; }
+    case 'mnt': { const s = BIZ_MNT[arg]; if (s && b.level >= s.lv) setOpt(() => { b.set.mnt = arg; }); return; }
+  }
+}
+function bizCardExtra(d, b){
+  const st = bizStats(d, b.level, b), al = st.netC <= 0 || st.cov < 0.95 || b.cond < 70 || !!b.offer;
+  return `<div class="bz-mini"><span>Репутация <b>${Math.round(b.rep)}</b></span><span>Состояние <b class="${b.cond < 70 ? 'biz-neg' : ''}">${Math.round(b.cond)}%</b></span><span>Штат <b>${b.staff}</b></span>${al ? '<span class="bz-chip bad" style="padding:2px 8px">Требует внимания</span>' : ''}</div>
+    <button class="biz-buy" type="button" data-bz-open="${d.id}">Управлять</button>`;
+}
+
+bizTick(); bizRenderEntry();
+setInterval(() => { if (!document.hidden) bizTick(); }, 5000);
+document.addEventListener('visibilitychange', () => { if (!document.hidden) bizTick(); });
+window.addEventListener('pageshow', bizTick);
+
 
 applyLang();
 
