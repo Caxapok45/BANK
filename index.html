@@ -530,7 +530,7 @@
     backdrop-filter:blur(24px) saturate(180%);
     -webkit-backdrop-filter:blur(24px) saturate(180%);
     border:1px solid var(--border-2);
-    display:grid;grid-template-columns:repeat(5,1fr);
+    display:grid;grid-template-columns:repeat(6,1fr);
     padding:6px;
     box-shadow:0 20px 45px -20px rgba(0,0,0,.95);
     z-index:50;
@@ -1218,6 +1218,23 @@ input,select{font-size:16px}
   .bz-grid>div{gap:14px}
 }
 @media (max-width:360px){.bz-head,.bz-chips{padding-left:14px;padding-right:14px}.bz-tiles{margin-left:14px;margin-right:14px}.bz-body{padding-left:14px;padding-right:14px}.bz-btn{min-width:84px}.bz-sec>summary em{display:none}}
+/* ===== БИЗНЕС: вкладка в нижнем меню, накопительный баланс, снятие ===== */
+#page-business:not(.biz-managing) .biz-back{display:none}
+#page-business.biz-managing #bizWallet{display:none!important}
+.bw-card{margin:14px 20px 0;padding:16px;border-radius:var(--radius);background:linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid color-mix(in srgb,var(--a2) 28%,transparent);box-shadow:0 18px 40px -28px color-mix(in srgb,var(--a2) 60%,transparent)}
+.bw-card>small,.bw-grid small{display:block;font-size:11px;color:var(--muted);font-weight:600}
+.bw-big{display:block;font-size:30px;font-weight:800;letter-spacing:-.8px;margin-top:4px;font-variant-numeric:tabular-nums;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bw-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.06)}
+.bw-grid b{display:block;font-size:13.5px;font-weight:700;margin-top:3px;font-variant-numeric:tabular-nums;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bw-btn{width:100%;margin:14px 0 0;height:50px}
+.bw-hint{font-size:11.5px;color:var(--muted-2);margin-top:10px;line-height:1.4}
+.bw-bad{color:var(--red);font-size:12px;padding:0 22px 8px;min-height:20px}
+.bw-quick{display:flex;gap:8px;padding:0 20px 12px;flex-wrap:wrap}
+.bw-quick .chip-f{flex:1 1 0;text-align:center;min-width:58px}
+.biz-tot{margin-top:10px}
+.bw-ent .bz-kv:last-child{border-bottom:0}
+@media (max-width:380px){.nav{left:8px;right:8px;padding:5px 3px}.nav-item span{font-size:9px}.nav-item svg{width:20px;height:20px}.bw-card{margin-left:14px;margin-right:14px}.bw-big{font-size:26px}.bw-grid b{font-size:12.5px}}
+@media (min-width:700px){.bw-card{margin-top:16px}}
 </style>
 </head>
 <body>
@@ -1378,14 +1395,6 @@ input,select{font-size:16px}
         </button>
       </div>
 
-      <div class="panel biz-entry" id="bizEntry" role="button" tabindex="0" aria-label="Бизнес">
-        <div class="row">
-          <div class="row-ic gold">🏢</div>
-          <div class="row-main"><div class="row-title">Бизнес</div><div class="row-sub" id="bizEntrySub">Каталог предприятий</div></div>
-          <div class="row-amt pos" id="bizEntryAmt"></div>
-        </div>
-      </div>
-
       <div class="section-head">
         <div class="section-title">Валютные счета</div>
         <div class="section-link" id="linkAllAccounts">Сменить валюту</div>
@@ -1501,6 +1510,7 @@ input,select{font-size:16px}
         <button class="chip-f" data-f="exchange">Обмен</button>
         <button class="chip-f" data-f="crypto">Крипто</button>
         <button class="chip-f" data-f="stock">Акции</button>
+        <button class="chip-f" data-f="business">Бизнес</button>
       </div>
 
       <div style="height:14px"></div>
@@ -1513,15 +1523,17 @@ input,select{font-size:16px}
         <button class="biz-back" id="bizBack" type="button" aria-label="Назад"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
         <div class="biz-ttl">Бизнес</div>
       </div>
+      <div id="bizWallet"></div>
       <div class="biz-sum" id="bizSummary"></div>
       <div class="biz-tabs" id="bizTabs">
         <button class="chip-f active" type="button" data-biz-tab="mine">Мои бизнесы</button>
         <button class="chip-f" type="button" data-biz-tab="shop">Каталог</button>
+        <button class="chip-f" type="button" data-biz-tab="wd">Снятия</button>
       </div>
       <div class="biz-tabs" id="bizCats" style="display:none;padding-top:10px"></div>
       <div class="biz-list" id="bizList"></div>
       <div id="bizManage"></div>
-      <div class="biz-note">Покупка и доход проходят через счёт USD. Прибыль начисляется автоматически, в том числе пока приложение закрыто.</div>
+      <div class="biz-note">Покупка и развитие предприятий оплачиваются со счёта USD. Прибыль накапливается на отдельном балансе бизнеса (в том числе пока приложение закрыто) и не зачисляется на счёт автоматически — её можно снять кнопкой «Снять заработок» в любой валюте.</div>
       <div style="height:24px"></div>
     </div>
 
@@ -1544,6 +1556,10 @@ input,select{font-size:16px}
     <button class="nav-item" data-page="stocks">
       <svg viewBox="0 0 24 24"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="15 7 21 7 21 13"/></svg>
       <span>Акции</span>
+    </button>
+    <button class="nav-item" data-page="business">
+      <svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M3 13h18"/><path d="M10.5 13v1.5h3V13"/></svg>
+      <span>Бизнес</span>
     </button>
     <button class="nav-item" data-page="history">
       <svg viewBox="0 0 24 24"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><polyline points="12 7 12 12 16 14"/></svg>
@@ -1730,8 +1746,8 @@ function loadState(){
   } catch(e){ try{ localStorage.setItem(STORAGE_KEY+'_backup', localStorage.getItem(STORAGE_KEY)||''); }catch(_){} return structuredClone(DEFAULT_STATE); }
 }
 function saveState(){
-  if (resetting) return;
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(S, (k, v) => typeof v === 'bigint' ? dStr(v) : v)); } catch(e){}
+  if (resetting) return true;
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(S, (k, v) => typeof v === 'bigint' ? dStr(v) : v)); return true; } catch(e){ return false; }
 }
 
 let FIAT = null;
@@ -2227,6 +2243,7 @@ $$('.nav-item').forEach(btn => {
     if (page === 'crypto') renderCrypto();
     if (page === 'stocks') openStocksPage();
     if (page === 'exchange') updateExchange();
+    if (page === 'business') openBusiness();
     if (page === 'home') renderAll();
   });
 });
@@ -3459,7 +3476,7 @@ const I18N_EN = {
  'Отображение больших чисел':'Display of large numbers',
  'Полный':'Full',
  'Короткий':'Short',
- 'Калькулятор':'Calculator',
+ 'Калькулятор':'Calculator','Бизнес':'Business','Снять заработок':'Withdraw earnings',
  'Ошибка':'Error',
  'SAYFER Bank · демо-версия. Данные хранятся только в этом браузере.':'SAYFER Bank · demo. Data is stored only in this browser.'
 };
@@ -3909,7 +3926,16 @@ function bizNormalize(){
   }
   const log = Array.isArray(o.log) ? o.log.filter(x => x && typeof x === 'object' && BIZ_BY_ID[x.id] && Number.isFinite(+x.t))
     .slice(0, 200).map(x => ({ id: x.id, t: +x.t, k: String(x.k || ''), x: String(x.x || '').slice(0, 90), c: Math.round(+x.c) || 0 })) : [];
-  S.biz = { ...o, v: 2, owned: own, log };
+  const nn = v => Number.isFinite(+v) ? Math.max(0, Math.floor(+v)) : 0, okD = v => typeof v === 'string' && /^\d+(\.\d+)?$/.test(v) ? v : '0';
+  const ws0 = o.wallet && typeof o.wallet === 'object' ? o.wallet : null;
+  /* Накопительный баланс бизнеса. c — доступно к снятию, wd — снято, cr — начислено с момента появления баланса,
+     base — заработок, который старые версии уже зачислили на USD автоматически (считается снятым). */
+  const wallet = ws0
+    ? { c: nn(ws0.c), wd: nn(ws0.wd), base: nn(ws0.base), cr: nn(ws0.cr),
+        ws: (Array.isArray(ws0.ws) ? ws0.ws : []).filter(x => x && typeof x === 'object' && Number.isFinite(+x.t) && nn(x.c) > 0).slice(0, 200)
+          .map(x => ({ t: +x.t, c: nn(x.c), to: String(x.to || '').slice(0, 24), toV: String(x.toV || '').slice(0, 60), rate: Number.isFinite(+x.rate) ? +x.rate : 0, fee: okD(x.fee), net: okD(x.net) })) }
+    : { c: 0, wd: 0, cr: 0, base: Object.values(own).reduce((a, b) => a + b.earnedC, 0), ws: [] };
+  S.biz = { ...o, v: 2, owned: own, log, wallet };
 }
 
 /* Износ, репутация, события — за k завершённых периодов. Возвращает чистую прибыль в центах/ч для начисления. */
@@ -3975,7 +4001,7 @@ function bizAppraise(id, b){
 
 bizNormalize();
 
-const bizC = c => fmtMoney(BigInt(Math.round(c)) * BIZ_CENT, 'USD', 0, 2);
+const bizC = c => fmtMoney(BigInt(Math.round(c)) * BIZ_CENT, 'USD', 2, 2);   // центы показываем всегда
 const bizPl = n => { const a = n % 10, b = n % 100; return a === 1 && b !== 11 ? 'предприятие' : (a >= 2 && a <= 4 && (b < 12 || b > 14)) ? 'предприятия' : 'предприятий'; };
 let bizTab = 'mine', bizCat = 'all';
 
@@ -4005,13 +4031,13 @@ function bizTick(){
     b.earnedC += Number(cents); credit += cents;
   }
   if (!dirty) return;
-  if (credit > 0n) S.balances.USD = (S.balances.USD || 0n) + credit * BIZ_CENT;
+  if (credit > 0n){ const w = S.biz.wallet, add = Number(credit); w.c += add; w.cr += add; }   // отдельный баланс бизнеса, НЕ счёт USD
   saveState();
-  if (credit > 0n && unlocked && FIAT){ renderBalance(); renderAccounts(); }
+  if (typeof bizWdUpd === 'function' && $('#bwAmt')) bizWdUpd();
   if ($('#page-business').classList.contains('active') && Date.now() - bizPtr > 900){
     bizRenderSummary(); if (bizView) bizRenderLive(); else if (bizTab === 'mine') bizRenderList();
   }
-  bizRenderEntry(); bizFlushNotes();
+  bizFlushNotes();
 }
 
 function bizBuy(id){
@@ -4060,7 +4086,8 @@ function bizCardHtml(d, b){
     <div class="biz-meta">${esc(d.cat)} · Ур. ${b ? b.level : 1}</div></div>${b ? '' : `<div class="biz-price">${fmtMoney(price, 'USD')}</div>`}</div>`;
   let tail;
   if (b){
-    tail = `<div class="biz-foot"><span>Заработано: <b>${bizC(b.earnedC)}</b></span><span>Куплено: <b>${new Date(b.boughtAt).toLocaleDateString(S.settings.lang === 'en' ? 'en-GB' : 'ru-RU')}</b></span></div>${bizCardExtra(d, b)}`;
+    tail = `<div class="biz-fin biz-tot"><div><small>Выручка, всего</small><b class="biz-pos">+${bizC(Math.round(b.rev))}</b></div><div><small>Расходы, всего</small><b class="biz-neg">−${bizC(Math.round(b.cost))}</b></div><div><small>Начислено</small><b class="biz-pos">${bizC(b.earnedC)}</b></div></div>
+    <div class="biz-foot"><span>Заработано: <b>${bizC(b.earnedC)}</b></span><span>Куплено: <b>${new Date(b.boughtAt).toLocaleDateString(S.settings.lang === 'en' ? 'en-GB' : 'ru-RU')}</b></span></div>${bizCardExtra(d, b)}`;
   } else if (S.biz.owned[d.id]){
     tail = `<button class="biz-buy own" type="button" disabled>Уже куплено</button>`;
   } else {
@@ -4078,7 +4105,27 @@ function bizRenderSummary(){
     <div><small>Доход / ч</small><b class="biz-pos">+${bizC(t.inc)}</b></div>
     <div><small>Расходы / ч</small><b class="biz-neg">−${bizC(t.exp)}</b></div>
     <div><small>Чистая / ч</small><b class="${t.net >= 0 ? 'biz-pos' : 'biz-neg'}">${t.net >= 0 ? '+' : '−'}${bizC(Math.abs(t.net))}</b></div>
-    <div><small>Всего заработано</small><b>${bizC(t.earned)}</b></div>`;
+    <div><small>Предприятий</small><b>${t.n}</b></div>`;
+  bizRenderWallet();
+}
+function bizRenderWallet(){
+  const w = S.biz.wallet, t = bizTotals(), hid = v => balHidden ? '••••' : v;
+  $('#bizWallet').innerHTML = `<div class="bw-card">
+    <small>Доступно для снятия</small>
+    <b class="bw-big biz-pos">${hid(bizC(w.c))}</b>
+    <div class="bw-grid">
+      <div><small>Общая прибыль</small><b>${hid(bizC(w.base + w.cr))}</b></div>
+      <div><small>Уже снято</small><b>${hid(bizC(w.wd + w.base))}</b></div>
+      <div><small>Прибыль / ч</small><b class="${t.net >= 0 ? 'biz-pos' : 'biz-neg'}">${t.net >= 0 ? '+' : '−'}${bizC(Math.abs(t.net))}</b></div>
+    </div>
+    <button class="btn btn-primary bw-btn" type="button" data-bw-wd="1">Снять заработок</button>
+    <div class="bw-hint">Прибыль накапливается здесь и не попадает на счёт USD, пока вы её не снимете.</div></div>`;
+}
+function bizWdCardHtml(x){
+  const to = x.to || '—';
+  return `<div class="biz-card bw-ent">
+    <div class="biz-h"><div class="biz-ic">💸</div><div class="biz-hm"><div class="biz-name">Снятие заработка</div><div class="biz-meta">${fmtTime(x.t)}</div></div></div>
+    <div style="margin-top:8px">${bzKv('Списано с баланса бизнеса', bizC(x.c) + ' USD')}${bzKv('Валюта получения', esc(to))}${bzKv('Курс', x.rate ? '1 USD = ' + fmtQty(x.rate) + ' ' + esc(to) : '—')}${bzKv('Комиссия', fmtQty(toB(x.fee)) + ' ' + esc(to))}${bzKv('Получено', '+' + fmtQty(toB(x.net)) + ' ' + esc(to), 'biz-pos')}</div></div>`;
 }
 function bizRenderList(){
   const box = $('#bizList');
@@ -4086,36 +4133,29 @@ function bizRenderList(){
     const ids = Object.keys(S.biz.owned).sort((a, b) => S.biz.owned[a].boughtAt - S.biz.owned[b].boughtAt);
     box.innerHTML = ids.length ? ids.map(id => bizCardHtml(BIZ_BY_ID[id], S.biz.owned[id])).join('')
       : `<div class="empty" style="grid-column:1/-1"><div>У вас пока нет предприятий</div><div style="margin-top:6px;font-size:12px;color:var(--muted-2)">Откройте «Каталог» и купите первое</div></div>`;
+  } else if (bizTab === 'wd'){
+    const ws = S.biz.wallet.ws;
+    box.innerHTML = ws.length ? ws.slice(0, 100).map(bizWdCardHtml).join('')
+      : `<div class="empty" style="grid-column:1/-1"><div>Снятий пока не было</div><div style="margin-top:6px;font-size:12px;color:var(--muted-2)">Нажмите «Снять заработок», чтобы вывести накопленную прибыль</div></div>`;
   } else {
     box.innerHTML = BIZ_CATALOG.filter(d => bizCat === 'all' || d.cat === bizCat).map(d => bizCardHtml(d, null)).join('');
   }
 }
-function bizRenderEntry(){
-  const t = bizTotals();
-  $('#bizEntrySub').textContent = t.n ? `${t.n} ${bizPl(t.n)}` : 'Каталог предприятий';
-  $('#bizEntryAmt').textContent = t.n ? '+' + bizC(t.net) + '/ч' : '';
-}
 function bizRender(){
   if (bizView && !S.biz.owned[bizView]) bizView = null;
   $('#page-business').classList.toggle('biz-managing', !!bizView);
-  if (bizView){ bizRenderManage(); bizRenderEntry(); return; }
+  if (bizView){ bizRenderManage(); return; }
   $$('#bizTabs [data-biz-tab]').forEach(b => b.classList.toggle('active', b.dataset.bizTab === bizTab));
   const cats = $('#bizCats'); cats.style.display = bizTab === 'shop' ? '' : 'none';
   cats.innerHTML = ['all', ...BIZ_CATS].map(c => `<button class="chip-f${bizCat === c ? ' active' : ''}" type="button" data-biz-cat="${c}">${c === 'all' ? 'Все' : c}</button>`).join('');
-  bizRenderSummary(); bizRenderList(); bizRenderEntry();
+  bizRenderSummary(); bizRenderList();
 }
-function openBusiness(){
-  haptic('light'); bizTick(); bizView = null;
-  $$('.nav-item').forEach(b => b.classList.remove('active'));
-  $$('.page').forEach(p => p.classList.toggle('active', p.id === 'page-business'));
-  $('#content').scrollTop = 0;
-  bizRender();
+function openBusiness(){       // вызывается обработчиком нижнего меню (вкладка «Бизнес»)
+  bizTick(); bizView = null; bizRender();
 }
-
-$('#bizEntry').addEventListener('click', openBusiness);
-$('#bizEntry').addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openBusiness(); } });
 $('#page-business').addEventListener('click', e => {
-  const t = e.target.closest('#bizBack, [data-biz-tab], [data-biz-cat], [data-biz-buy], [data-bz-open], [data-bz], [data-bzt]'); if (!t) return;
+  const t = e.target.closest('#bizBack, [data-biz-tab], [data-biz-cat], [data-biz-buy], [data-bz-open], [data-bz], [data-bzt], [data-bw-wd]'); if (!t) return;
+  if (t.dataset.bwWd){ haptic('light'); return bizOpenWithdraw(); }
   if (t.dataset.bzOpen || t.dataset.bz || t.dataset.bzt) return bizClick(t);
   if (t.id === 'bizBack'){ haptic('light'); if (bizView){ bizView = null; return bizRender(); } return $('.nav-item[data-page="home"]').click(); }
   if (t.dataset.bizTab){ haptic('light'); bizTab = t.dataset.bizTab; return bizRender(); }
@@ -4331,9 +4371,9 @@ function bzTabMk(id, d, b, st, P){
 }
 function bzTabFin(id, d, b, st, P){
   const basis = d.price * 100 + b.inv, ret = basis > 0 ? b.earnedC / basis : 0;
-  const fin = bzKv('Выручка за всё время', bizC(b.rev)) + bzKv('Расходы за всё время', '−' + bizC(b.cost)) + bzKv('Чистая прибыль начислена', bizC(b.earnedC), 'biz-pos') +
+  const fin = bzKv('Выручка за всё время', bizC(b.rev)) + bzKv('Расходы за всё время', '−' + bizC(b.cost)) + bzKv('Чистая прибыль начислена на баланс бизнеса', bizC(b.earnedC), 'biz-pos') +
     bzKv('Цена покупки', bizC(d.price * 100)) + bzKv('Вложено в развитие', bizC(b.inv)) + bzKv('Возврат вложений', bzPct(ret, 1) + '%') + bzBar(ret * 100) +
-    `<div class="bz-rs" style="padding:8px 0 10px">Выручка и расходы считаются по текущим параметрам. Прибыль начисляется на счёт USD автоматически; при убытке начисления нет, но деньги не списываются.</div>`;
+    `<div class="bz-rs" style="padding:8px 0 10px">Выручка и расходы считаются по текущим параметрам. Прибыль копится на отдельном балансе бизнеса (вкладка «Бизнес» → «Снять заработок»), а не на счёте USD; при убытке начисления нет, но деньги не списываются.</div>`;
   const KI = { buy: '🛒', up: '⬆️', sale: '💰', event: '⚡', goal: '🏆', hire: '👥', fire: '👥', repair: '🔧', offer: '💡', camp: '📣', train: '🎓' };
   const logs = S.biz.log.filter(x => x.id === id).slice(0, 30);
   const hist = logs.length ? logs.map(x => `<div class="bz-log"><span class="bz-li">${KI[x.k] || '•'}</span><div class="bz-ri"><div class="bz-rt">${esc(x.x)}</div><div class="bz-rs">${fmtTime(x.t)}</div></div><b class="${x.c > 0 ? 'biz-pos' : x.c < 0 ? 'biz-neg' : ''}">${x.c ? bzSign(x.c) : ''}</b></div>`).join('') : '<div class="bz-rs" style="padding:12px 0">Операций пока нет</div>';
@@ -4543,7 +4583,131 @@ function bizCardExtra(d, b){
     <button class="biz-buy" type="button" data-bz-open="${d.id}">Управлять</button>`;
 }
 
-bizTick(); bizRenderEntry();
+/* =========================================================
+   СНЯТИЕ ЗАРАБОТКА С БАЛАНСА БИЗНЕСА
+   Баланс бизнеса хранится в USD (целые центы, S.biz.wallet.c). Снятие: USD → любой актив из «Обмена»
+   по тому же курсу и с той же комиссией 0.5%, что и обмен; в USD — без комиссии.
+   ========================================================= */
+let bizWdBusy = false, bizWdUpd = null, bizWdLockUntil = 0;
+function bizWdQuote(val, amt){
+  const B = asset(val);
+  if (B.v === 'f:USD') return { ok: true, B, rate: 1, fee: 0n, net: amt };
+  const q = calcEx(asset('f:USD'), B, amt);
+  return { ok: q.ok, B, rate: q.rate, fee: q.fee, net: q.net };
+}
+/* Разбор суммы: возвращает { st, amt (BigInt, кратно центу) } */
+function bizWdParse(raw){
+  const t = String(raw || '').replace(/[\s\u00A0\u202F]/g, '');
+  if (t === '') return { st: 'empty', amt: 0n };
+  if (!/^\d*([.,]\d*)?$/.test(t)) return { st: 'bad', amt: 0n };
+  if (/[.,]\d{3,}/.test(t)) return { st: 'dec', amt: 0n };
+  const amt = truncB(parseAmt(t, 2), 2);
+  return amt > 0n ? { st: 'ok', amt } : { st: 'zero', amt: 0n };
+}
+function bizOpenWithdraw(){
+  bizTick();
+  openSheet(`
+    <div class="sheet-handle"></div>
+    <div class="sheet-head">
+      <div class="sheet-title">Снять заработок</div>
+      <button class="sheet-close" data-close aria-label="Закрыть"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="rate-line"><span>Доступно для снятия</span><b id="bwAvail" class="biz-pos">—</b></div>
+    <div class="field" style="margin-top:12px">
+      <div class="field-label">Сумма для снятия</div>
+      <div class="input-box">
+        <input id="bwAmt" type="text" inputmode="decimal" placeholder="0" autocomplete="off">
+        <div class="input-suffix">USD</div>
+      </div>
+    </div>
+    <div class="bw-quick" id="bwQuick">
+      <button class="chip-f" type="button" data-p="25">25%</button><button class="chip-f" type="button" data-p="50">50%</button>
+      <button class="chip-f" type="button" data-p="75">75%</button><button class="chip-f" type="button" data-p="100">Всё</button>
+    </div>
+    <div class="field">
+      <div class="field-label">Валюта получения</div>
+      <div class="select-box"><select id="bwCur">${assetOptionsHtml('f:USD')}</select><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+    </div>
+    <div class="rate-line"><span>Курс конвертации</span><b id="bwRate">—</b></div>
+    <div class="rate-line"><span id="bwFeeLbl">Комиссия</span><b id="bwFee">—</b></div>
+    <div class="rate-line"><span>Итого к получению</span><b id="bwNet">—</b></div>
+    <div class="bw-bad" id="bwErr"></div>
+    <button class="btn btn-primary" id="bwOk" type="button" disabled>Подтвердить снятие</button>
+    <div style="height:12px"></div>`);
+  const avail = () => BigInt(S.biz.wallet.c) * BIZ_CENT;
+  const upd = bizWdUpd = () => {
+    if (!$('#bwAmt')) return;
+    const av = avail(), p = bizWdParse($('#bwAmt').value), val = $('#bwCur').value, B = asset(val), conv = val !== 'f:USD';
+    $('#bwAvail').textContent = fmtMoney(av, 'USD', 2, 2);
+    $('#bwFeeLbl').textContent = conv ? 'Комиссия конвертации (0.5%)' : 'Комиссия';
+    let err = '', ok = false, q = null;
+    if (p.st === 'bad') err = 'Некорректная сумма';
+    else if (p.st === 'dec') err = 'Не более 2 знаков после запятой';
+    else if (p.st === 'ok' && p.amt > av) err = 'Недостаточно средств на балансе бизнеса';
+    if (p.st === 'ok'){ q = bizWdQuote(val, p.amt); }
+    else { const one = bizWdQuote(val, SCB); q = { ok: one.ok, B, rate: one.rate, fee: 0n, net: 0n }; }
+    $('#bwRate').textContent = q.ok ? `1 USD = ${fmtQty(q.rate)} ${B.lbl}` : '—';
+    $('#bwFee').textContent = p.st === 'ok' && q.ok ? `${fmtQty(q.fee)} ${B.lbl}` : '—';
+    $('#bwNet').textContent = p.st === 'ok' && q.ok && q.net > 0n ? `${fmtQty(q.net)} ${B.lbl}` : '—';
+    if (p.st === 'ok' && !err){
+      if (!q.ok) err = 'Курс недоступен';
+      else if (!(q.net > 0n)) err = 'Слишком малая сумма';
+      else ok = true;
+    }
+    $('#bwErr').textContent = err;
+    const btn = $('#bwOk'); btn.disabled = !ok || bizWdBusy;
+    btn.textContent = p.st === 'empty' || p.st === 'zero' ? 'Введите сумму' : ok ? 'Подтвердить снятие' : (err || 'Подтвердить снятие');
+  };
+  $('#bwAmt').addEventListener('input', upd);
+  $('#bwCur').addEventListener('change', upd);
+  $$('#bwQuick .chip-f').forEach(b => b.addEventListener('click', () => {
+    haptic('light'); const c = S.biz.wallet.c, pc = +b.dataset.p;
+    const cents = pc === 100 ? c : Math.floor(c * pc / 100);
+    $('#bwAmt').value = formatAmountInput(dStr(BigInt(cents) * BIZ_CENT)); upd();
+  }));
+  $('#bwOk').addEventListener('click', () => bizDoWithdraw($('#bwCur').value, $('#bwAmt').value));
+  upd();
+}
+function bizDoWithdraw(val, raw){
+  if (bizWdBusy || Date.now() < bizWdLockUntil) return;   // защита от двойного нажатия
+  bizWdBusy = true; const btn = $('#bwOk'); if (btn) btn.disabled = true;
+  const fail = msg => { hapticErr(); toast(msg, 'err'); if (bizWdUpd) bizWdUpd(); };
+  try {
+    bizTick();                                        // сначала начислить накопленную прибыль
+    const w = S.biz.wallet, p = bizWdParse(raw);
+    if (p.st !== 'ok') return fail(p.st === 'bad' ? 'Некорректная сумма' : p.st === 'dec' ? 'Не более 2 знаков после запятой' : 'Введите сумму');
+    if (p.amt > BigInt(w.c) * BIZ_CENT) return fail('Недостаточно средств на балансе бизнеса');
+    const cents = Number(p.amt / BIZ_CENT), q = bizWdQuote(val, p.amt), B = q.B;
+    if (!(cents > 0) || !Number.isSafeInteger(cents)) return fail('Некорректная сумма');
+    if (!q.ok) return fail('Курс недоступен');
+    if (!(q.net > 0n)) return fail('Слишком малая сумма');
+    const snap = { c: w.c, wd: w.wd, ws: w.ws.slice(), bal: { ...S.balances }, cr: structuredClone(S.crypto), tx: S.txs.length };
+    try {
+      w.c -= cents; w.wd += cents;
+      if (w.c < 0) throw new Error('negative');
+      setBal(B, getBal(B) + q.net);
+      if (B.k === 'c' && S.crypto[B.id]) S.crypto[B.id].usd = B.usd;
+      const now = Date.now();
+      w.ws.unshift({ t: now, c: cents, to: B.lbl, toV: B.v, rate: q.rate, fee: dStr(q.fee), net: dStr(q.net) });
+      if (w.ws.length > 200) w.ws.length = 200;
+      S.txs.unshift({ id: uid(), type: 'business', title: 'Снятие заработка',
+        subtitle: B.v === 'f:USD' ? `Баланс бизнеса → счёт USD · -${fmtMoney(p.amt, 'USD', 2, 2)}` : `-${fmtMoney(p.amt, 'USD', 2, 2)} → ${B.lbl} · 1 USD = ${fmtQty(q.rate)} ${B.lbl}`,
+        amountText: `+${fmtQty(q.net)} ${B.lbl}`, amountClass: 'pos', amount: dStr(q.net), currency: B.lbl,
+        date: new Date(now).toISOString(),
+        meta: { biz: 'withdraw', from: 'USD', to: B.v, amt: dStr(p.amt), rate: q.rate, fee: dStr(q.fee), net: dStr(q.net) } });
+      if (!saveState()) throw new Error('save');
+    } catch(err){                                     // откат: операция не считается выполненной
+      w.c = snap.c; w.wd = snap.wd; w.ws = snap.ws; S.balances = snap.bal; S.crypto = snap.cr;
+      if (S.txs.length > snap.tx) S.txs.splice(0, S.txs.length - snap.tx);
+      return fail('Не удалось сохранить операцию, баланс не изменён');
+    }
+    bizWdLockUntil = Date.now() + 1500;
+    hapticOk(); bizWdUpd = null; closeSheet(); renderAll(); bizRender();
+    toast('Заработок снят: +' + fmtQty(q.net) + ' ' + B.lbl);
+  } finally { bizWdBusy = false; }
+}
+
+bizTick();
 setInterval(() => { if (!document.hidden) bizTick(); }, 5000);
 document.addEventListener('visibilitychange', () => { if (!document.hidden) bizTick(); });
 window.addEventListener('pageshow', bizTick);
