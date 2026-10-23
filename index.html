@@ -87,7 +87,8 @@ button:focus-visible,a:focus-visible,.nav-item:focus-visible,.action:focus-visib
 .lock-logo{margin-top:auto;width:56px;height:56px;border-radius:18px;display:grid;place-items:center;margin-bottom:16px;color:var(--a1);
   background:var(--surface);border:1px solid var(--border-2);box-shadow:0 14px 34px -18px color-mix(in srgb,var(--a2) 60%,transparent)}
 .lock-logo svg{width:24px;height:24px;fill:none;stroke:var(--a1);stroke-width:1.7}
-.lock-title{font-size:30px;font-weight:800;letter-spacing:-1px;margin-bottom:6px}
+.lock-title{font-size:30px;font-weight:800;letter-spacing:-1px;margin-bottom:2px}
+.lock-sno{font-size:10px;letter-spacing:5px;font-weight:700;color:var(--muted-2);margin-bottom:8px}
 .lock-sub{font-size:13px;color:var(--muted);margin-bottom:clamp(18px,4vh,34px);text-align:center}
 .dots{display:flex;gap:16px;margin-bottom:clamp(18px,4vh,32px)}
 .dot{width:12px;height:12px;border-radius:50%;border:1.5px solid rgba(255,255,255,.3);transition:all .2s cubic-bezier(.3,1.4,.5,1)}
@@ -318,6 +319,8 @@ button:focus-visible,a:focus-visible,.nav-item:focus-visible,.action:focus-visib
 .back-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .back-label{font-size:9.5px;letter-spacing:1.2px;color:rgba(255,255,255,.45);font-weight:600}
 .cvv-box{min-width:70px;padding:6px 14px;border-radius:6px;background:#f5f0e3;color:#111;font-size:14px;font-weight:800;letter-spacing:3px;text-align:center;font-variant-numeric:tabular-nums}
+.card-back .eye-btn{background:rgba(0,0,0,.28);border-color:rgba(255,255,255,.18)}
+.card-back .eye-btn svg{stroke:#f4f6fb}
 .back-text{font-size:clamp(8.5px,2.6cqw,10.5px);line-height:1.5;color:rgba(255,255,255,.38)}
 .card-brand-badge{align-self:flex-end;font-size:11px;font-weight:800;letter-spacing:1.5px;color:#f4f6fb}
 .card-section.enter .card-tilt{animation:cardIn .9s cubic-bezier(.2,.8,.2,1) both}
@@ -686,6 +689,7 @@ button:focus-visible,a:focus-visible,.nav-item:focus-visible,.action:focus-visib
 <div id="lockScreen">
   <div class="lock-logo"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="10.5" width="15" height="10" rx="3"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg></div>
   <div class="lock-title">Bank</div>
+  <div class="lock-sno">SNO</div>
   <div class="lock-sub">Введите код доступа для входа</div>
 
   <div class="dots" id="dots">
@@ -773,7 +777,7 @@ button:focus-visible,a:focus-visible,.nav-item:focus-visible,.action:focus-visib
               <div class="card-bottom">
                 <div>
                   <div class="card-label">CARD HOLDER</div>
-                  <div class="card-holder">SAYFER</div>
+                  <div class="card-holder">Sayfer</div>
                 </div>
                 <div>
                   <div class="card-label">EXPIRES</div>
@@ -791,6 +795,9 @@ button:focus-visible,a:focus-visible,.nav-item:focus-visible,.action:focus-visib
                 <div class="back-row">
                   <div class="back-label">CVV / CVC</div>
                   <div class="cvv-box" id="cardCvv">•••</div>
+                  <button class="eye-btn" id="cvvEye" type="button" aria-label="Показать CVC">
+                    <svg id="cvvEyeIcon" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </button>
                 </div>
                 <div class="back-text">
                   This card is a virtual product for demonstration purposes only.
@@ -850,6 +857,7 @@ button:focus-visible,a:focus-visible,.nav-item:focus-visible,.action:focus-visib
     <div class="page" id="page-exchange">
       <div class="section-head" style="padding-top:8px">
         <div class="section-title" style="font-size:22px;letter-spacing:-.6px;">Обмен валют</div>
+        <div class="section-link" id="exRefresh">Обновить</div>
       </div>
 
       <div class="field">
@@ -889,6 +897,8 @@ button:focus-visible,a:focus-visible,.nav-item:focus-visible,.action:focus-visib
       <div class="rate-line"><span>Курс</span><b id="exRate">—</b></div>
       <div class="rate-line"><span>Комиссия (0.5%)</span><b id="exFee">—</b></div>
       <div class="rate-line"><span>Доступно</span><b id="exAvail">—</b></div>
+      <div class="rate-line"><span>Обновлено</span><b id="exUpdated">—</b></div>
+      <div class="biz-adv bad" id="exWarn" style="display:none;margin:8px var(--g) 0"></div>
 
       <button class="btn btn-primary" id="exConfirm">Обменять</button>
       <div style="height:24px"></div>
@@ -908,7 +918,7 @@ button:focus-visible,a:focus-visible,.nav-item:focus-visible,.action:focus-visib
 
       <div class="section-head">
         <div class="section-title">Рынок</div>
-        <div class="section-link">Топ 50</div>
+        <div class="section-link" id="cryptoSearchOpen">Поиск</div>
       </div>
       <div class="panel" id="marketPanel"></div>
       <div style="height:20px"></div>
@@ -937,6 +947,7 @@ button:focus-visible,a:focus-visible,.nav-item:focus-visible,.action:focus-visib
         <div class="stk-sec"><div class="stk-sec-t">Рынок</div><div class="stk-sec-m" id="stkAllCnt"></div></div>
         <div class="stk-chips" id="stkAllX"></div>
         <div class="stk-list" id="stkAll"></div>
+        <div class="stk-note">Котировки реальные, покупка и продажа — демонстрационные.</div>
       </div>
       <div style="height:20px"></div>
     </div>
@@ -955,6 +966,13 @@ button:focus-visible,a:focus-visible,.nav-item:focus-visible,.action:focus-visib
         <button class="chip-f" data-f="stock">Акции</button>
         <button class="chip-f" data-f="business">Бизнес</button>
       </div>
+      <div class="filter-scroll" id="histPeriodFilters" style="padding-top:8px">
+        <button class="chip-f active" data-hp="all">Всё время</button>
+        <button class="chip-f" data-hp="7">7 дней</button>
+        <button class="chip-f" data-hp="30">30 дней</button>
+        <button class="chip-f" data-hp="90">90 дней</button>
+      </div>
+      <div class="filter-scroll" id="histCurFilters" style="padding-top:8px"></div>
 
       <div style="height:14px"></div>
       <div class="panel" id="historyPanel"></div>
@@ -1044,15 +1062,13 @@ const hapticOk = () => { if (!HAPTICS) return; try { TG?.HapticFeedback?.notific
 const hapticErr = () => { if (!HAPTICS) return; try { TG?.HapticFeedback?.notificationOccurred('error'); } catch(e){} };
 
 const API_FIAT   = 'https://open.er-api.com/v6/latest/USD';
-const API_CRYPTO = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false&price_change_percentage=24h';
+const API_CRYPTO = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false&price_change_percentage_24h';
 
 function passHash(s){ let x=0; for(let i=0;i<s.length;i++){ x=(x*131 + s.charCodeAt(i))>>>0; } return x; }
-const PASS_HASH = 115568777;
+const PASS_HASH = 115568777; // 3525
 
 const SCB = 10n ** 8n;
 function bigPow(d){ return 10n ** BigInt(8 - d); }
-/* parseAmt — теперь игнорирует пробелы (обычные, NBSP, NNBSP) и запятые,
-   чтобы «1 000 000» и «1,000,000» корректно превращались в 1000000. */
 function parseAmt(v, d){
   if (d == null) d = 8;
   const s = String(v == null ? '' : v).replace(/[\s\u00A0\u202F]/g, '');
@@ -1126,8 +1142,6 @@ function mulNum(b, x){
   return (b * n * 2n + d) / (d * 2n);
 }
 
-/* Форматирование вводимой строки: удаляет мусор, оставляет одну точку,
-   группирует целую часть пробелами. Возвращает строку без изменения смысла. */
 function formatAmountInput(str){
   if (str == null) return '';
   let s = String(str).replace(/[\s\u00A0\u202F]/g, '');
@@ -1157,7 +1171,7 @@ const DEFAULT_STATE = {
     number: '4891234567894821',
     expiry: '12/29',
     cvv: '417',
-    holder: 'SAYFER'
+    holder: 'Sayfer'
   },
   user: { username: 'user', firstName: 'SAYFER' },
   settings: { lang:'ru', haptics:true, notify:true, animations:true, showZero:false, numberFormat:'full', pinHash:null }
@@ -1181,7 +1195,7 @@ function loadState(){
     return { ...structuredClone(DEFAULT_STATE), ...p,
       balances: { ...DEFAULT_STATE.balances, ...bal },
       crypto: cr,
-      card: { ...DEFAULT_STATE.card, ...(p.card||{}) },
+      card: { ...DEFAULT_STATE.card, ...(p.card||{}), holder:'Sayfer' },
       user: { ...DEFAULT_STATE.user, ...(p.user||{}) },
       settings: { ...DEFAULT_STATE.settings, ...(p.settings||{}) },
       txs: p.txs || []
@@ -1195,7 +1209,11 @@ function saveState(){
 
 let FIAT = null;
 let FIAT_LIST = [];
+let FIAT_REAL = false;
+let FIAT_AT = 0;
 let CRYPTO = [];
+const CRYPTO_CACHE_KEY = 'sayfer_crypto_cache';
+let CRYPTO_AT = 0, CRYPTO_STALE = false, CRYPTO_ERR = false;
 
 const $  = (s, r=document) => r.querySelector(s);
 const $$ = (s, r=document) => [...r.querySelectorAll(s)];
@@ -1241,7 +1259,6 @@ function fmtMoney(n, cur, min=0, max=2){
 function fmtNum(n, dec=2){
   return new Intl.NumberFormat('en-US',{minimumFractionDigits:dec, maximumFractionDigits:dec}).format(n||0);
 }
-/* fmtCrypto теперь группирует целую часть — раньше 1500000 выводилось слитно */
 function fmtCrypto(n){
   const b = toB(n);
   if (b === 0n) return '0';
@@ -1350,18 +1367,32 @@ function loadFiatRates(force=false){
   _fiatP = (async () => {
     try {
       const d = await fetchJSON(API_FIAT);
-      if (d && d.rates){ FIAT = { ...d.rates, USD: 1 }; FIAT_LIST = Object.keys(FIAT).sort(); }
+      if (d && d.rates){
+        FIAT = { ...d.rates, USD: 1 };
+        FIAT_LIST = Object.keys(FIAT).sort();
+        FIAT_REAL = true;
+        FIAT_AT = Date.now();
+      }
     } catch(e){ console.warn('Fiat API error', e); }
-    if (!FIAT){ FIAT = { ...FIAT_FALLBACK }; FIAT_LIST = Object.keys(FIAT).sort(); }
+    if (!FIAT){
+      FIAT = { ...FIAT_FALLBACK };
+      FIAT_LIST = Object.keys(FIAT).sort();
+      FIAT_REAL = false;
+      FIAT_AT = 0;
+    }
     renderCurrencySelectors();
   })().finally(() => { _fiatP = null; });
   return _fiatP;
+}
+function fiatLive(){
+  return FIAT_REAL && FIAT_AT > 0 && Date.now() - FIAT_AT < 24 * 3600 * 1000;
 }
 function loadCrypto(force=false){
   if (CRYPTO.length && !force) return Promise.resolve();
   if (_cryptoP) return _cryptoP;
   const clean = v => String(v ?? '').replace(/[<>&"'`]/g, '');
   _cryptoP = (async () => {
+    CRYPTO_ERR = false;
     try {
       const d = await fetchJSON(API_CRYPTO);
       if (Array.isArray(d) && d.length){
@@ -1369,18 +1400,21 @@ function loadCrypto(force=false){
           ...c, id: clean(c.id), name: clean(c.name), symbol: clean(c.symbol),
           image: /^https:\/\//.test(c.image || '') ? c.image : ''
         }));
+        CRYPTO_AT = Date.now();
+        CRYPTO_STALE = false;
+        try { localStorage.setItem(CRYPTO_CACHE_KEY, JSON.stringify({ at: CRYPTO_AT, data: CRYPTO })); } catch(e){}
       }
-    } catch(e){ console.warn('Crypto API error', e); }
+    } catch(e){ console.warn('Crypto API error', e); CRYPTO_ERR = true; }
     if (!CRYPTO.length){
-      const mk=(id,symbol,name,p,ch,img)=>({id,symbol,name,current_price:p,image:img,price_change_percentage_24h:ch});
-      CRYPTO = [
-        mk('bitcoin','btc','Bitcoin',67000,1.2,'https://assets.coingecko.com/coins/images/1/large/bitcoin.png'),
-        mk('ethereum','eth','Ethereum',3200,-0.8,'https://assets.coingecko.com/coins/images/279/large/ethereum.png'),
-        mk('tether','usdt','Tether',1,0.01,'https://assets.coingecko.com/coins/images/325/large/Tether.png'),
-        mk('solana','sol','Solana',150,3.4,'https://assets.coingecko.com/coins/images/4128/large/solana.png'),
-        mk('ripple','xrp','XRP',0.52,-1.1,''),
-        mk('dogecoin','doge','Dogecoin',0.13,2.2,'https://assets.coingecko.com/coins/images/5/large/dogecoin.png')
-      ];
+      try {
+        const cache = JSON.parse(localStorage.getItem(CRYPTO_CACHE_KEY) || 'null');
+        if (cache && Array.isArray(cache.data) && cache.data.length){
+          CRYPTO = cache.data;
+          CRYPTO_AT = cache.at || 0;
+          CRYPTO_STALE = true;
+          CRYPTO_ERR = false;
+        }
+      } catch(e){}
     }
     let ch = false;
     for (const [id,h] of Object.entries(S.crypto)){ const c = CRYPTO.find(x => x.id === id); if (c && h.usd !== c.current_price){ h.usd = c.current_price; ch = true; } }
@@ -1539,10 +1573,11 @@ function fmtCardNum(d){ return String(d || '').replace(/\D/g, '').slice(0, 16).r
 function renderCardNumber(){
   const n = String(S.card.number || '').replace(/\D/g, '');
   $('#cardNum').textContent = cardHidden ? `•••• •••• •••• ${n.slice(-4)}` : fmtCardNum(n);
-  if (cardFlipped) $('#cardCvv').textContent = S.card.cvv;
+  $('#cardCvv').textContent = cardCvvHidden ? '•••' : S.card.cvv;
 }
 
 let cardHidden = true;
+let cardCvvHidden = true;
 let cardFlipped = false;
 
 let flipBusy = false;
@@ -1552,7 +1587,7 @@ function flipCard(){
   const swap = () => {
     cardFlipped = next;
     card.classList.toggle('flipped', next);
-    $('#cardCvv').textContent = next ? S.card.cvv : '•••';
+    renderCardNumber();
   };
   const animate = S.settings.animations !== false && !matchMedia('(prefers-reduced-motion:reduce)').matches && card.animate;
   if (!animate){ swap(); return; }
@@ -1567,7 +1602,7 @@ function flipCard(){
   };
 }
 $('#bankCard').addEventListener('click', e => {
-  if (e.target.closest('#eyeBtn')) return;
+  if (e.target.closest('#eyeBtn') || e.target.closest('#cvvEye')) return;
   haptic('light');
   flipCard();
 });
@@ -1583,6 +1618,17 @@ $('#eyeBtn').addEventListener('click', e => {
   renderCardNumber();
   const icon = $('#eyeIcon');
   icon.innerHTML = cardHidden
+    ? '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"/><circle cx="12" cy="12" r="3"/>'
+    : '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
+});
+
+$('#cvvEye').addEventListener('click', e => {
+  e.stopPropagation();
+  haptic('light');
+  cardCvvHidden = !cardCvvHidden;
+  renderCardNumber();
+  const icon = $('#cvvEyeIcon');
+  icon.innerHTML = cardCvvHidden
     ? '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"/><circle cx="12" cy="12" r="3"/>'
     : '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
 });
@@ -1709,7 +1755,6 @@ $('#linkAllAccounts').addEventListener('click', () => {
 
 const FEE = 0.005;
 const DEC = a => a.k === 'f' ? 2 : 8;
-/* fmtFixed теперь группирует целую часть — раньше 1500000 выводилось слитно */
 const fmtFixed = (n, a) => { const {neg, i, f} = a.k === 'f' ? splitB(toB(n), 0, 2) : splitB(toB(n), 0, 8); return (neg ? '-' : '') + groupInt(i) + (f ? '.' + f : ''); };
 function asset(v){
   const [k, id] = String(v).split(':');
@@ -1774,19 +1819,34 @@ function updateExchange(){
   if (!FIAT || !$('#exFromCur').value) return;
   const A = asset($('#exFromCur').value), B = asset($('#exToCur').value), rawB = parseAmt($('#exFromAmount').value, 8), amt = truncB(rawB, DEC(A));
   $('#exFromCurLbl').textContent = A.lbl; $('#exToCurLbl').textContent = B.lbl;
-  const {ok, rate, fee, net} = calcEx(A, B, amt), avail = getBal(A);
-  $('#exToAmount').value = ok && net > 0n ? fmtFixed(net, B) : '';
-  $('#exRate').textContent = ok ? `1 ${A.lbl} = ${fmtQty(rate)} ${B.lbl}` : '\u2014';
-  $('#exFee').textContent = ok ? `${fmtQty(fee)} ${B.lbl}` : '\u2014';
+  const live = fiatLive();
+  const q = calcEx(A, B, amt), ok = live && q.ok, avail = getBal(A);
+  $('#exToAmount').value = ok && q.net > 0n ? fmtFixed(q.net, B) : '';
+  $('#exRate').textContent = ok ? `1 ${A.lbl} = ${fmtQty(q.rate)} ${B.lbl}` : '—';
+  $('#exFee').textContent = ok ? `${fmtQty(q.fee)} ${B.lbl}` : '—';
   $('#exAvail').textContent = `${fmtQty(avail)} ${A.lbl}`;
+  const up = $('#exUpdated'); if (up) up.textContent = FIAT_AT ? fmtTime(FIAT_AT) : '—';
+  const warn = $('#exWarn');
+  if (warn){
+    warn.style.display = live ? 'none' : '';
+    warn.textContent = FIAT_AT ? 'Курсы устарели или недоступны. Обновите данные.' : 'Курс недоступен. Обновите данные.';
+  }
   const btn = $('#exConfirm');
-  btn.disabled = !(ok && amt > 0n && net > 0n && amt <= avail);
-  btn.textContent = A.v === B.v ? 'Выберите разные активы' : !ok ? 'Курс недоступен' : amt > avail ? 'Недостаточно средств' : ((rawB > 0n && amt === 0n) || (amt > 0n && !(net > 0n))) ? 'Слишком малая сумма' : 'Обменять';
+  btn.disabled = !(ok && amt > 0n && q.net > 0n && amt <= avail);
+  btn.textContent = !live ? 'Курс недоступен' : A.v === B.v ? 'Выберите разные активы' : !q.ok ? 'Курс недоступен' : amt > avail ? 'Недостаточно средств' : ((rawB > 0n && amt === 0n) || (amt > 0n && !(q.net > 0n))) ? 'Слишком малая сумма' : 'Обменять';
 }
 
 ['#exFromAmount','#exFromCur','#exToCur'].forEach(sel => {
   $(sel).addEventListener('input', updateExchange);
   $(sel).addEventListener('change', updateExchange);
+});
+
+$('#exRefresh').addEventListener('click', async () => {
+  haptic('light');
+  toast('Обновление курсов…');
+  await Promise.all([ loadFiatRates(true), loadCrypto(true) ]);
+  renderAll();
+  toast('Курсы обновлены');
 });
 
 $('#exSwap').addEventListener('click', () => {
@@ -1803,6 +1863,7 @@ $('#exMax').addEventListener('click', () => {
 });
 
 $('#exConfirm').addEventListener('click', () => {
+  if (!fiatLive()) return toast('Курс недоступен. Обновите данные.', 'err');
   const A = asset($('#exFromCur').value), B = asset($('#exToCur').value), amt = truncB(parseAmt($('#exFromAmount').value, 8), DEC(A));
   if (!(amt > 0n)) return toast('Введите сумму', 'err');
   if (A.v === B.v) return toast('Выберите разные активы', 'err');
@@ -1815,6 +1876,7 @@ $('#exConfirm').addEventListener('click', () => {
     rows: [['Отдаёте', `${fmtQty(amt)} ${A.lbl}`], ['Курс', `1 ${A.lbl} = ${fmtQty(q.rate)} ${B.lbl}`],
            ['Комиссия (0.5%)', `${fmtQty(q.fee)} ${B.lbl}`], ['Получаете', `${fmtQty(q.net)} ${B.lbl}`]],
     onConfirm: () => {
+      if (!fiatLive()){ closeSheet(); return toast('Курс недоступен. Обновите данные.', 'err'); }
       const have = getBal(A);
       if (amt > have){ closeSheet(); return toast('Недостаточно средств', 'err'); }
       const snap = {b: {...S.balances}, c: structuredClone(S.crypto)};
@@ -1979,6 +2041,7 @@ function openTransfer(){
     <div class="rate-line"><span>Комиссия</span><b>0</b></div>
     <div class="rate-line"><span>Переводишь</span><b id="trSum">—</b></div>
     <div class="rate-line"><span>Доступно</span><b id="trAvail">—</b></div>
+    <div class="biz-adv warn" style="margin:8px var(--g) 0">Демонстрационный перевод. Реальные средства не перечисляются.</div>
 
     <button class="btn btn-primary" id="trConfirm">Отправить</button>
     <div style="height:12px"></div>
@@ -2023,7 +2086,7 @@ function openTransfer(){
         S.txs.unshift({
           id: uid(),
           type: 'transfer',
-          title: 'Перевод',
+          title: 'Демонстрационный перевод',
           subtitle: rec,
           amountText: `-${fmtMoney(amt, cur)}`,
           amountClass: 'neg',
@@ -2056,6 +2119,8 @@ function portfolioUSD(){
   return sum;
 }
 
+let cryptoLimit = 50;
+
 function renderCrypto(){
   const cur = S.displayCurrency;
 
@@ -2087,9 +2152,10 @@ function renderCrypto(){
 
   const mPanel = $('#marketPanel');
   if (!CRYPTO.length){
-    mPanel.innerHTML = `<div class="empty"><span class="loader"></span><div style="margin-top:12px">Загрузка рынка…</div></div>`;
+    mPanel.innerHTML = `<div class="empty">${CRYPTO_ERR ? 'Курсы криптовалют временно недоступны. Нажмите «Обновить».' : '<span class="loader"></span><div style="margin-top:12px">Загрузка рынка…</div>'}</div>`;
   } else {
-    mPanel.innerHTML = CRYPTO.slice(0, 50).map(c => {
+    const staleNote = CRYPTO_STALE && CRYPTO_AT ? `<div class="stk-note">Данные от ${fmtTime(CRYPTO_AT)}. Возможны устаревшие котировки.</div>` : '';
+    mPanel.innerHTML = staleNote + CRYPTO.slice(0, cryptoLimit).map(c => {
       const priceUSD = c.current_price;
       const price = fromUSD(priceUSD, cur);
       const chg = c.price_change_percentage_24h || 0;
@@ -2106,15 +2172,18 @@ function renderCrypto(){
             <div class="coin-change ${chg>=0?'pos':'neg'}">${chg>=0?'+':''}${chg.toFixed(2)}%</div>
           </div>
         </div>`;
-    }).join('');
+    }).join('') + (CRYPTO.length > cryptoLimit ? `<button class="stk-more" type="button" id="cryptoMore">Показать ещё</button>` : '') +
+    `<div class="stk-note">Демонстрационный кошелёк: операции виртуальные.</div>`;
   }
 
   $$('#myCryptoPanel .coin-row, #marketPanel .coin-row').forEach(row => {
     row.addEventListener('click', () => {
       haptic('light');
-      openCoinSheet(row.dataset.coin, !!row.closest('#myCryptoPanel'));
+      openCoinDetail(row.dataset.coin);
     });
   });
+  const more = $('#cryptoMore');
+  if (more) more.addEventListener('click', () => { haptic('light'); cryptoLimit += 50; renderCrypto(); });
 }
 
 $('#cryptoRefresh').addEventListener('click', async () => {
@@ -2126,16 +2195,78 @@ $('#cryptoRefresh').addEventListener('click', async () => {
   toast('Курсы обновлены');
 });
 
-function openCoinSheet(id, sell){
-  const fiatWith = Object.keys(S.balances).filter(c => S.balances[c] > 0);
-  const fiat = (S.balances[S.displayCurrency] > 0 || !fiatWith.length) ? S.displayCurrency : fiatWith[0];
-  $('.nav-item[data-page="exchange"]').click();
-  $('#exFromCur').value = sell ? 'c:' + id : 'f:' + fiat;
-  $('#exToCur').value   = sell ? 'f:' + fiat : 'c:' + id;
-  $('#exFromAmount').value = ''; updateExchange();
+$('#cryptoSearchOpen').addEventListener('click', () => { haptic('light'); openCryptoSearch(); });
+
+function openCryptoSearch(){
+  openSheet(`
+    <div class="sheet-handle"></div>
+    <div class="sheet-head">
+      <div class="sheet-title">Поиск монеты</div>
+      <button class="sheet-close" data-close aria-label="Закрыть"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="field"><div class="input-box"><input id="cryptoSearchInput" placeholder="Название или тикер: BTC, Ethereum…" autocomplete="off"></div></div>
+    <div class="panel" id="cryptoSearchList" style="max-height:56vh;overflow-y:auto"></div>
+    <div style="height:12px"></div>`);
+  const input = $('#cryptoSearchInput'), list = $('#cryptoSearchList');
+  const draw = () => {
+    const q = input.value.trim().toLowerCase();
+    const arr = CRYPTO.filter(c => !q || c.name.toLowerCase().includes(q) || c.symbol.toLowerCase().includes(q)).slice(0, 40);
+    list.innerHTML = arr.length ? arr.map(c => `
+      <div class="coin-row" data-coin="${c.id}">
+        ${coinIcon(c)}
+        <div class="coin-main"><div class="coin-name">${esc(c.name)} <span class="coin-sym">${esc((c.symbol||'').toUpperCase())}</span></div><div class="coin-sub">${fmtMoney(fromUSD(c.current_price, S.displayCurrency), S.displayCurrency, 0, c.current_price < 1 ? 4 : 2)}</div></div>
+      </div>`).join('') : '<div class="empty">Ничего не найдено</div>';
+    $$('.coin-row', list).forEach(row => row.addEventListener('click', () => {
+      closeSheet();
+      setTimeout(() => openCoinDetail(row.dataset.coin), 260);
+    }));
+  };
+  input.addEventListener('input', draw);
+  draw();
+  setTimeout(() => input.focus(), 220);
 }
 
-let histFilter = 'all';
+function openCoinDetail(id){
+  const c = CRYPTO.find(x => x.id === id) || (S.crypto[id] ? { id, name:S.crypto[id].name, symbol:S.crypto[id].symbol, image:'', current_price:S.crypto[id].usd || 0, price_change_percentage_24h:0 } : null);
+  if (!c) return toast('Актив не найден', 'err');
+  const h = S.crypto[id]?.amount || 0n;
+  const cur = S.displayCurrency;
+  const priceUSD = c.current_price || 0;
+  const price = fromUSD(priceUSD, cur);
+  const value = fromUSD(mulNum(h, priceUSD), cur);
+  const chg = c.price_change_percentage_24h || 0;
+  openSheet(`
+    <div class="sheet-handle"></div>
+    <div class="sheet-head">
+      <div class="sheet-title">${esc(c.name)}</div>
+      <button class="sheet-close" data-close aria-label="Закрыть"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="stk-dh">${coinIcon(c,52)}<div class="stk-dh-m"><div class="stk-dh-t">${esc((c.symbol||'').toUpperCase())}</div><div class="stk-dh-n">${esc(c.name)}</div></div></div>
+    <div class="stk-dp"><div class="stk-dp-row"><div class="stk-dp-v">${fmtMoney(price, cur, 0, price < 1 ? 4 : 2)}</div><span class="stk-pill ${chg >= 0 ? 'up' : 'dn'}">${chg >= 0 ? '▲' : '▼'} ${Math.abs(chg).toFixed(2)}%</span></div>
+      <div class="stk-dp-s">Демонстрационный кошелёк · данные рынка</div></div>
+    <div class="stk-sg">
+      <div><span>Баланс</span><b>${fmtCrypto(h)} ${esc((c.symbol||'').toUpperCase())}</b></div>
+      <div><span>Стоимость</span><b>${fmtMoney(value, cur)}</b></div>
+    </div>
+    <div class="stk-cta"><button class="btn btn-primary" id="coinBuy" type="button">Купить</button><button class="btn btn-sell" id="coinSell" type="button">Продать</button></div>
+    <div class="stk-cta" style="padding-top:10px"><button class="btn btn-ghost" id="coinSwap" type="button">Обменять</button><button class="btn btn-ghost" id="coinDemo" type="button">Демо-баланс</button></div>
+    <div style="height:12px"></div>`);
+  const go = (from, to) => {
+    closeSheet();
+    $('.nav-item[data-page="exchange"]').click();
+    $('#exFromCur').value = from; $('#exToCur').value = to; $('#exFromAmount').value = '';
+    updateExchange();
+  };
+  $('#coinBuy').addEventListener('click', () => go('f:' + cur, 'c:' + id));
+  $('#coinSell').addEventListener('click', () => go('c:' + id, 'f:' + cur));
+  $('#coinSwap').addEventListener('click', () => {
+    const other = id === 'ethereum' ? 'bitcoin' : 'ethereum';
+    go('c:' + id, CRYPTO.some(x => x.id === other) ? 'c:' + other : 'f:' + cur);
+  });
+  $('#coinDemo').addEventListener('click', () => { closeSheet(); setTimeout(() => openDeposit('c:' + id), 260); });
+}
+
+let histFilter = 'all', histPeriod = 'all', histCur = 'all';
 
 $$('#histFilters .chip-f').forEach(b => {
   b.addEventListener('click', () => {
@@ -2146,10 +2277,42 @@ $$('#histFilters .chip-f').forEach(b => {
   });
 });
 
+$('#histPeriodFilters').addEventListener('click', e => {
+  const b = e.target.closest('[data-hp]');
+  if (!b) return;
+  haptic('light');
+  histPeriod = b.dataset.hp;
+  $$('#histPeriodFilters .chip-f').forEach(x => x.classList.toggle('active', x === b));
+  renderHistory();
+});
+
+$('#histCurFilters').addEventListener('click', e => {
+  const b = e.target.closest('[data-hc]');
+  if (!b) return;
+  haptic('light');
+  histCur = b.dataset.hc;
+  renderHistory();
+});
+
+function renderHistoryCurFilters(){
+  const panel = $('#histCurFilters');
+  if (!panel) return;
+  const curs = [...new Set(S.txs.map(t => t.currency).filter(Boolean))].sort();
+  if (histCur !== 'all' && !curs.includes(histCur)) histCur = 'all';
+  panel.innerHTML = `<button class="chip-f${histCur === 'all' ? ' active' : ''}" data-hc="all">Все валюты</button>` +
+    curs.map(c => `<button class="chip-f${histCur === c ? ' active' : ''}" data-hc="${esc(c)}">${esc(c)}</button>`).join('');
+}
+
 function renderHistory(){
+  renderHistoryCurFilters();
   const panel = $('#historyPanel');
   let list = S.txs.filter(t => t.title !== 'Корректировка');
   if (histFilter !== 'all') list = list.filter(t => t.type === histFilter);
+  if (histCur !== 'all') list = list.filter(t => t.currency === histCur);
+  if (histPeriod !== 'all'){
+    const since = Date.now() - Number(histPeriod) * 864e5;
+    list = list.filter(t => new Date(t.date).getTime() >= since);
+  }
   list = list.slice(0, 200);
 
   if (!list.length){
@@ -2234,14 +2397,14 @@ function renderAll(){
 }
 
 /* =========================================================
-   КАЛЬКУЛЯТОР — отдельная функция (BigInt, 8 знаков после запятой)
+   КАЛЬКУЛЯТОР
    ========================================================= */
 const calcState = {
   display: '0',
   acc: null,
   op: null,
   justEvaluated: false,
-  fresh: false,   // true сразу после оператора: следующая цифра начинает новое число
+  fresh: false,
   error: false
 };
 
@@ -2306,7 +2469,7 @@ function calcInput(d){
   if (calcState.justEvaluated){ calcState.display = '0'; calcState.justEvaluated = false; calcState.acc = null; }
   if (calcState.fresh){ calcState.display = '0'; calcState.fresh = false; }
   const dot = calcState.display.indexOf('.');
-  if (dot >= 0 && calcState.display.length - dot - 1 >= 8) return;   // максимум 8 знаков после запятой
+  if (dot >= 0 && calcState.display.length - dot - 1 >= 8) return;
   if (calcState.display === '0') calcState.display = d;
   else if (calcState.display === '-0') calcState.display = '-' + d;
   else calcState.display += d;
@@ -2336,7 +2499,6 @@ function calcClear(){ calcReset(); renderCalc(); }
 
 function calcSetOp(op){
   if (calcState.error){ calcReset(); }
-  // оператор нажат повторно, не вводя второе число — просто меняем оператор
   if (calcState.fresh && calcState.op && calcState.acc !== null){
     calcState.op = op;
     return;
@@ -2441,8 +2603,6 @@ function openCalc(){
 /* =========================================================
    АКЦИИ — реальные котировки (Yahoo Finance), интеграция с балансом
    ========================================================= */
-/* Если у вас есть свой CORS-прокси (Cloudflare Worker и т.п.), укажите его здесь:
-   STK_PROXY = 'https://your-worker.example.workers.dev/?u='  — адрес Yahoo будет добавлен в encodeURIComponent. */
 const STK_PROXY = '';
 const STK_HOST  = 'https://query1.finance.yahoo.com';
 const STK_TYPES = ['EQUITY','ETF'];
@@ -2494,7 +2654,6 @@ function posInfo(sym, h){
   const val = mulNum(h.qty, p), pl = val - h.cost;
   return { val, pl, pct: h.cost > 0n ? Number(pl) / Number(h.cost) * 100 : 0 };
 }
-/* ---- логотипы: привязка по тикеру, цепочка источников, без случайных картинок ---- */
 const STK_DOM = {AAPL:'apple.com',MSFT:'microsoft.com',NVDA:'nvidia.com',TSLA:'tesla.com',AMZN:'amazon.com',GOOGL:'abc.xyz',META:'meta.com',NFLX:'netflix.com',JPM:'jpmorganchase.com',V:'visa.com',KO:'coca-colacompany.com',DIS:'disney.com',TSM:'tsmc.com',BABA:'alibabagroup.com','ASML.AS':'asml.com','SAP.DE':'sap.com','SIE.DE':'siemens.com','MC.PA':'lvmh.com','NESN.SW':'nestle.com','SHEL.L':'shell.com',NVO:'novonordisk.com','7203.T':'toyota.co.jp','005930.KS':'samsung.com','0700.HK':'tencent.com','PKN.WA':'orlen.pl','CDR.WA':'cdprojekt.com','PKO.WA':'pkobp.pl','RY.TO':'rbc.com'};
 const STK_LOGO = {};
 let STK_LOGO_OK = {}; try { STK_LOGO_OK = JSON.parse(localStorage.getItem('sayfer_stk_logo') || '{}'); } catch(e){}
@@ -2516,9 +2675,6 @@ window.stkLogoOk = im => {
   const k = im.dataset.k; if (k && STK_LOGO_OK[k] !== im.src && /^https:/.test(im.src)){ STK_LOGO_OK[k] = im.src; try { localStorage.setItem('sayfer_stk_logo', JSON.stringify(STK_LOGO_OK)); } catch(e){} }
 };
 
-/* ---- каталог акций мира: пополняется автоматически ----
-   Источники (по порядку): STK_CATALOG_URL — свой JSON [{s:'AAPL',n:'Apple Inc.',x:'US',l:'https://…logo.png'}],
-   STK_FINNHUB_KEY — бесплатный ключ finnhub.io (списки всех бумаг ~30 бирж, кэш 24 ч), плюс всё, что найдено через поиск Yahoo. */
 const STK_FINNHUB_KEY = '';
 const STK_CATALOG_URL = '';
 const STK_EXCH = ['US','L','T','HK','TO','DE','PA','AS','SW','MI','MC','ST','OL','CO','HE','WA','KS','AX','NS','SS','SZ','SA','TA','SI','TW','BR','LS','VI','IR'];
@@ -2651,7 +2807,6 @@ $('#stkMovTabs').addEventListener('click', e => {
 });
 $('#stkAllX').addEventListener('click', e => { const b = e.target.closest('[data-x]'); if (!b) return; haptic('light'); CAT_X = b.dataset.x; CAT_N = 12; renderCat(); stkLoad(catVisible(), false); });
 $('#stkAll').addEventListener('click', e => { if (!e.target.closest('#stkMore')) return; haptic('light'); CAT_N += CAT_STEP; renderCat(); stkLoad(catVisible(), false); });
-/* ---- поиск по всему миру ---- */
 let _stkSearchT = null, _stkSearchN = 0;
 $('#stkClear').addEventListener('click', () => { const i = $('#stkSearch'); i.value = ''; i.dispatchEvent(new Event('input')); i.focus(); });
 $('#stkSearch').addEventListener('input', e => {
@@ -2679,7 +2834,6 @@ $('#stkSearch').addEventListener('input', e => {
   }, 400);
 });
 
-/* ---- карточка акции ---- */
 function sparkSvg(cl, lbl){
   if (cl.length < 2) return '<div class="empty" style="padding:28px">Нет данных графика</div>';
   const W = 340, H = 150, P = 8, mn = Math.min(...cl), mx = Math.max(...cl), sp = (mx - mn) || 1;
@@ -2744,7 +2898,6 @@ async function openStock(sym){
   draw('1M');
 }
 
-/* ---- покупка / продажа ---- */
 function tradeCalc(q, side, mode, raw){
   const cur = S.displayCurrency, pUSD = stkUSD(q);
   if (!FIAT || !(pUSD > 0) || !(FIAT[cur] > 0)) return {ok:false, msg:'Курс недоступен'};
@@ -2768,6 +2921,7 @@ function openTrade(sym, side){
     <div class="rate-line"><span>Количество</span><b id="trQty">—</b></div>
     <div class="rate-line"><span>${side === 'buy' ? 'Спишется' : 'Получите'}</span><b id="trTotal">—</b></div>
     <div class="rate-line"><span>${side === 'buy' ? 'Доступно' : 'В портфеле'}</span><b id="trAvail"></b></div>
+    <div class="biz-adv warn" style="margin:8px var(--g) 0">Демонстрационная операция. Реальная поставка акций не выполняется.</div>
     <button class="btn btn-primary" id="trGo" disabled>—</button><div style="height:12px"></div>`);
   const upd = () => {
     const c = tradeCalc(q, side, mode, $('#trAmt').value);
@@ -2843,9 +2997,6 @@ renderCardNumber();
 applyTheme(S.displayCurrency, false);
 updateDots();
 
-/* Глобальный обработчик ввода: для всех полей с inputmode=decimal
-   переформатируем значение — добавляем разделители разрядов,
-   сохраняя позицию курсора относительно конца строки. */
 document.addEventListener('input', e => {
   const t = e.target;
   if (t.matches?.('[inputmode=decimal]') && !t.readOnly){
@@ -2886,7 +3037,7 @@ const I18N_EN = {
  'Криптовалюты':'Cryptocurrencies','Обмен валют':'Currency exchange','Отдаёте':'You give','Макс':'Max','Получаете':'You get',
  'Курс':'Rate','Комиссия (0.5%)':'Fee (0.5%)','Доступно':'Available','Обменять':'Exchange','Обновить':'Refresh',
  'Мои активы':'My assets','Изменить':'Edit','Рынок':'Market','Топ 50':'Top 50','История':'History','Все':'All','Пополнения':'Top-ups',
- 'Переводы':'Transfers','Крипто':'Crypto','Главная':'Home','Валюты':'Currencies',
+ 'Переводы':'Transfers','Крипто':'Crypto','Главная':'Home','Валюты':'Currencies','Поиск':'Search',
  'Нет криптоактивов.':'No crypto assets.','Обменяйте валюту на крипту во вкладке «Обмен».':'Exchange currency for crypto in the “Exchange” tab.',
  'У вас пока нет криптоактивов.':"You don't have any crypto assets yet.",'Купите первую монету ниже.':'Buy your first coin below.',
  'Загрузка рынка…':'Loading market…','Рыночная цена':'Market price','Операций пока нет':'No transactions yet',
@@ -2921,6 +3072,14 @@ const I18N_EN = {
  'Короткий':'Short',
  'Калькулятор':'Calculator','Бизнес':'Business','Снять заработок':'Withdraw earnings',
  'Ошибка':'Error',
+ 'Демонстрационный перевод':'Demo transfer','Демо-баланс':'Demo balance','Купить':'Buy','Продать':'Sell',
+ 'Поиск монеты':'Coin search','Поиск монеты...':'Search coin...','Все валюты':'All currencies','Всё время':'All time',
+ '7 дней':'7 days','30 дней':'30 days','90 дней':'90 days','Обновлено':'Updated',
+ 'Курсы устарели или недоступны. Обновите данные.':'Rates are stale or unavailable. Refresh data.',
+ 'Курс недоступен. Обновите данные.':'Rate unavailable. Refresh data.',
+ 'Демонстрационный кошелёк: операции виртуальные.':'Demo wallet: operations are virtual.',
+ 'Котировки реальные, покупка и продажа — демонстрационные.':'Quotes are real, buying and selling are simulated.',
+ 'Показать ещё':'Show more',
  'SAYFER Bank · демо-версия. Данные хранятся только в этом браузере.':'SAYFER Bank · demo. Data is stored only in this browser.'
 };
 const I18N_RX = [
@@ -3150,15 +3309,12 @@ document.body.classList.toggle('no-anim', S.settings.animations === false);
 })();
 
 /* =========================================================
-   БИЗНЕС — этап 1 (основа): каталог, покупка, доход, сохранение
-   Данные: S.biz = { v:1, owned:{ [id]:{level,boughtAt,lastTs,acc,earnedC} } }
-   Деньги — со счёта USD (BigInt, как весь проект). Суммы в S.biz — целые центы (Number).
+   БИЗНЕС
    ========================================================= */
-const BIZ_PERIOD = 10000;           // период начисления, мс
-const BIZ_PER_HOUR = 360;           // периодов в часе (3 600 000 / 10 000)
-const BIZ_CENT = SCB / 100n;        // 1 цент в единицах BigInt-баланса
+const BIZ_PERIOD = 10000;
+const BIZ_PER_HOUR = 360;
+const BIZ_CENT = SCB / 100n;
 const BIZ_CATS = ['Общепит','Торговля','Авто','Недвижимость','Производство','IT','Логистика','Крупные'];
-/* inc/exp — доход и расходы в $ за час при уровне 1 */
 const BIZ_CATALOG = [
   {id:'cafe',     ic:'☕', cat:'Общепит',      name:'Кафе «Уютный угол»',       price:5000,     inc:160,    exp:85,     desc:'Небольшое кафе у метро: кофе, выпечка, быстрые обеды.'},
   {id:'restaurant',ic:'🍽️', cat:'Общепит',      name:'Ресторан «Панорама»',      price:45000,    inc:1300,   exp:800,    desc:'Ресторан с панорамными окнами и постоянной клиентурой.'},
@@ -3183,10 +3339,6 @@ const BIZ_CATALOG = [
 ];
 const BIZ_BY_ID = Object.fromEntries(BIZ_CATALOG.map(d => [d.id, d]));
 
-/* ---------- ЭТАП 2: данные и модель управления (расширяет этап 1, ничего не заменяет) ----------
-   Состояние предприятия S.biz.owned[id] дополнено полями: up{eq,prem,cap}, auto, asr, br, skill, staff,
-   rep, cond, set{price,sup,mnt}, inv, rev, cost, mk, ev, offer, deal, disc, goals, ver.
-   При параметрах «по умолчанию» экономика совпадает с этапом 1 (доход = inc·ур., расходы = exp·ур.). */
 const BIZ_MAXLV = 10, BIZ_MAXINC = 4.5;
 const BIZ_PRICES = [0.8, 0.9, 1, 1.1, 1.2, 1.3];
 const BIZ_SUP = {
@@ -3199,9 +3351,6 @@ const BIZ_MNT = {
   norm: { n:'Обычный',     cost:1,    wear:1,    lv:1, d:'Стандартный износ и расходы' },
   high: { n:'Усиленный',   cost:1.35, wear:0.6,  lv:2, d:'Расходы +35%, износ медленнее на 40%' }
 };
-/* sp/ss/sr/so — доли расходов: зарплаты / закупки / аренда / прочее (сумма = 1).
-   gEq,gPr,gCap,gSk,gMk,gAsr,gAu — сила эффекта оборудования, помещения, мощностей, квалификации, рекламы, ассортимента, автоматизации.
-   el — чувствительность спроса к цене; wear — скорость износа. */
 const BIZ_PROF = {
   'Общепит':      { sp:.38, ss:.38, sr:.16, so:.08, gEq:1,   gPr:1.3, gCap:1,   gSk:1.3, gMk:1.4, gAsr:1.2, gAu:.9,  el:1,   wear:.9,  brk:'сломалось кухонное оборудование',
                     eq:'Кухонное оборудование', pr:'Зал и интерьер',         cp:'Мощность кухни',      asr:['Десерты и выпечка','Доставка заказов','Банкеты и кейтеринг'],
@@ -3252,12 +3401,11 @@ let bizView = null, bizVTab = 'ov', bizPtr = 0, bizLockUntil = 0, bizSelling = f
 
 const bizClamp = (x, a, b) => Math.min(b, Math.max(a, x));
 const bizInt = (v, a, b) => Math.min(b, Math.max(a, Math.floor(+v) || 0));
-const bizNref = d => bizClamp(Math.round(Math.cbrt(d.price) / 4), 2, 15);          // базовый штат
-const bizBr = b => 1 + 0.55 * (b.br || 0);                                          // множитель масштаба от филиалов
+const bizNref = d => bizClamp(Math.round(Math.cbrt(d.price) / 4), 2, 15);
+const bizBr = b => 1 + 0.55 * (b.br || 0);
 const bizNeed = (d, b) => Math.max(1, Math.round(bizNref(d) * Math.max(1, b.level | 0) * bizBr(b)));
-const bizWage = d => BIZ_PROF[d.cat].sp * d.exp * 100 / bizNref(d);                 // центы/ч за сотрудника
+const bizWage = d => BIZ_PROF[d.cat].sp * d.exp * 100 / bizNref(d);
 
-/* Доля окна [t0,t1], в течение которой действует временный эффект (для корректного офлайн-начисления) */
 function bizTf(until, win){
   if (!until || win === 'base') return 0;
   if (!win) return until > Date.now() ? 1 : 0;
@@ -3265,15 +3413,12 @@ function bizTf(until, win){
   if (span <= 0) return until > win.t1 ? 1 : 0;
   return bizClamp((Math.min(until, win.t1) - win.t0) / span, 0, 1);
 }
-/* Рынок: детерминированная плавная функция времени (шаг 6 ч), 0.90…1.10 */
 function bizMarket(cat, t){
   const SL = 6 * 3600000, s = Math.floor(t / SL), f = (t - s * SL) / SL, sm = f * f * (3 - 2 * f), ci = (BIZ_CAT_IDX[cat] || 0) + 1;
   const h = n => { const x = Math.sin(n * 12.9898 + ci * 78.233) * 43758.5453; return 0.9 + 0.2 * (x - Math.floor(x)); };
   return h(s) + (h(s + 1) - h(s)) * sm;
 }
 
-/* Экономика предприятия на заданном уровне (в центах за час).
-   Без b — прежняя формула этапа 1 (каталог). С b — полная модель управления. */
 function bizStats(d, level, b, win, ov){
   const m = Math.max(1, level | 0);
   if (!b){ const incC = d.inc * 100 * m, expC = d.exp * 100 * m; return { incC, expC, netC: incC - expC }; }
@@ -3290,7 +3435,7 @@ function bizStats(d, level, b, win, ov){
   const demPrice = pr >= 1 ? Math.max(0.25, 1 - elas * (pr - 1)) : 1 + 0.9 * elas * (1 - pr);
   const demand = (0.7 + 0.006 * rep) * demPrice * sup.dem * (1 + 0.09 * P.gAsr * b.asr) * mkc * evD * dlD;
   const ceil = 1.45 + 0.26 * P.gCap * up.cap + 0.10 * P.gPr * up.prem + 0.08 * P.gEq * up.eq;
-  const served = demand <= ceil ? demand : ceil + 0.3 * (demand - ceil);              // спрос выше мощностей теряется
+  const served = demand <= ceil ? demand : ceil + 0.3 * (demand - ceil);
   const need = bizNeed(d, b), cov = need > 0 ? b.staff / need : 1;
   const staffEff = cov < 1 ? Math.pow(Math.max(0, cov), 0.9) : 1 + 0.1 * Math.min(cov - 1, 0.3) / 0.3;
   const condEff = cond >= 70 ? 1 : 0.6 + 0.4 * cond / 70;
@@ -3305,7 +3450,7 @@ function bizStats(d, level, b, win, ov){
   return { incC, expC, netC: incC - expC, pay, sup: spl, rent, oth, demand, ceil, served, cov, need, staffEff, condEff, eff, mult };
 }
 
-function bizAddStaff(b, n){            // новые сотрудники приходят с квалификацией 1 — средняя квалификация разбавляется
+function bizAddStaff(b, n){
   const tot = b.staff + n; if (n <= 0) return;
   b.skill = bizClamp((b.staff * b.skill + n) / tot, 1, 5); b.staff = tot;
 }
@@ -3371,8 +3516,6 @@ function bizNormalize(){
     .slice(0, 200).map(x => ({ id: x.id, t: +x.t, k: String(x.k || ''), x: String(x.x || '').slice(0, 90), c: Math.round(+x.c) || 0 })) : [];
   const nn = v => Number.isFinite(+v) ? Math.max(0, Math.floor(+v)) : 0, okD = v => typeof v === 'string' && /^\d+(\.\d+)?$/.test(v) ? v : '0';
   const ws0 = o.wallet && typeof o.wallet === 'object' ? o.wallet : null;
-  /* Накопительный баланс бизнеса. c — доступно к снятию, wd — снято, cr — начислено с момента появления баланса,
-     base — заработок, который старые версии уже зачислили на USD автоматически (считается снятым). */
   const wallet = ws0
     ? { c: nn(ws0.c), wd: nn(ws0.wd), base: nn(ws0.base), cr: nn(ws0.cr),
         ws: (Array.isArray(ws0.ws) ? ws0.ws : []).filter(x => x && typeof x === 'object' && Number.isFinite(+x.t) && nn(x.c) > 0).slice(0, 200)
@@ -3381,7 +3524,6 @@ function bizNormalize(){
   S.biz = { ...o, v: 2, owned: own, log, wallet };
 }
 
-/* Износ, репутация, события — за k завершённых периодов. Возвращает чистую прибыль в центах/ч для начисления. */
 function bizRepTarget(d, b, cov, cond){
   const sup = BIZ_SUP[b.set.sup] || BIZ_SUP.std, pr = b.set.price;
   let T = 50 + 4 * (b.skill - 1) + sup.rep + 2 * b.up.prem + 1.5 * b.asr + 1.5 * b.up.eq;
@@ -3404,7 +3546,7 @@ function bizAdvance(id, b, k, t0){
   if (b.mk && b.mk.until <= now) b.mk = null;
   if (b.deal && b.deal.until <= now) b.deal = null;
   if (b.disc && b.disc.until <= now) b.disc = null;
-  let p = 0.12 * hrs, n = 0;                                    // ≈ одно событие за 8 часов
+  let p = 0.12 * hrs, n = 0;
   while (p > 0 && n < 3){ if (Math.random() < Math.min(1, p)) n++; p -= 1; }
   for (let i = 0; i < n; i++) bizSpawn(id, b, d, P, now);
   return st.netC;
@@ -3432,8 +3574,6 @@ function bizSpawn(id, b, d, P, now){
   }
 }
 
-/* Оценка продажи. Итог не выше 95% суммарных затрат (цена + вложения) и после комиссии 3% —
-   поэтому «купить → улучшить → продать» не приносит прибыли без реальной работы предприятия. */
 function bizAppraise(id, b){
   const d = BIZ_BY_ID[id], st = bizStats(d, b.level, b, 'base');
   const basisC = d.price * 100 + b.inv, asset = 0.6 * basisC, earn = Math.max(0, st.netC) * 48, raw = 0.5 * asset + 0.5 * earn;
@@ -3444,7 +3584,7 @@ function bizAppraise(id, b){
 
 bizNormalize();
 
-const bizC = c => fmtMoney(BigInt(Math.round(c)) * BIZ_CENT, 'USD', 2, 2);   // центы показываем всегда
+const bizC = c => fmtMoney(BigInt(Math.round(c)) * BIZ_CENT, 'USD', 0, 2);
 const bizPl = n => { const a = n % 10, b = n % 100; return a === 1 && b !== 11 ? 'предприятие' : (a >= 2 && a <= 4 && (b < 12 || b > 14)) ? 'предприятия' : 'предприятий'; };
 let bizTab = 'mine', bizCat = 'all';
 
@@ -3457,16 +3597,14 @@ function bizTotals(){
   return { inc, exp, net: inc - exp, earned, n: Object.keys(S.biz.owned).length };
 }
 
-/* Начисление: только за ПОЛНЫЕ завершённые периоды; lastTs сдвигается ровно на их число,
-   поэтому один и тот же период не начисляется дважды (в т.ч. после перезагрузки). */
 function bizTick(){
   const now = Date.now(); let credit = 0n, dirty = false;
   for (const [id, b] of Object.entries(S.biz.owned)){
-    if (b.lastTs > now){ b.lastTs = now; dirty = true; continue; }   // часы переведены назад
+    if (b.lastTs > now){ b.lastTs = now; dirty = true; continue; }
     const k = Math.floor((now - b.lastTs) / BIZ_PERIOD);
     if (k < 1) continue;
     const t0 = b.lastTs; b.lastTs += k * BIZ_PERIOD; dirty = true;
-    const net = bizAdvance(id, b, k, t0);          // этап 2: износ, репутация, события; возвращает чистую прибыль/ч
+    const net = bizAdvance(id, b, k, t0);
     if (net <= 0) continue;
     const units = BigInt(net) * BigInt(k) + BigInt(b.acc);
     const cents = units / BigInt(BIZ_PER_HOUR);
@@ -3474,7 +3612,7 @@ function bizTick(){
     b.earnedC += Number(cents); credit += cents;
   }
   if (!dirty) return;
-  if (credit > 0n){ const w = S.biz.wallet, add = Number(credit); w.c += add; w.cr += add; }   // отдельный баланс бизнеса, НЕ счёт USD
+  if (credit > 0n){ const w = S.biz.wallet, add = Number(credit); w.c += add; w.cr += add; }
   saveState();
   if (typeof bizWdUpd === 'function' && $('#bwAmt')) bizWdUpd();
   if ($('#page-business').classList.contains('active') && Date.now() - bizPtr > 900){
@@ -3495,7 +3633,7 @@ function bizBuy(id){
 }
 function bizDoBuy(id){
   const d = BIZ_BY_ID[id], price = d ? BigInt(d.price) * SCB : 0n;
-  if (!d || S.biz.owned[id]){ closeSheet(); return toast('Это предприятие уже куплено', 'err'); }   // защита от повторной покупки
+  if (!d || S.biz.owned[id]){ closeSheet(); return toast('Это предприятие уже куплено', 'err'); }
   const snapBal = S.balances.USD, snapOwned = S.biz.owned[id], snapTx = S.txs.length;
   try {
     const bal = S.balances.USD || 0n;
@@ -3593,7 +3731,7 @@ function bizRender(){
   cats.innerHTML = ['all', ...BIZ_CATS].map(c => `<button class="chip-f${bizCat === c ? ' active' : ''}" type="button" data-biz-cat="${c}">${c === 'all' ? 'Все' : c}</button>`).join('');
   bizRenderSummary(); bizRenderList();
 }
-function openBusiness(){       // вызывается обработчиком нижнего меню (вкладка «Бизнес»)
+function openBusiness(){
   bizTick(); bizView = null; bizRender();
 }
 $('#page-business').addEventListener('click', e => {
@@ -3606,7 +3744,6 @@ $('#page-business').addEventListener('click', e => {
   if (t.dataset.bizBuy){ haptic('light'); bizBuy(t.dataset.bizBuy); }
 });
 
-/* ---------- ЭТАП 2: интерфейс управления предприятием ---------- */
 const bizOpen = {};
 const BZ_TR = { eq: 'eq', prem: 'pr', cap: 'cp' }, BZ_UPF = { eq: .14, prem: .12, cap: .16 };
 document.addEventListener('pointerdown', () => { bizPtr = Date.now(); }, true);
@@ -3639,7 +3776,6 @@ function bzSeg(act, items, cur){
   return `<div class="bz-seg">${items.map(([v, label, why]) => `<button class="chip-f${String(v) === String(cur) ? ' active' : ''}" type="button" data-bz="${act}" data-arg="${esc(v)}"${why ? ` data-why="${esc(why)}"` : ''}>${label}</button>`).join('')}</div>`;
 }
 
-/* ---- верхняя «живая» панель ---- */
 function bzLiveHtml(d, b, st){
   const mk = bizMarket(d.cat, Date.now()), mkT = mk >= 1.04 ? ['▲ Подъём', 'biz-pos'] : mk <= 0.96 ? ['▼ Спад', 'biz-neg'] : ['● Стабильно', ''];
   const chips = [];
@@ -3665,7 +3801,6 @@ function bizRenderLive(){
   const d = BIZ_BY_ID[bizView]; box.innerHTML = bzLiveHtml(d, b, bizStats(d, b.level, b));
 }
 
-/* ---- вкладки ---- */
 function bzAdvice(d, b, st){
   const o = [];
   if (st.netC <= 0) o.push(['bad', 'Предприятие убыточно: прибыль не начисляется. Проверьте цены, персонал и закупки.']);
@@ -3712,7 +3847,6 @@ function bzTabOv(id, d, b, st, P){
 }
 function bzTabDev(id, d, b, st, P){
   const L = b.level, brm = bizBr(b);
-  /* уровень */
   let lvl;
   if (L >= BIZ_MAXLV) lvl = bzRow('Максимальный уровень', 'Предприятие достигло вершины развития.', '<span class="bz-chip good">Ур. ' + L + '</span>');
   else {
@@ -3725,7 +3859,6 @@ function bzTabDev(id, d, b, st, P){
       bzBtn('lvl', null, L, tot, 'Повысить', why ? { why } : {}));
   }
   lvl += `<div class="bz-rs" style="padding:0 0 12px">Цель: уровень ${BIZ_MAXLV}${bzBar(L / BIZ_MAXLV * 100)}</div>`;
-  /* улучшения */
   const upTxt = { eq: `+${(4 * P.gEq).toFixed(1)}% дохода, износ −7%`, prem: `+${(3.5 * P.gPr).toFixed(1)}% дохода, репутация +2, аренда +6%`, cap: `+${(5 * P.gCap).toFixed(1)}% дохода, потолок спроса +${Math.round(26 * P.gCap)}%` };
   const ups = ['eq', 'prem', 'cap'].map(tr => {
     const k = b.up[tr], name = P[BZ_TR[tr]];
@@ -3734,14 +3867,12 @@ function bzTabDev(id, d, b, st, P){
     const dn = bizDelta(id, b, x => { x.up[tr]++; });
     return bzRow(`${name} · ур. ${k}/5`, `${upTxt[tr]}. Прибыль ${bzSign(dn)}/ч, ${bzPay(c, dn)}.`, bzBtn('up', tr, k, c, 'Улучшить', k + 1 > L ? { why: 'Нужен уровень предприятия ' + (k + 1) } : {}));
   }).join('');
-  /* ассортимент */
   const asr = P.asr.map((nm, i) => {
     if (i < b.asr) return bzRow(esc(nm), `Спрос +${(9 * P.gAsr).toFixed(1)}%, закупки +10%.`, '<span class="bz-chip good">Открыто</span>');
     const c = bzCost(b, d.price * 100 * L * brm * 0.30 * (1 + i)).cents, dn = bizDelta(id, b, x => { x.asr++; });
     const why = i > b.asr ? 'Сначала откройте предыдущую позицию' : L < 2 * (i + 1) ? 'Нужен уровень предприятия ' + 2 * (i + 1) : '';
     return bzRow(esc(nm), `Спрос +${(9 * P.gAsr).toFixed(1)}%, закупки +10%. Прибыль ${bzSign(dn)}/ч, ${bzPay(c, dn)}.`, bzBtn('asr', null, b.asr, c, 'Открыть', why ? { why } : {}));
   }).join('');
-  /* автоматизация */
   let au;
   if (b.auto >= 4) au = bzRow('Автоматизация · ур. 4/4', 'Максимальная автоматизация процессов.', '<span class="bz-chip good">Макс.</span>');
   else {
@@ -3749,7 +3880,6 @@ function bzTabDev(id, d, b, st, P){
     au = bzRow(`Автоматизация · ур. ${b.auto}/4`, `Зарплаты −${(9 * P.gAu).toFixed(1)}%, закупки −${(4 * P.gAu).toFixed(1)}%, прочее −${(12 * P.gAu).toFixed(1)}%, износ медленнее. Прибыль ${bzSign(dn)}/ч, ${bzPay(c, dn)}.`,
       bzBtn('auto', null, b.auto, c, 'Внедрить', L < b.auto + 2 ? { why: 'Нужен уровень предприятия ' + (b.auto + 2) } : {}));
   }
-  /* филиалы */
   let br;
   if (b.br >= 4) br = bzRow('Филиалы · 4/4', 'Сеть достигла максимального размера.', '<span class="bz-chip good">Макс.</span>');
   else {
@@ -3841,7 +3971,6 @@ function bizRenderManage(){
 }
 $('#bizManage').addEventListener('toggle', e => { const k = e.target && e.target.dataset && e.target.dataset.k; if (k) bizOpen[k] = e.target.open; }, true);
 
-/* ---- действия ---- */
 function bizSpend(id, b, cents, title, kind, invest){
   cents = Math.max(0, Math.ceil(cents)); const cost = BigInt(cents) * BIZ_CENT, bal = S.balances.USD || 0n;
   if (cost > bal){ hapticErr(); toast('Недостаточно средств на счёте USD', 'err'); return false; }
@@ -3868,7 +3997,7 @@ function bzDoLevel(id, b, d, exp){
     rows: [['Предприятие', d.name], ['Новый уровень', L + ' → ' + (L + 1)], ['Стоимость', bizC(cents) + (disc ? ' (скидка ' + Math.round(disc * 100) + '%)' : '')], ['Набор персонала', '+' + addN + ' чел. · ' + bizC(fee)],
       ['Прибыль / ч', bzSign(dn)], ['Баланс после', fmtMoney((S.balances.USD || 0n) - BigInt(cents + fee) * BIZ_CENT, 'USD')]],
     onConfirm: () => {
-      if (!S.biz.owned[id] || S.biz.owned[id].level !== L){ closeSheet(); return bizRender(); }   // повторное нажатие
+      if (!S.biz.owned[id] || S.biz.owned[id].level !== L){ closeSheet(); return bizRender(); }
       if (bzLow(cents + fee)){ closeSheet(); hapticErr(); return toast('Недостаточно средств на счёте USD', 'err'); }
       if (!bizSpend(id, b, cents + fee, 'Повышение до ур. ' + (L + 1), 'up', false)) return closeSheet();
       b.inv += cents; b.level = L + 1; bizAddStaff(b, addN); if (disc) b.disc = null;
@@ -3975,9 +4104,9 @@ function bzDoSell(id, q){
   if (bizSelling) return; bizSelling = true;
   try {
     const b = S.biz.owned[id], d = BIZ_BY_ID[id];
-    if (!b || !d){ closeSheet(); return toast('Предприятие уже продано', 'err'); }                  // повторная продажа исключена
+    if (!b || !d){ closeSheet(); return toast('Предприятие уже продано', 'err'); }
     if (!q || q.id !== id || q.ver !== b.ver || Date.now() - q.ts > 90000){ closeSheet(); toast('Оценка устарела — пересчитана', 'err'); return setTimeout(() => bzSell(id), 350); }
-    bizTick();                                                                                        // начисляем накопленную прибыль до продажи
+    bizTick();
     const credit = BigInt(q.netC) * BIZ_CENT;
     S.balances.USD = (S.balances.USD || 0n) + credit;
     delete S.biz.owned[id];
@@ -3998,7 +4127,7 @@ function bizClick(t){
   const id = bizView, b = id && S.biz.owned[id]; if (!b) return;
   const d = BIZ_BY_ID[id], act = t.dataset.bz, arg = t.dataset.arg, exp = t.dataset.exp != null ? +t.dataset.exp : null;
   const quick = act === 'hire' || act === 'fire' || act === 'price' || act === 'sup' || act === 'mnt', now = Date.now();
-  if (now < bizLockUntil) return; bizLockUntil = now + (quick ? 120 : 500);            // защита от двойного нажатия
+  if (now < bizLockUntil) return; bizLockUntil = now + (quick ? 120 : 500);
   haptic('light');
   const setOpt = fn => { fn(); bizTouch(b); saveState(); bizRender(); };
   switch (act){
@@ -4026,11 +4155,6 @@ function bizCardExtra(d, b){
     <button class="biz-buy" type="button" data-bz-open="${d.id}">Управлять</button>`;
 }
 
-/* =========================================================
-   СНЯТИЕ ЗАРАБОТКА С БАЛАНСА БИЗНЕСА
-   Баланс бизнеса хранится в USD (целые центы, S.biz.wallet.c). Снятие: USD → любой актив из «Обмена»
-   по тому же курсу и с той же комиссией 0.5%, что и обмен; в USD — без комиссии.
-   ========================================================= */
 let bizWdBusy = false, bizWdUpd = null, bizWdLockUntil = 0;
 function bizWdQuote(val, amt){
   const B = asset(val);
@@ -4038,7 +4162,6 @@ function bizWdQuote(val, amt){
   const q = calcEx(asset('f:USD'), B, amt);
   return { ok: q.ok, B, rate: q.rate, fee: q.fee, net: q.net };
 }
-/* Разбор суммы: возвращает { st, amt (BigInt, кратно центу) } */
 function bizWdParse(raw){
   const t = String(raw || '').replace(/[\s\u00A0\u202F]/g, '');
   if (t === '') return { st: 'empty', amt: 0n };
@@ -4112,11 +4235,11 @@ function bizOpenWithdraw(){
   upd();
 }
 function bizDoWithdraw(val, raw){
-  if (bizWdBusy || Date.now() < bizWdLockUntil) return;   // защита от двойного нажатия
+  if (bizWdBusy || Date.now() < bizWdLockUntil) return;
   bizWdBusy = true; const btn = $('#bwOk'); if (btn) btn.disabled = true;
   const fail = msg => { hapticErr(); toast(msg, 'err'); if (bizWdUpd) bizWdUpd(); };
   try {
-    bizTick();                                        // сначала начислить накопленную прибыль
+    bizTick();
     const w = S.biz.wallet, p = bizWdParse(raw);
     if (p.st !== 'ok') return fail(p.st === 'bad' ? 'Некорректная сумма' : p.st === 'dec' ? 'Не более 2 знаков после запятой' : 'Введите сумму');
     if (p.amt > BigInt(w.c) * BIZ_CENT) return fail('Недостаточно средств на балансе бизнеса');
@@ -4139,7 +4262,7 @@ function bizDoWithdraw(val, raw){
         date: new Date(now).toISOString(),
         meta: { biz: 'withdraw', from: 'USD', to: B.v, amt: dStr(p.amt), rate: q.rate, fee: dStr(q.fee), net: dStr(q.net) } });
       if (!saveState()) throw new Error('save');
-    } catch(err){                                     // откат: операция не считается выполненной
+    } catch(err){
       w.c = snap.c; w.wd = snap.wd; w.ws = snap.ws; S.balances = snap.bal; S.crypto = snap.cr;
       if (S.txs.length > snap.tx) S.txs.splice(0, S.txs.length - snap.tx);
       return fail('Не удалось сохранить операцию, баланс не изменён');
@@ -4154,7 +4277,6 @@ bizTick();
 setInterval(() => { if (!document.hidden) bizTick(); }, 5000);
 document.addEventListener('visibilitychange', () => { if (!document.hidden) bizTick(); });
 window.addEventListener('pageshow', bizTick);
-
 
 applyLang();
 
