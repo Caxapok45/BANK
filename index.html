@@ -1132,7 +1132,7 @@ body{background:var(--bg);letter-spacing:.005em}
 .row-ic.pos{color:var(--green)}.row-ic.neg{color:var(--red)}
 
 /* изумруд: кнопки, активные состояния, финансовые показатели */
-.btn-primary,.biz-buy,.calc-key.eq,.toggle-row button.active,.stk-tabs button.active,.brand-mark:not(.m3d),.card-logo-mark:not(.m3d){
+.btn-primary,.biz-buy,.calc-key.eq,.toggle-row button.active,.stk-tabs button.active,.brand-mark:not(.m3d){
   background:var(--a2)!important;background-image:none!important;color:#05140E!important;box-shadow:none!important;font-weight:600}
 .toggle-row button.active.sell,.stk-tabs button.active[data-m="dn"],.bz-btn.danger{background:var(--red)!important;color:#1A0A0D!important}
 .btn,.biz-buy{border-radius:var(--radius-sm);letter-spacing:.01em}
@@ -1156,16 +1156,6 @@ body{background:var(--bg);letter-spacing:.005em}
   .nav::before{color:var(--gold);font-weight:500;letter-spacing:.38em}
   .nav-item.active::after{left:0;bottom:auto;top:50%;width:1px;height:16px;margin:-8px 0 0}
 }
-
-/* карточки-«банковские»: плоский графит, золотая линия */
-.skin{background:linear-gradient(0deg,#1A1D1E,#1A1D1E)!important}
-.skin svg,.card-sweep{display:none!important}
-.card-face{box-shadow:none!important;border:1px solid var(--gold-line)}
-.card-back{background:#1A1D1E!important}
-#wCard .card-face{box-shadow:none!important}
-#wCard .card-front::after,#wCard .card-back::after{border:1px solid var(--gold-line)}
-.card-tilt,#page-crypto .card-tilt{animation:none!important}
-.brand-circles{display:none}
 
 /* оверлеи */
 .sheet{border-radius:24px 24px 0 0;border-bottom:none!important;border-color:var(--border-2)!important}
@@ -1909,10 +1899,13 @@ function totalInDisplay(){
 }
 
 function fetchJSON(url, ms=8000){
-  const ac = new AbortController(), t = setTimeout(()=>ac.abort(), ms);
-  return fetch(url, {signal: ac.signal})
-    .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
-    .finally(() => clearTimeout(t));
+  /* без AbortSignal: в Telegram/iframe-окружении fetch может пробрасываться через postMessage,
+     а AbortSignal не клонируется (DataCloneError). Таймаут — через Promise.race. */
+  let t;
+  const timeout = new Promise((_, rej) => { t = setTimeout(() => rej(new Error('timeout')), ms); });
+  const req = Promise.resolve().then(() => fetch(url))
+    .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); });
+  return Promise.race([req, timeout]).finally(() => clearTimeout(t));
 }
 const FIAT_FALLBACK = { USD:1, EUR:0.92, GBP:0.79, PLN:4.0, RUB:92, UAH:41, CHF:0.88, JPY:150, CNY:7.2, CAD:1.36, AUD:1.52 };
 let _fiatP = null, _cryptoP = null;
@@ -1920,10 +1913,25 @@ function loadFiatRates(force=false){
   if (FIAT && !force) return Promise.resolve();
   if (_fiatP) return _fiatP;
   _fiatP = (async () => {
-    try {
-      const d = await fetchJSON(API_FIAT);
-      if (d && d.rates){ FIAT = { ...d.rates, USD: 1 }; FIAT_LIST = Object.keys(FIAT).sort(); }
-    } catch(e){ console.warn('Fiat API error', e); }
+    /* несколько источников по очереди: если один недоступен (сеть/CORS/блокировка), берём следующий */
+    const iso = (() => { try { return new Set(Intl.supportedValuesOf('currency')); } catch(e){ return null; } })();
+    const fromMap = (m, up) => { const o = {}; for (const k in m){ const c = up ? k.toUpperCase() : k, v = +m[k];
+      if (/^[A-Z]{3}$/.test(c) && v > 0 && isFinite(v) && (!iso || iso.has(c))) o[c] = v; } return o; };
+    const SRC = [
+      [API_FIAT, d => d && d.rates && fromMap(d.rates, false)],
+      ['https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json', d => d && d.usd && fromMap(d.usd, true)],
+      ['https://latest.currency-api.pages.dev/v1/currencies/usd.json', d => d && d.usd && fromMap(d.usd, true)],
+      ['https://api.frankfurter.app/latest?from=USD', d => d && d.rates && fromMap(d.rates, false)]
+    ];
+    let lastErr;
+    for (const [url, parse] of SRC){
+      try {
+        const r = parse(await fetchJSON(url, 7000));
+        if (r && Object.keys(r).length > 10){ FIAT = { ...FIAT_FALLBACK, ...r, USD: 1 }; FIAT_LIST = Object.keys(FIAT).sort(); lastErr = null; break; }
+        lastErr = new Error('bad payload');
+      } catch(e){ lastErr = e; }
+    }
+    if (lastErr) console.info('Fiat rates: все источники недоступны, использую резервные курсы', lastErr);
     if (!FIAT){ FIAT = { ...FIAT_FALLBACK }; FIAT_LIST = Object.keys(FIAT).sort(); }
     renderCurrencySelectors();
   })().finally(() => { _fiatP = null; });
@@ -2076,9 +2084,6 @@ const THEMES={
   art:()=>`<defs><pattern id="pgf" width="40" height="40" patternUnits="userSpaceOnUse"><g fill="none" stroke="#e8c877" stroke-opacity=".14"><rect x="9" y="9" width="22" height="22"/><rect x="9" y="9" width="22" height="22" transform="rotate(45 20 20)"/></g></pattern></defs><rect width="320" height="202" fill="url(#pgf)"/>`}
 };
 
-/* Graphite Luxury: единая палитра карточек */
-(function(){const A=['#3FD9A0','#10B981','#0B8A61'],C=['#1A1D1E','#1A1D1E','#1A1D1E'];
-Object.keys(THEMES).forEach(k=>{THEMES[k].a=A.slice();THEMES[k].c=C.slice();THEMES[k].art=()=>'';});})();
 function skinEl(cur,th){
   const d=document.createElement('div'); d.className='skin';
   d.style.background=`radial-gradient(90% 80% at 0% 0%,${th.a[1]}40,transparent 60%),linear-gradient(150deg,${th.c[0]},${th.c[1]} 55%,${th.c[2]})`;
@@ -2673,7 +2678,6 @@ const COIN_THEME = {
   toncoin:{a:['#cdeaff','#4db3ff','#1673c9'],c:['#10446e','#08243b','#03111d']}
 };
 function coinTheme(id){
-  return {a:['#3FD9A0','#10B981','#0B8A61'], c:['#1A1D1E','#1A1D1E','#1A1D1E']};
   if (COIN_THEME[id]) return COIN_THEME[id];
   let h = 0; for (const ch of String(id)) h = (h * 31 + ch.charCodeAt(0)) % 360;
   return {a:[`hsl(${h} 90% 86%)`,`hsl(${h} 80% 62%)`,`hsl(${h} 70% 36%)`], c:[`hsl(${h} 55% 22%)`,`hsl(${h} 55% 12%)`,`hsl(${h} 55% 6%)`]};
