@@ -1175,6 +1175,9 @@ body{background:var(--bg);letter-spacing:.005em}
 }
 .btn:active,.action:active,.icon-btn:active,.key:active{transform:scale(.97)}
 .page{animation-duration:.4s;animation-timing-function:var(--ease)}
+.chip-f.hist-clear{color:#ff6b81;border-color:rgba(255,77,102,.35);background:rgba(255,77,102,.08)}
+.chip-f.hist-clear[hidden]{display:none}
+@media (hover:hover){.chip-f.hist-clear:hover{background:rgba(255,77,102,.16)}}
 </style>
 </head>
 <body>
@@ -1503,6 +1506,7 @@ body{background:var(--bg);letter-spacing:.005em}
     <div class="page" id="page-history">
       <div class="section-head" style="padding-top:8px">
         <div class="section-title" style="font-size:22px;letter-spacing:-.6px;">История</div>
+        <button class="chip-f hist-clear" id="histClear" type="button" hidden>Очистить историю</button>
       </div>
 
       <div class="filter-scroll" id="histFilters">
@@ -2869,17 +2873,25 @@ function openWalletCoinPicker(){
 $('#wCoinBtn').addEventListener('click', () => { haptic('light'); openWalletCoinPicker(); });
 
 function openCryptoSend(id){
-  const a = asset('c:' + id), meta = walletMeta(id), own = walletAddr(id);
+  const a = asset('c:' + id), own = walletAddr(id);
+  const RK = 'sayfer_recent_rec';
+  const getRec = () => { try { return JSON.parse(localStorage.getItem(RK) || '[]'); } catch(e){ return []; } };
+  const addRec = r => { try { const l = [r, ...getRec().filter(x => x !== r)].slice(0, 5); localStorage.setItem(RK, JSON.stringify(l)); } catch(e){} };
+
   openSheet(`
     <div class="sheet-handle"></div>
     <div class="sheet-head">
-      <div class="sheet-title">Перевод ${esc(a.lbl)}</div>
+      <div class="sheet-title">Перевод</div>
       <button class="sheet-close" data-close aria-label="Закрыть"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
+
     <div class="field">
-      <div class="field-label">Адрес получателя</div>
-      <div class="input-box"><input id="csAddr" type="text" placeholder="${esc(meta.pre || 'Адрес')}…" autocomplete="off" autocapitalize="off" spellcheck="false"></div>
+      <div class="field-label">Получатель</div>
+      <div class="input-box">
+        <input id="csRec" type="text" placeholder="Имя или номер получателя" autocomplete="off" autocapitalize="off" spellcheck="false">
+      </div>
     </div>
+
     <div class="field">
       <div class="field-label">Актив</div>
       <div class="select-box" style="pointer-events:none;cursor:default">
@@ -2887,42 +2899,83 @@ function openCryptoSend(id){
         <span style="font-size:12.5px;color:var(--muted)">${esc(a.name)}</span>
       </div>
     </div>
+
     <div class="field">
       <div class="field-label">Сумма</div>
-      <div class="input-box"><input id="csAmt" type="text" inputmode="decimal" placeholder="0" autocomplete="off"><div class="input-suffix">${esc(a.lbl)}</div></div>
+      <div class="input-box">
+        <input id="csAmt" type="text" inputmode="decimal" placeholder="0" autocomplete="off">
+        <div class="input-suffix">${esc(a.lbl)}</div>
+      </div>
     </div>
     <div class="filter-scroll" style="padding-bottom:12px;"><button class="chip-f" id="csMax" type="button">Макс</button></div>
-    <div class="rate-line"><span>Сеть</span><b>${esc(meta.net)}</b></div>
+
+    <div class="field">
+      <div class="field-label">Комментарий</div>
+      <div class="input-box">
+        <input id="csNote" type="text" maxlength="60" placeholder="Необязательно" autocomplete="off" spellcheck="false">
+      </div>
+    </div>
+
     <div class="rate-line"><span>Комиссия</span><b>0</b></div>
-    <div class="rate-line"><span>Отправляете</span><b id="csSum">—</b></div>
+    <div class="rate-line"><span>Переводишь</span><b id="csSum">—</b></div>
     <div class="rate-line"><span>Доступно</span><b id="csAvail">—</b></div>
+
     <button class="btn btn-primary" id="csConfirm">Отправить</button>
     <div style="height:12px"></div>`);
+
   const show = n => `${fmtFixed(n, a)} ${a.lbl}`;
+  const btn = $('#csConfirm'), rec = $('#csRec'), amtEl = $('#csAmt');
   const upd = () => {
-    const raw = $('#csAmt').value.trim(), amt = truncB(parseAmt(raw, 8), 8);
+    const raw = amtEl.value.trim(), amt = truncB(parseAmt(raw, 8), 8);
     $('#csAvail').textContent = show(getBal(a));
     $('#csSum').textContent = raw ? show(amt) : '—';
+    btn.disabled = !(rec.value.trim() && /\d/.test(amtEl.value));
   };
-  $('#csAmt').addEventListener('input', upd);
-  $('#csMax').addEventListener('click', () => { haptic('light'); $('#csAmt').value = formatAmountInput(fmtFixed(getBal(a), a)); upd(); });
+  amtEl.addEventListener('input', upd);
+  rec.addEventListener('input', upd);
+  $('#csMax').addEventListener('click', () => { haptic('light'); amtEl.value = formatAmountInput(fmtFixed(getBal(a), a)); upd(); });
+
+  const recent = getRec();
+  if (recent.length){
+    const box = document.createElement('div'); box.className = 'rec-chips';
+    recent.forEach(r => {
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'rec-chip'; b.textContent = r;
+      b.onclick = () => { rec.value = r; upd(); amtEl.focus(); };
+      box.appendChild(b);
+    });
+    rec.closest('.field').appendChild(box);
+  }
   upd();
-  $('#csConfirm').addEventListener('click', () => {
-    const addr = $('#csAddr').value.trim(), amt = truncB(parseAmt($('#csAmt').value, 8), 8);
-    if (addr.length < 20 || /\s/.test(addr)) return toast('Введите корректный адрес', 'err');
-    if (addr === own) return toast('Нельзя отправить на свой адрес', 'err');
+
+  btn.addEventListener('click', () => {
+    const r = rec.value.trim();
+    const note = ($('#csNote').value || '').replace(/\s+/g, ' ').trim().slice(0, 60);
+    const amt = truncB(parseAmt(amtEl.value, 8), 8);
+
+    if (!r) return toast('Введите получателя', 'err');
+    if (r === own) return toast('Нельзя отправить на свой адрес', 'err');
     if (!(amt > 0n)) return toast('Введите сумму', 'err');
     if (amt > getBal(a)) return toast('Недостаточно средств', 'err');
+
     confirmSheet({
       title: 'Подтверждение перевода',
-      rows: [['Адрес', addr], ['Сеть', meta.net], ['Сумма', show(amt)], ['Комиссия', `0 ${a.lbl}`]],
+      rows: [
+        ['Получатель', r],
+        ...(note ? [['Комментарий', note]] : []),
+        ['Актив', a.lbl],
+        ['Сумма', show(amt)],
+        ['Комиссия', `0 ${a.lbl}`],
+        ['Итого', show(amt)]
+      ],
       onConfirm: () => {
         if (amt > getBal(a)){ closeSheet(); return toast('Недостаточно средств', 'err'); }
         try { setBal(a, getBal(a) - amt); } catch(e){ closeSheet(); return toast('Некорректная сумма', 'err'); }
+        addRec(r);
         S.txs.unshift({
-          id: uid(), type: 'crypto', title: 'Перевод', subtitle: shortAddr(addr),
+          id: uid(), type: 'transfer', title: 'Перевод', subtitle: r,
           amountText: '-' + show(amt), amountClass: 'neg', amount: dStr(-amt), currency: a.lbl,
-          date: nowDate().toISOString(), meta: { recipient: addr }
+          date: nowDate().toISOString(),
+          meta: note ? { recipient: r, comment: note, coin: true } : { recipient: r, coin: true }
         });
         saveState(); hapticOk(); closeSheet(); renderAll(); renderCrypto(); updateExchange();
         toast('Отправлено ' + show(amt));
@@ -3057,6 +3110,7 @@ function fmtTrTime(d){
   return dt.toLocaleDateString(loc,{day:'2-digit',month:'2-digit',year:'numeric'}) + ', ' + dt.toLocaleTimeString(loc,{hour:'2-digit',minute:'2-digit'});
 }
 function fmtTrAmount(t){
+  if (t.meta && t.meta.coin) return t.amountText;
   try {
     const b = toB(t.amount), cur = t.currency;
     if (cur && t.amount != null){
@@ -3069,9 +3123,29 @@ function fmtTrAmount(t){
   return t.amountText;
 }
 
+const HIST_TYPES = ['deposit','transfer','exchange','crypto'];
+const isHistTx = t => t.title !== 'Корректировка' && HIST_TYPES.includes(t.type);
+
+$('#histClear').addEventListener('click', () => {
+  haptic('light');
+  const n = S.txs.filter(isHistTx).length;
+  if (!n) return;
+  confirmSheet({
+    title: 'Очистить историю', danger: true, okText: 'Очистить',
+    rows: [['Будет удалено', 'Все операции в истории (' + n + ')'], ['Это действие', 'Нельзя отменить']],
+    onConfirm: () => {
+      S.txs = S.txs.filter(t => !isHistTx(t));
+      saveState(); hapticOk(); closeSheet(); renderHistory();
+      toast('История очищена');
+    }
+  });
+});
+
 function renderHistory(){
   const panel = $('#historyPanel');
-  let list = S.txs.filter(t => t.title !== 'Корректировка' && ['deposit','transfer','exchange','crypto'].includes(t.type));
+  const clr = $('#histClear');
+  if (clr) clr.hidden = !S.txs.some(isHistTx);
+  let list = S.txs.filter(isHistTx);
   if (histFilter !== 'all') list = list.filter(t => t.type === histFilter);
   list = list.slice(0, 200);
 
@@ -3834,6 +3908,7 @@ const I18N_EN = {
  'Банковская карта':'Bank card','Номер карты':'Card number','Номер карты должен состоять из 16 цифр':'Card number must be 16 digits','CVC должен состоять из 3 цифр':'CVC must be 3 digits','Данные карты сохранены':'Card details saved',
  'Данные':'Data','Полный сброс':'Full reset','Удалить все данные приложения':'Delete all app data',
  'Будет удалено':'Will be deleted','Все балансы, криптоактивы, история, настройки и данные пользователя':'All balances, crypto assets, history, settings and user data',
+ 'Очистить историю':'Clear history','Очистить':'Clear','История очищена':'History cleared','Все операции в истории':'All operations in history',
  'Это действие':'This action','Нельзя отменить':'Cannot be undone','Сбросить всё':'Reset everything',
  'Текущий код':'Current passcode','Новый код':'New passcode','Повторите новый код':'Repeat new passcode','Сохранить':'Save',
  'Неверный текущий код':'Wrong current passcode','Код должен состоять из 4 цифр':'Passcode must be 4 digits','Коды не совпадают':'Passcodes do not match',
