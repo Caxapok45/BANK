@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#000000">
+<meta name="theme-color" content="#0F1011">
 <title>SNO</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script>
@@ -1085,6 +1085,106 @@ input:disabled,select:disabled{cursor:not-allowed}
 
 /* блок «Мои активы» в Crypto скрыт (разметка и логика сохранены, как у «Валютных счетов» на главной) */
 #page-crypto .w-lists>.section-head:first-child,#myCryptoPanel{display:none!important}
+
+/* =====================================================================
+   GRAPHITE LUXURY — финальный слой темы
+   графит · изумруд · тонкое золото · без градиентов, свечений и шума
+   ===================================================================== */
+:root{
+  --bg:#0F1011; --bg-2:#131516; --surface:#171A1B; --surface-2:#1C2021; --surface-3:#242829;
+  --border:rgba(255,255,255,.07); --border-2:rgba(255,255,255,.12);
+  --text:#EDEFEE; --muted:#8E9694; --muted-2:#646B69;
+  --a1:#3FD9A0; --a2:#10B981; --a3:#0B8A61; --a0:#10B981;
+  --green:#2FCB93; --red:#E5677A;
+  --gold:#C9AC6E; --gold-line:rgba(201,172,110,.28);
+  --radius:20px; --radius-sm:14px; --r-xs:10px;
+  --ease:cubic-bezier(.2,.8,.2,1);
+  --shadow:none;
+}
+@media (min-width:700px){:root{--g:28px}}
+@media (max-width:699px){:root{--g:20px}}
+body{background:var(--bg);letter-spacing:.005em}
+#ambient{display:none}
+#lockScreen{background:var(--bg)}
+
+/* типографика: крупно и чисто */
+.balance-value,.stk-hero-v,.stk-dp-v{background:none!important;-webkit-background-clip:border-box!important;background-clip:border-box!important;color:var(--text)!important;font-weight:600;letter-spacing:-.03em}
+.balance-value{font-size:clamp(38px,11.5vw,54px)}
+.balance-label,.card-label,.field-label,.biz-sum,.rate-line{color:var(--muted);font-weight:500;letter-spacing:.04em}
+.section-head{margin-top:36px}
+.section-title{font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+#page-exchange>.section-head .section-title,#page-history>.section-head .section-title{font-size:26px;font-weight:600;letter-spacing:-.02em;text-transform:none;color:var(--text)}
+.section-link,.brand-sub{color:var(--gold);font-weight:500}
+.brand-name{font-weight:600;letter-spacing:.02em}
+
+/* поверхности: ровные тёмные карточки, тонкие границы */
+.panel,.action,.icon-btn,.user-chip,.chip-f,.input-box,.select-box,.bw-card,.stk-hero,.stk-card,.biz-card,.bz-tile,.rec-chip,.coin-ic,.sheet{
+  background:var(--surface)!important;background-image:none!important;box-shadow:none!important;border:1px solid var(--border)!important}
+.panel,.bw-card,.stk-hero,.biz-card{border-radius:var(--radius)}
+.panel,.bw-card,.stk-hero{padding-block:max(var(--pad,0px),0px)}
+.row{border-bottom-color:var(--border)}
+.coin-ic{color:var(--a1)}
+
+/* иконки: тонкая линия */
+.icon-btn svg,.nav-item svg,.lock-now svg{stroke-width:1.4}
+.icon-btn svg,.lock-now svg{stroke:var(--text)}
+.action .action-ic,.row-ic{background:transparent!important;border:1px solid var(--border-2)!important;color:var(--a1)}
+.row-ic.pos{color:var(--green)}.row-ic.neg{color:var(--red)}
+
+/* изумруд: кнопки, активные состояния, финансовые показатели */
+.btn-primary,.biz-buy,.calc-key.eq,.toggle-row button.active,.stk-tabs button.active,.brand-mark:not(.m3d),.card-logo-mark:not(.m3d){
+  background:var(--a2)!important;background-image:none!important;color:#05140E!important;box-shadow:none!important;font-weight:600}
+.toggle-row button.active.sell,.stk-tabs button.active[data-m="dn"],.bz-btn.danger{background:var(--red)!important;color:#1A0A0D!important}
+.btn,.biz-buy{border-radius:var(--radius-sm);letter-spacing:.01em}
+.btn-ghost{border:1px solid var(--gold-line)!important;color:var(--gold)}
+.switch.on{background:var(--a2)!important;background-image:none!important}
+.bz-bar i{background:var(--a2)!important}
+.row-amt.pos,.coin-change.pos,.pos{color:var(--green)}
+.row-amt.gold{color:var(--gold)}
+.dot.filled{background:var(--a2);border-color:var(--a2);transform:none}
+.dot{border-color:var(--border-2)}
+.key,.calc-key{background:var(--surface)!important;border:1px solid var(--border)!important;font-weight:300}
+
+/* навигация */
+.nav{background:var(--bg-2)!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;box-shadow:none!important;border:1px solid var(--border)!important;border-radius:22px}
+.nav-item{color:var(--muted-2);position:relative}
+.nav-item.active{background:transparent!important;color:var(--a1)}
+.nav-item.active::after{content:"";position:absolute;bottom:3px;left:50%;width:14px;height:1px;margin-left:-7px;background:var(--gold)}
+.nav-item span{font-weight:500;letter-spacing:.03em}
+@media (min-width:900px){
+  .nav{background:var(--bg)!important;border:none!important;border-right:1px solid var(--border)!important;border-radius:0}
+  .nav::before{color:var(--gold);font-weight:500;letter-spacing:.38em}
+  .nav-item.active::after{left:0;bottom:auto;top:50%;width:1px;height:16px;margin:-8px 0 0}
+}
+
+/* карточки-«банковские»: плоский графит, золотая линия */
+.skin{background:linear-gradient(0deg,#1A1D1E,#1A1D1E)!important}
+.skin svg,.card-sweep{display:none!important}
+.card-face{box-shadow:none!important;border:1px solid var(--gold-line)}
+.card-back{background:#1A1D1E!important}
+#wCard .card-face{box-shadow:none!important}
+#wCard .card-front::after,#wCard .card-back::after{border:1px solid var(--gold-line)}
+.card-tilt,#page-crypto .card-tilt{animation:none!important}
+.brand-circles{display:none}
+
+/* оверлеи */
+.sheet{border-radius:24px 24px 0 0;border-bottom:none!important;border-color:var(--border-2)!important}
+.sheet-handle{background:var(--gold-line)}
+.overlay{background:rgba(8,9,9,.72)}
+.skeleton,.sk{background-image:linear-gradient(90deg,rgba(255,255,255,.03) 25%,rgba(255,255,255,.06) 50%,rgba(255,255,255,.03) 75%)!important}
+.lock-logo::after{display:none}
+.lock-title{font-weight:600;letter-spacing:-.02em}
+
+/* плавность */
+.btn,.action,.icon-btn,.user-chip,.chip-f,.coin-row,.stk-row,.stk-card,.set-row,.nav-item,.panel,.rec-chip,.key,.calc-key,.switch{
+  transition:background-color .28s var(--ease),border-color .28s var(--ease),color .28s var(--ease),transform .28s var(--ease),opacity .28s var(--ease)}
+@media (hover:hover){
+  .action:hover,.icon-btn:hover,.chip-f:hover,.rec-chip:hover{border-color:var(--gold-line)!important}
+  .coin-row:hover,.stk-row:hover,.set-row:hover{background:rgba(255,255,255,.025)}
+  .btn-primary:hover,.biz-buy:hover{background:var(--a1)!important}
+}
+.btn:active,.action:active,.icon-btn:active,.key:active{transform:scale(.97)}
+.page{animation-duration:.4s;animation-timing-function:var(--ease)}
 </style>
 </head>
 <body>
@@ -1721,12 +1821,16 @@ function curName(code){
   try { return new Intl.DisplayNames(['en'], {type:'currency'}).of(code) || code; }
   catch(e){ return code; }
 }
+const _symCache = Object.create(null);
 function curSymbol(code){
+  if (_symCache[code] !== undefined) return _symCache[code];
+  let r = code;
   try {
     const parts = new Intl.NumberFormat('en-US',{style:'currency',currency:code,currencyDisplay:'narrowSymbol'}).formatToParts(0);
     const v = parts.find(p=>p.type==='currency')?.value || code;
-    return v.length > 3 ? code : v;
-  } catch(e){ return code; }
+    r = v.length > 3 ? code : v;
+  } catch(e){ r = code; }
+  return (_symCache[code] = r);
 }
 const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const num = v => parseFloat(String(v).replace(',', '.')) || 0;
@@ -1971,6 +2075,10 @@ const THEMES={
  gf:{a:['#f5e6b4','#dcb55e','#9a7424'],c:['#0b4a3d','#06291f','#021410'],
   art:()=>`<defs><pattern id="pgf" width="40" height="40" patternUnits="userSpaceOnUse"><g fill="none" stroke="#e8c877" stroke-opacity=".14"><rect x="9" y="9" width="22" height="22"/><rect x="9" y="9" width="22" height="22" transform="rotate(45 20 20)"/></g></pattern></defs><rect width="320" height="202" fill="url(#pgf)"/>`}
 };
+
+/* Graphite Luxury: единая палитра карточек */
+(function(){const A=['#3FD9A0','#10B981','#0B8A61'],C=['#1A1D1E','#1A1D1E','#1A1D1E'];
+Object.keys(THEMES).forEach(k=>{THEMES[k].a=A.slice();THEMES[k].c=C.slice();THEMES[k].art=()=>'';});})();
 function skinEl(cur,th){
   const d=document.createElement('div'); d.className='skin';
   d.style.background=`radial-gradient(90% 80% at 0% 0%,${th.a[1]}40,transparent 60%),linear-gradient(150deg,${th.c[0]},${th.c[1]} 55%,${th.c[2]})`;
@@ -2565,6 +2673,7 @@ const COIN_THEME = {
   toncoin:{a:['#cdeaff','#4db3ff','#1673c9'],c:['#10446e','#08243b','#03111d']}
 };
 function coinTheme(id){
+  return {a:['#3FD9A0','#10B981','#0B8A61'], c:['#1A1D1E','#1A1D1E','#1A1D1E']};
   if (COIN_THEME[id]) return COIN_THEME[id];
   let h = 0; for (const ch of String(id)) h = (h * 31 + ch.charCodeAt(0)) % 360;
   return {a:[`hsl(${h} 90% 86%)`,`hsl(${h} 80% 62%)`,`hsl(${h} 70% 36%)`], c:[`hsl(${h} 55% 22%)`,`hsl(${h} 55% 12%)`,`hsl(${h} 55% 6%)`]};
@@ -2714,16 +2823,26 @@ function selectWalletCoin(id){
 function openWalletCoinPicker(){
   const cur = S.displayCurrency, sel = wSel();
   const held = Object.keys(S.crypto).filter(k => S.crypto[k].amount > 0);
-  const ids = [...held, ...CRYPTO.map(c => c.id).filter(k => !held.includes(k))];
-  const rows = ids.map(id => {
+  const heldSet = new Set(held), byId = new Map(CRYPTO.map(c => [c.id, c]));
+  const ids = [...held, ...CRYPTO.map(c => c.id).filter(k => !heldSet.has(k))];
+  const qOf = id => { const c = byId.get(id), h = S.crypto[id]; return (c ? c.name + ' ' + c.symbol : h ? (h.name || '') + ' ' + (h.symbol || '') : id).toLowerCase(); };
+  const pool = ids.map(id => ({id, q: qOf(id)}));
+  const PICK_MAX = 60;   // рисуем не больше 60 строк за раз; поиск работает по всему списку
+  const rowHtml = id => {
     const c = wCoin(id), has = c.amount > 0n;
-    return `<div class="coin-row wc-opt${id === sel ? ' sel' : ''}" data-id="${esc(id)}" data-q="${esc((c.name + ' ' + c.symbol).toLowerCase())}">
+    return `<div class="coin-row wc-opt${id === sel ? ' sel' : ''}" data-id="${esc(id)}">
       ${coinIcon({symbol:c.symbol, name:c.name, image:c.image})}
       <div class="coin-main"><div class="coin-name">${esc(c.name)} <span class="coin-sym">${esc(c.symbol)}</span></div>
         <div class="coin-sub">${has ? fmtCrypto(c.amount) + ' ' + esc(c.symbol) : (c.price > 0 ? fmtMoney(fromUSD(c.price, cur), cur, 0, c.price < 1 ? 4 : 2) : '—')}</div></div>
       ${id === sel ? '<div class="coin-right"><div class="coin-price" style="color:var(--a1)">✓</div></div>' : ''}
     </div>`;
-  }).join('');
+  };
+  const listHtml = q => {
+    const m = [];
+    for (const it of pool){ if (!q || it.q.includes(q)){ m.push(it); if (m.length >= PICK_MAX) break; } }
+    if (m.length) return m.map(it => rowHtml(it.id)).join('');
+    return pool.length ? '<div class="empty"><div>Ничего не найдено</div></div>' : '<div class="empty"><div>Рынок загружается…</div></div>';
+  };
   openSheet(`
     <div class="sheet-handle"></div>
     <div class="sheet-head">
@@ -2731,10 +2850,9 @@ function openWalletCoinPicker(){
       <button class="sheet-close" data-close aria-label="Закрыть"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
     <div class="field"><div class="input-box"><input id="wcSearch" placeholder="Поиск монеты..." autocomplete="off"></div></div>
-    <div class="panel" id="wcList" style="max-height:52vh;overflow-y:auto;">${rows || '<div class="empty"><div>Рынок загружается…</div></div>'}</div>`);
+    <div class="panel" id="wcList" style="max-height:52vh;overflow-y:auto;">${listHtml('')}</div>`);
   $('#wcSearch').addEventListener('input', e => {
-    const q = e.target.value.trim().toLowerCase();
-    $$('.wc-opt').forEach(el => { el.style.display = (!q || el.dataset.q.includes(q)) ? '' : 'none'; });
+    $('#wcList').innerHTML = listHtml(e.target.value.trim().toLowerCase());
   });
   $('#wcList').addEventListener('click', e => {
     const row = e.target.closest('.wc-opt'); if (!row) return;
@@ -2852,7 +2970,8 @@ function renderCrypto(){
   if (!CRYPTO.length){
     mPanel.innerHTML = `<div class="empty"><span class="loader"></span><div style="margin-top:12px">Загрузка рынка…</div></div>`;
   } else {
-    mPanel.innerHTML = CRYPTO.map(c => {
+    const shown = CRYPTO.slice(0, marketLimit);
+    mPanel.innerHTML = shown.map(c => {
       const priceUSD = c.current_price;
       const price = fromUSD(priceUSD, cur);
       const chg = c.price_change_percentage_24h || 0;
@@ -2869,19 +2988,35 @@ function renderCrypto(){
             <div class="coin-change ${chg>=0?'pos':'neg'}">${chg>=0?'+':''}${chg.toFixed(2)}%</div>
           </div>
         </div>`;
-    }).join('');
+    }).join('') + (CRYPTO.length > shown.length
+      ? `<div class="coin-row" id="marketMore" role="button" tabindex="0" style="justify-content:center;color:var(--a1);font-weight:700">Показать ещё</div>` : '');
   }
-
-  $$('#myCryptoPanel .coin-row, #marketPanel .coin-row').forEach(row => {
-    row.addEventListener('click', () => {
-      haptic('light');
-      if (row.closest('#myCryptoPanel')){
-        selectWalletCoin(row.dataset.coin);
-        $('#content').scrollTo({top:0, behavior:'smooth'});
-      } else openCoinSheet(row.dataset.coin, false);
-    });
-  });
 }
+
+/* Один делегированный обработчик на панели (раньше — по слушателю на каждую из 1500 строк при каждой отрисовке) */
+let marketLimit = 50;
+const MARKET_STEP = 50;
+function onCoinPanelClick(e){
+  const more = e.target.closest('#marketMore');
+  if (more){
+    haptic('light');
+    marketLimit = Math.min(CRYPTO.length, marketLimit + MARKET_STEP);
+    renderCrypto();
+    return;
+  }
+  const row = e.target.closest('.coin-row');
+  if (!row || !row.dataset.coin) return;
+  haptic('light');
+  if (row.closest('#myCryptoPanel')){
+    selectWalletCoin(row.dataset.coin);
+    $('#content').scrollTo({top:0, behavior:'smooth'});
+  } else openCoinSheet(row.dataset.coin, false);
+}
+$('#myCryptoPanel').addEventListener('click', onCoinPanelClick);
+$('#marketPanel').addEventListener('click', onCoinPanelClick);
+$('#marketPanel').addEventListener('keydown', e => {
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.id === 'marketMore'){ e.preventDefault(); e.target.click(); }
+});
 
 $('#cryptoRefresh').addEventListener('click', async () => {
   haptic('light');
@@ -3714,7 +3849,7 @@ Object.assign(I18N_EN, {
  'Нажмите на монету, чтобы увидеть полный адрес':'Tap the coin to see the full address','Купить':'Buy','Отправить':'Send','Адрес получателя':'Recipient address','Адрес':'Address','Сеть':'Network','Актив':'Asset',
  'Отправляете':'You send','Введите корректный адрес':'Enter a valid address','Нельзя отправить на свой адрес':"You can't send to your own address",
  'Адрес скопирован':'Address copied','Не удалось скопировать':'Could not copy','Выбор актива':'Select asset','Поиск монеты...':'Search coin...',
- 'Демо-адрес. Средства виртуальные.':'Demo address. Funds are virtual.','Рынок загружается…':'Loading market…',
+ 'Демо-адрес. Средства виртуальные.':'Demo address. Funds are virtual.','Рынок загружается…':'Loading market…','Показать ещё':'Show more','Ничего не найдено':'Nothing found',
  'Подтверждение перевода':'Confirm transfer','Недостаточно средств':'Insufficient funds','Введите сумму':'Enter amount','Макс':'Max','Комиссия':'Fee','Доступно':'Available'
 });
 
